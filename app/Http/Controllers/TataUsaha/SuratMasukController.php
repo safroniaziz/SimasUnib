@@ -15,7 +15,10 @@ class SuratMasukController extends Controller
         if(!Gate::allows('isStafTu')){
             return redirect()->back()->with('gagal-staf-tu', 'Anda tidak memiliki akses sebagai staf tu, silahkan logout dan login kembali sebagai admin'); 
         }
-        return view('staf_tu/surat_masuk.index');
+        $model = new SuratMasuk();
+        $id_pejabat_disposisi = DB::table('tb_pejabat_disposisi')->select('id','nm_pejabat')->get();
+        $id_jenis_surat = DB::table('tb_jenis_surat')->select('id','jenis_surat')->get();
+        return view('staf_tu/surat_masuk.index',compact('model','id_pejabat_disposisi','id_jenis_surat'));
     }
     public function create(){
         $model = new SuratMasuk();
@@ -27,8 +30,13 @@ class SuratMasukController extends Controller
 
     public function store(Request $request){
         $this->validate($request,[
-            'nm_satuan_kerja'    =>  'required|string|',
-            'nm_satuan_kerja_singkat'    =>  'required|string|',
+            'tanggal_surat'    =>  'required|',
+            'id_pejabat_disposisi'    =>  'required|',
+            'id_jenis_surat'    =>  'required|',
+            'no_surat'    =>  'required|string',
+            'pengirim'    =>  'required|string',
+            'perihal'    =>  'required|string',
+            'sifat_surat'    =>  'required|string',
         ]);
 
         $model = SuratMasuk::create($request->all());

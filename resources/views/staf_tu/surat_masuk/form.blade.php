@@ -1,10 +1,16 @@
 {!! Form::model($model, [
-    'route' =>  $model->exists ? ['admin.surat_masuk.update',$model->id] : 'admin.surat_masuk.store',
+    'route' =>  $model->exists ? ['staf_tu.surat_masuk.update',$model->id] : 'staf_tu.surat_masuk.store',
     'method'    =>  $model->exists ? 'PUT' : 'POST'
 ]) !!}
     <div class="form-group">
-        <label for="" class="control-label">Tanggal Surat Masuk :</label>
+        <label for="tanggal_surat" class="control-label">Tanggal Surat Masuk :</label>
         <input type="date" name="tanggal_surat" id="tanggal_surat" class="form-control">
+        
+        @if($errors->has('tanggal_surat'))
+            <span class="invalid-feedback" role="alert">
+                <strong>{{ $errors->first('tanggal_surat') }}</strong>
+            </span>
+        @endif
     </div>
 
     <div class="form-group">
@@ -42,6 +48,11 @@
     <div class="form-group">
         <label for="" class="control-label">No Surat :</label>
         {!! Form::text('no_surat',null,['class' =>  'form-control','id' =>  'no_surat','placeholder'    =>  'nomor surat']) !!}
+            @if($errors->has('no_surat'))
+                <li style="color: red">
+                    {{$errors->first('no_surat')}}
+                </li>
+            @endif
     </div>
 
     <div class="form-group">
@@ -56,7 +67,7 @@
 
     <div class="form-group">
         <label for="" class="control-label">Sifat Surat :</label>
-        <select name="id_pengirim" id="id_pengirim" class="form-control" >
+        <select name="sifat_surat" id="sifat_surat" class="form-control" >
             <option value="0" selected="true" disabled="true">-- pilih Jenis Surat --</option>    
             <option value="penting">Penting</option>
             <option value="rahasia">Rahasia</option>

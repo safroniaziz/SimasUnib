@@ -2,13 +2,13 @@
     <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <div class="modal-header" id="modal-header">
+            <div class="modal-header" id="modal-header" style="padding:20px 26px;">
                 <h5 class="modal-title" id="modal-title">Form Tambah</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-                <div class="modal-body" id="modal-body">
+                <div class="modal-body" id="modal-body" style="padding:20px 15px;">
                     
                 </div>
             <div class="modal-footer" id="modal-footer">
