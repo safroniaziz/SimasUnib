@@ -1,3 +1,3 @@
-<a href="{{ $url_show }}" class="btn-show btn btn-primary btn-sm btn-flat" title="Detail: {{ $model->kode_surat }}"><i class="fa fa-info-circle" ></i></a> | 
-<a href="{{ $url_edit }}" class="modal-show  btn btn-success btn-sm btn-flat edit" title="Edit Data ({{ $model->kode_surat }})"><i class="fa fa-edit "></i></a> | 
-<a href="{{ $url_destroy }}" class="btn-delete  btn btn-danger btn-sm btn-flat" title="{{ $model->kode_surat }}"><i class="fa fa-remove "></i></a>
+<a href="{{ $url_show }}" class="btn-show social-btn btn btn-primary" style="padding:5px;" title="Detail "><i class="fa fa-info-circle" ></i></a>
+<a href="{{ $url_edit }}" class="modal-show  social-btn  btn btn-success edit" style="padding:5px;" title="Edit Data"><i class="fa fa-edit "></i></a>
+<a href="{{ $url_destroy }}" class="btn-delete social-btn   btn btn-danger" style="padding:5px;"><i class="fa fa-remove "></i></a>

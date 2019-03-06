@@ -1,113 +1,93 @@
-
-<!doctype html>
-<html>
-	<head>
-		<meta charset="utf-8">
-		<title>Simas Unib - Login</title>
-        <style>
-            body
-            {
-                margin: 0;
-                padding: 0;
-                background: url({{ asset('assets/img/bg-book.png') }});
-                background-size: cover;
-                font-family: sans-serif;
-            }
-            .loginBox
-            {
-                position: absolute;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%,-50%);
-                width: 350px;
-                height: 450px;
-                padding: 80px 40px;
-                box-sizing: border-box;
-                background: rgba(0,0,0,.7);
-            }
-            .user
-            {
-                width: 100px;
-                height: 100px;
-                border-radius: 50%;
-                overflow: hidden;
-                position: absolute;
-                top: calc(-100px/2);
-                left: calc(50% - 50px);
-            }
-            h2
-            {
-                margin: 0;
-                padding: 0 0 20px;
-                color: #efed40;
-                text-align: center;
-            }
-            .loginBox p
-            {
-                margin: 0;
-                padding: 0;
-                font-weight: bold;
-                color: #fff;
-            }
-            .loginBox input
-            {
-                width: 100%;
-                margin-bottom: 20px;
-            }
-            .loginBox input[type="text"],
-            .loginBox input[type="password"]
-            {
-                border: none;
-                border-bottom: 1px solid #fff;
-                background: transparent;
-                outline: none;
-                height: 40px;
-                color: #fff;
-                font-size: 16px;
-            }
-            ::placeholder
-            {
-                color: rgba(255,255,255,.5);
-            }
-            .loginBox input[type="submit"]
-            {
-                border: none;
-                outline: none;
-                height: 40px;
-                color: #fff;
-                font-size: 16px;
-                background: #ff267e;
-                cursor: pointer;
-                border-radius: 20px;
-            }
-            .loginBox input[type="submit"]:hover
-            {
-                background: white;
-                color: black;
-            }
-            .loginBox a
-            {
-                color: #fff;
-                font-size: 14px;
-                font-weight: bold;
-                text-decoration: none;
-            }
-
-        </style>
-	</head>
-	<body>
-		<div class="loginBox">
-			<img src="{{ asset('assets/img/logo-utama.png') }}" class="user">
-            <h2 style="text-transform: uppercase;">Silahkan Login Disini</h2>
-            <form method="post">
-				@csrf
-				<p>Username</p>
-				<input type="text" name="username"  placeholder="masukan username">
-				<p>Password</p>
-				<input type="password" name="password" placeholder="••••••">
-				<input type="submit" name="" value="Login">
-				<a href="#">Lupa Password?</a>
-			</form>
-		</div>
-	</body>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Simas Unib - Login</title>
+    <!-- plugins:css -->
+    <link rel="stylesheet" href="{{ asset('assets/template/vendors/iconfonts/mdi/css/materialdesignicons.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/template/vendors/iconfonts/puse-icons-feather/feather.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/template/vendors/css/vendor.bundle.base.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/template/vendors/css/vendor.bundle.addons.css') }}">
+    <!-- endinject -->
+    <!-- plugin css for this page -->
+    <!-- End plugin css for this page -->
+    <!-- inject:css -->
+    <link rel="stylesheet" href="{{ asset('assets/template/css/shared/style.css') }}">
+    <!-- endinject -->
+    <link rel="shortcut icon" href="{{ asset('assets/img/logo-utama.png') }}" />
+  </head>
+  <body>
+    <div class="container-scroller">
+      <div class="container-fluid page-body-wrapper full-page-wrapper" >
+        <div class="content-wrapper d-flex align-items-center auth auth-bg-1 theme-one" style="background:url({{ asset('assets/img/bg-book.png') }})">
+          <div class="row w-100" style="margin-left:0px;">
+            <div class="col-lg-4 mx-auto">
+              <div class="auto-form-wrapper" style="padding:30px 20px;">
+                <form method="post">
+                @csrf
+                  <div class="form-group"> 
+                    <h3 style="text-align:center;font-weight:bold;">SISTEM INFORMASI SURAT MENYURAT</h3>
+                    <h5 style="text-align:center;">UNIVERSITAS BENGKULU</h5>
+                  </div>
+                  <div class="form-group">
+                    <label class="label">Username</label>
+                    <div class="input-group">
+                      <input type="text" name="username" class="form-control" placeholder="Username">
+                      <div class="input-group-append">
+                        <span class="input-group-text">
+                          <i class="mdi mdi-account-check circle-outline"></i>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="label">Password</label>
+                    <div class="input-group">
+                      <input type="password" name="password" class="form-control" placeholder="*********">
+                      <div class="input-group-append">
+                        <span class="input-group-text">
+                          <i class="mdi mdi-account-key"></i>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <button class="btn btn-primary submit-btn btn-block">Login</button>
+                  </div>
+                  <div class="form-group d-flex justify-content-between">
+                    <div class="form-check form-check-flat mt-0">
+                      <label class="form-check-label">
+                        <input type="checkbox" class="form-check-input" checked> Simpan data login saya </label>
+                    </div>
+                    <a href="#" class="text-small forgot-password text-black">Lupa password ?</a>
+                  </div>
+                  <div class="text-block text-center my-3">
+                    <span class="text-small font-weight-semibold">Belum Terdaftar ?</span>
+                    <a href="register.html" class="text-black text-small">Buat Akun Baru</a>
+                  </div>
+                </form>
+              </div>
+              <p class="footer-text text-center text-white" style="margin-top:10px;">copyright © 2019 <a href="http://lptik.unib.ac.id/en/home" class="text-white">LPTIK UNIB</a>. <a href="https://www.unib.ac.id/" class="text-white">UNIVERSITAS BENGKULU</a>.</p>
+            </div>
+          </div>
+        </div>
+        <!-- content-wrapper ends -->
+      </div>
+      <!-- page-body-wrapper ends -->
+    </div>
+    <!-- container-scroller -->
+    <!-- plugins:js -->
+    <script src="{{ asset('assets/template//vendors/js/vendor.bundle.base.js') }}"></script>
+    <script src="{{ asset('assets/template//vendors/js/vendor.bundle.addons.js') }}"></script>
+    <!-- endinject -->
+    <!-- inject:js -->
+    <script src="{{ asset('assets/template//js/shared/off-canvas.js') }}"></script>
+    <script src="{{ asset('assets/template//js/shared/hoverable-collapse.js') }}"></script>
+    <script src="{{ asset('assets/template//js/shared/misc.js') }}"></script>
+    <script src="{{ asset('assets/template//js/shared/settings.js') }}"></script>
+    <script src="{{ asset('assets/template//js/shared/todolist.js') }}"></script>
+    <!-- endinject -->
+  </body>
 </html>

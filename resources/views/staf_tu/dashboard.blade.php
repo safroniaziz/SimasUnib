@@ -1,6 +1,6 @@
 @extends('layouts/template')
 @section('page-title')
-    Staf TU -Dashboard
+    Staf TU - Dashboard
 @endsection
 @section('sidebar-menu')
     @include('staf_tu/sidebar-menu')
@@ -16,9 +16,8 @@
                         <i class="fa fa-close"></i> {!! \Session::get('gagal-pimpinan') !!} !!
                 </div>
         </div>
-          @endif
-          <!-- row selamat datang -->
-          <div class="row">
+      @endif
+  <div class="row">
     <div class="col-md-12 grid-margin stretch-card">
       <div class="card bg-primary">
         <div class="card-body py-3">
@@ -30,94 +29,85 @@
             </div>
           </div>
         </div>
-          <!-- end row selamat datang -->
-          
-          <!-- row widgets -->
-          <div class="row">
-            <div class="col-md-3 col-sm-6 col-xs-12">
-              <div class="info-box bg-aqua">
-                <span class="info-box-icon"><i class="fa fa-bookmark-o"></i></span>
-
-                <div class="info-box-content">
-                  <span class="info-box-text">Bookmarks</span>
-                  <span class="info-box-number">41,410</span>
-
-                  <div class="progress">
-                    <div class="progress-bar" style="width: 70%"></div>
-                  </div>
-                      <span class="progress-description">
-                        70% Increase in 30 Days
-                      </span>
-                </div>
-                <!-- /.info-box-content -->
-              </div>
-              <!-- /.info-box -->
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xl-3 col-lg-3 col-md-3 col-sm-6 grid-margin stretch-card">
+      <div class="card card-statistics">
+        <div class="card-body">
+          <div class="clearfix">
+            <div class="float-left">
+              <i class="mdi mdi-cube text-danger icon-lg"></i>
             </div>
-            <!-- /.col -->
-            <div class="col-md-3 col-sm-6 col-xs-12">
-              <div class="info-box bg-green">
-                <span class="info-box-icon"><i class="fa fa-thumbs-o-up"></i></span>
-
-                <div class="info-box-content">
-                  <span class="info-box-text">Likes</span>
-                  <span class="info-box-number">41,410</span>
-
-                  <div class="progress">
-                    <div class="progress-bar" style="width: 70%"></div>
-                  </div>
-                      <span class="progress-description">
-                        70% Increase in 30 Days
-                      </span>
-                </div>
-                <!-- /.info-box-content -->
+            <div class="float-right">
+              <p class="mb-0 text-right" style="text-transform:uppercase;">Surat Masuk</p>
+              <div class="fluid-container">
+                <h3 class="font-weight-medium text-right mb-0"></h3>
               </div>
-              <!-- /.info-box -->
             </div>
-            <!-- /.col -->
-            <div class="col-md-3 col-sm-6 col-xs-12">
-              <div class="info-box bg-yellow">
-                <span class="info-box-icon"><i class="fa fa-calendar"></i></span>
-
-                <div class="info-box-content">
-                  <span class="info-box-text">Events</span>
-                  <span class="info-box-number">41,410</span>
-
-                  <div class="progress">
-                    <div class="progress-bar" style="width: 70%"></div>
-                  </div>
-                      <span class="progress-description">
-                        70% Increase in 30 Days
-                      </span>
-                </div>
-                <!-- /.info-box-content -->
-              </div>
-              <!-- /.info-box -->
-            </div>
-            <!-- /.col -->
-            <div class="col-md-3 col-sm-6 col-xs-12">
-              <div class="info-box bg-red">
-                <span class="info-box-icon"><i class="fa fa-comments-o"></i></span>
-
-                <div class="info-box-content">
-                  <span class="info-box-text">Comments</span>
-                  <span class="info-box-number">41,410</span>
-
-                  <div class="progress">
-                    <div class="progress-bar" style="width: 70%"></div>
-                  </div>
-                      <span class="progress-description">
-                        70% Increase in 30 Days
-                      </span>
-                </div>
-                <!-- /.info-box-content -->
-              </div>
-              <!-- /.info-box -->
-            </div>
-            <!-- /.col -->
           </div>
-          <!-- /.row -->
-
-          <!-- end row widgets -->
+          <p class="text-muted mt-3 mb-0">
+            <i class="mdi mdi-alert-octagon mr-1" aria-hidden="true"></i>  Surat Belum Dibaca </p>
         </div>
-        <!-- /.box-body -->
+      </div>
+    </div>
+    <div class="col-xl-3 col-lg-3 col-md-3 col-sm-6 grid-margin stretch-card">
+      <div class="card card-statistics">
+        <div class="card-body">
+          <div class="clearfix">
+            <div class="float-left">
+              <i class="mdi mdi-receipt text-warning icon-lg"></i>
+            </div>
+            <div class="float-right">
+              <p class="mb-0 text-right" style="text-transform:uppercase;">Surat Keluar</p>
+              <div class="fluid-container">
+                <h3 class="font-weight-medium text-right mb-0">3455</h3>
+              </div>
+            </div>
+          </div>
+          <p class="text-muted mt-3 mb-0">
+            <i class="mdi mdi-bookmark-outline mr-1" aria-hidden="true"></i> Product-wise sales </p>
+        </div>
+      </div>
+    </div>
+    <div class="col-xl-3 col-lg-3 col-md-3 col-sm-6 grid-margin stretch-card">
+      <div class="card card-statistics">
+        <div class="card-body">
+          <div class="clearfix">
+            <div class="float-left">
+              <i class="mdi mdi-poll-box text-success icon-lg"></i>
+            </div>
+            <div class="float-right">
+              <p class="mb-0 text-right" style="text-transform:uppercase;">User</p>
+              <div class="fluid-container">
+                <h3 class="font-weight-medium text-right mb-0"></h3>
+              </div>
+            </div>
+          </div>
+          <p class="text-muted mt-3 mb-0">
+            <i class="mdi mdi-calendar mr-1" aria-hidden="true"></i> Weekly Sales </p>
+        </div>
+      </div>
+    </div>
+    <div class="col-xl-3 col-lg-3 col-md-3 col-sm-6 grid-margin stretch-card">
+      <div class="card card-statistics">
+        <div class="card-body">
+          <div class="clearfix">
+            <div class="float-left">
+              <i class="mdi mdi-account-box-multiple text-info icon-lg"></i>
+            </div>
+            <div class="float-right">
+              <p class="mb-0 text-right" style="text-transform:uppercase;">Satuan Kerja</p>
+              <div class="fluid-container">
+                <h3 class="font-weight-medium text-right mb-0"></h3>
+              </div>
+            </div>
+          </div>
+          <p class="text-muted mt-3 mb-0">
+            <i class="mdi mdi-reload mr-1" aria-hidden="true"></i> Product-wise sales </p>
+        </div>
+      </div>
+    </div>
+  </div>
 @endsection

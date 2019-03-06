@@ -5,10 +5,36 @@
       <span class="menu-title">Dashboard</span>
     </a>
   </li>
+
   <li class="nav-item {{ set_active('admin.kode_surat.index') }}">
     <a class="nav-link" href="{{ route('admin.kode_surat.index') }}">
-      <i class="menu-icon mdi mdi-code-tags"></i>
+      <i class="menu-icon mdi mdi-code-array"></i>
       <span class="menu-title">Manajemen Kode Surat</span>
+    </a>
+  </li>
+  
+  <li class="nav-item {{ set_active('admin.jenis_surat.index') }}">
+    <a class="nav-link" href="{{ route('admin.jenis_surat.index') }}">
+      <i class="menu-icon mdi mdi-information-outline"></i>
+      <span class="menu-title">Manajemen Jenis Surat</span>
+    </a>
+  </li>
+  <li class="nav-item {{ set_active('admin.satuan_kerja.index') }}">
+    <a class="nav-link" href="{{ route('admin.satuan_kerja.index') }}">
+      <i class="menu-icon mdi mdi-account-multiple"></i>
+      <span class="menu-title">Manajemen Satuan Kerja</span>
+    </a>
+  </li>
+  <li class="nav-item {{ set_active('admin.manajemen_jabatan.index') }}">
+    <a class="nav-link" href="{{ route('admin.manajemen_jabatan.index') }}">
+      <i class="menu-icon fa fa-tasks"></i>
+      <span class="menu-title">Manajemen Jabatan</span>
+    </a>
+  </li>
+  <li class="nav-item {{ set_active('admin.pejabat_disposisi.index') }}">
+    <a class="nav-link" href="{{ route('admin.pejabat_disposisi.index') }}">
+      <i class="menu-icon mdi mdi-account-box-outline"></i>
+      <span class="menu-title">Manajemen Pejabat Disposisi</span>
     </a>
   </li>
   <li class="nav-item {{ set_active('admin.surat_masuk.index') }}">
@@ -34,18 +60,7 @@
       </ul>
     </div>
   </li>
-  <li class="nav-item {{ set_active('admin.satuan_kerja.index') }}">
-    <a class="nav-link" href="{{ route('admin.satuan_kerja.index') }}">
-      <i class="menu-icon mdi mdi-account-multiple"></i>
-      <span class="menu-title">Manajemen Satuan Kerja</span>
-    </a>
-  </li>
-  <li class="nav-item {{ set_active('admin.pejabat_disposisi.index') }}">
-    <a class="nav-link" href="{{ route('admin.pejabat_disposisi.index') }}">
-      <i class="menu-icon mdi mdi-account-box-outline"></i>
-      <span class="menu-title">Manajemen Pejabat Disposisi</span>
-    </a>
-  </li>
+
   <li class="nav-item {{ set_active('admin.manajemen_user.index') }}">
     <a class="nav-link" href="{{ route('admin.manajemen_user.index') }}">
       <i class="menu-icon fa fa-users"></i>

@@ -1,6 +1,6 @@
-$('body').on('click','.modal-show',function(event){
+$('body').on('click', '.modal-show', function (event) {
     event.preventDefault();
-  
+
     var me = $(this),
         url = me.attr('href'),
         title = me.attr('title');
@@ -9,14 +9,14 @@ $('body').on('click','.modal-show',function(event){
     $('#modal-btn-save').text(me.hasClass('edit') ? 'Update Data' : 'Tambah Data');
 
     $.ajax({
-        url : url,
-        dataType : 'html',
-        success : function(response){
+        url: url,
+        dataType: 'html',
+        success: function (response) {
             $('#modal-body').html(response);
         }
-    })
+    });
 
-    $('.modal').modal();
+    $('#modal').modal('show');
 });
 
 $('#modal-btn-save').click(function (event) {
@@ -37,11 +37,16 @@ $('#modal-btn-save').click(function (event) {
             form.trigger('reset');
             $('#modal').modal('hide');
             $('#table-kode-surat').DataTable().ajax.reload();
+            $('#table-jenis-surat').DataTable().ajax.reload();
+            $('#table-satuan-kerja').DataTable().ajax.reload();
+            $('#table-jabatan').DataTable().ajax.reload();
+            $('#table-pejabat-disposisi').DataTable().ajax.reload();
+            $('#table-pejabat-disposisi').DataTable().ajax.reload();
 
             swal({
                 type : 'success',
                 title : 'Berhasil!',
-                text : 'Kode Surat Berhasil Disimpan!'
+                text : 'Data berhasil ditambahkan!'
             });
         },
         error : function (xhr) {
@@ -51,14 +56,14 @@ $('#modal-btn-save').click(function (event) {
                     $('#' + key)
                         .closest('.form-group')
                         .addClass('has-error')
-                        .append('<span class="help-block"><strong>' + value + '</strong></span>');
+                        .append('<span class="help-block">' + value + '</span>');
                 });
             }
         }
     })
 });
 
-$('body').on('click','.btn-delete',function(event){
+$('body').on('click', '.btn-delete', function (event) {
     event.preventDefault();
 
     var me = $(this),
@@ -67,38 +72,42 @@ $('body').on('click','.btn-delete',function(event){
         csrf_token = $('meta[name="csrf-token"]').attr('content');
 
     swal({
-        title : 'Apakah anda yakin ingin menghapus data '+ title + ' ?',
-        text : 'Anda tidak dapat mengembalikan data jika dihapus !',
-        type : 'warning',
-        showCancelButton :true,
-        confirmButtonColor :'#3085d6',
-        cancelButtonColor : '#d33',
-        confirmButtonText : 'Ya, Hapus data!'
-    }).then((result)    =>  {
-        if(result.value){
+        title: 'Apakah anda yakin ingin menghapus data ' + title + ' ?',
+        text: 'Anda tidak dapat mengembalikan data jika dihapus!',
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Ya, hapus data!'
+    }).then((result) => {
+        if (result.value) {
             $.ajax({
-                url : url,
-                type : "POST",
-                data : {
-                    '_method' : 'DELETE',
-                    '_token' : csrf_token
+                url: url,
+                type: "POST",
+                data: {
+                    '_method': 'DELETE',
+                    '_token': csrf_token
                 },
-                success: function(response){
+                success: function (response) {
                     $('#table-kode-surat').DataTable().ajax.reload();
+                    $('#table-jenis-surat').DataTable().ajax.reload();
+                    $('#table-satuan-kerja').DataTable().ajax.reload();
+                    $('#table-jabatan').DataTable().ajax.reload();
+                    $('#table-pejabat-disposisi').DataTable().ajax.reload();
                     swal({
                         type: 'success',
-                        title: 'Success!',
-                        text: 'Data has been deleted!'
+                        title: 'Berhasil!',
+                        text: 'Data berhasil dihapus!'
                     });
                 },
                 error: function (xhr) {
                     swal({
                         type: 'error',
-                        title: 'Oops...',
-                        text: 'Something went wrong!'
+                        title: 'Upss...',
+                        text: 'Ada sesuatu yang salah!'
                     });
                 }
-            })
+            });
         }
     });
 });

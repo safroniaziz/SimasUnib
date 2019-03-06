@@ -1,8 +1,8 @@
 {!! Form::model($model, [
-    'route' =>  $model->exists ? ['admin.kode_surat.update',$model->id_kode_surat] : 'admin.kode_surat.store',
+    'route' =>  $model->exists ? ['admin.kode_surat.update',$model->id] : 'admin.kode_surat.store',
     'method'    =>  $model->exists ? 'PUT' : 'POST'
 ]) !!}
-
+ 
     <div class="form-group">
         <label for="" class="control-label">Kode Surat :</label>
         {!! Form::text('kode_surat',null,['class' =>  'form-control','id' =>  'kode_surat']) !!}

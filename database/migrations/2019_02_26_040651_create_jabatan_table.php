@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateKodeSuratTable extends Migration
+class CreateJabatanTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,9 @@ class CreateKodeSuratTable extends Migration
      */
     public function up()
     {
-        Schema::create('tb_kode_surat', function (Blueprint $table) {
+        Schema::create('tb_jabatan', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('kode_surat')->length(10)->unique();
+            $table->string('nm_jabatan');
             $table->string('keterangan');
             $table->timestamps();
         });
@@ -28,6 +28,6 @@ class CreateKodeSuratTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tb_kode_surat');
+        Schema::dropIfExists('tb_jabatan');
     }
 }

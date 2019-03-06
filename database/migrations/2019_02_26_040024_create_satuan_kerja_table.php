@@ -17,10 +17,8 @@ class CreateSatuanKerjaTable extends Migration
             $table->increments('id');
             $table->string('nm_satuan_kerja');
             $table->string('nm_satuan_kerja_singkat');
-            $table->string('nm_pimpinan');
-            $table->string('nip_pimpinan');
-            $table->enum('jabatan',['rektor','dekan','ketua']);
-            $table->string('no_hp');
+            $table->string('no_hp')->nullable();
+            $table->string('website')->nullable();
             $table->timestamps();
         });
     }
