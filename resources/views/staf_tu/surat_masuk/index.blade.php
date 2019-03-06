@@ -47,7 +47,7 @@
             responsive: true,
             processing: true,
             serverside: true,
-            ajax: "{{ route('admin.surat_masuk.api') }}",
+            ajax: "{{ route('staf_tu.surat_masuk.api') }}",
             columns: [
                 {data: 'DT_RowIndex',name:'id'},
                 {data: 'nm_pejabat',name:'nm_pejabat'},

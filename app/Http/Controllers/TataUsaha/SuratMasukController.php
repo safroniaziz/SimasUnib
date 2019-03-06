@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Gate;
 use App\Model\SuratMasuk;
 use DB;
+use DataTables;
 
 class SuratMasukController extends Controller
 {
