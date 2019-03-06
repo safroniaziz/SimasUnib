@@ -5,24 +5,73 @@
 @section('sidebar-menu')
     @include('admin/sidebar-menu')
 @endsection
-@section('content')
-    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 grid-margin stretch-card" style="padding:0px;">
-        <div class="card card-statistics social-card card-default">
-            <div class="card-header header-sm">
-            <div class="d-flex align-items-center">
-                <div class="wrapper d-flex align-items-center media-info text-facebook">
-                <i class="mdi mdi-code-tags icon-md"></i>
-                <h2 class="card-title ml-3">Manajemen kode Surat</h5>
-                </div>
-                <div class="wrapper ml-auto action-bar">
-                    <i class="mdi mdi-share-variant mr-3"></i>
-                    <i class="mdi mdi-heart"></i>
-                </div>
-            </div>
-            </div>
-            <div class="card-body">
-                
-            </div>
-        </div>
-    </div>
+@section('manajemen-icon')
+  <i class="mdi mdi-account-multiple icon-md text-dark"></i>
 @endsection
+@section('manajemen-title','Manajemen Satuan Kerja')
+@section('manajemen-button-tambah')
+  <div class="wrapper ml-auto action-bar">
+    <a href="{{ route('admin.satuan_kerja.create') }}" class="btn btn-primary btn-flat modal-show" title="Tambah Satuan Kerja"><i class="fa fa-plus text-white"></i>Tambah Satuan Kerja</a>
+  </div>
+@endsection
+@section('manajemen-table')
+  <div class="row">
+    <div class="col-12 table-responsive">
+      <table id="table-satuan-kerja" class="table dt-responsive table-hover table-striped table-bordered nowrap " style="width:100%;">
+        <thead>
+          <tr class="tr-header">
+            <td>No</td>
+            <td>Nama Satuan Kerja</td>
+            <td>Nama Satuan Kerja Singkat</td>
+            <td>Telephone</td>
+            <td>Website</td>
+            <td>Aksi</td>
+          </tr>
+        </thead>
+      </table>
+    </div>
+  </div>
+@endsection
+
+@push('scripts')
+     <script>
+        $('#table-satuan-kerja').DataTable({
+            responsive: true,
+            processing: true,
+            serverside: true,
+            ajax: "{{ route('admin.satuan_kerja.api') }}",
+            columns: [
+                {data: 'DT_RowIndex',name:'id'},
+                {data: 'nm_satuan_kerja',name:'nm_satuan_kerja'},
+                {data: 'nm_satuan_kerja_singkat',name:'nm_satuan_kerja_singkat'},
+                {data: 'no_hp', 
+                        render:function(data, type, row){
+                            if(data == null)
+                            {
+                              return '<label class="badge badge-danger" style="font-size:12px;">'+'<i class="fa fa-close"></i>'+'&nbsp;data belum ada'+'</label>';
+                            }
+                            else
+                            {
+                              return '<label class="label label-primary" style="font-size:12px;">'+data+'</label>';
+                            }
+                        }
+                },
+                {data: 'website', 
+                        render:function(data, type, row){
+                            if(data == null)
+                            {
+                              return '<label class="badge badge-danger" style="font-size:12px;">'+'<i class="fa fa-close"></i>'+'&nbsp;data belum ada'+'</label>';
+                            }
+                            else
+                            {
+                              return '<label class="label label-primary" style="font-size:12px;">'+data+'</label>';
+                            }
+                        }
+                },
+                
+                {data: 'action',name:'action'},
+            ],
+            
+        })
+    </script>
+@endpush

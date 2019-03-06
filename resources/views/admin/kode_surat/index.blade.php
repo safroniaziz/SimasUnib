@@ -23,22 +23,18 @@
             <div class="card-body" style="padding:10px 15px;">
             <div class="row">
                   <div class="col-12">
-                    <table id="table-kode-surat" class="table dt-responsive table-striped table-bordered nowrap " style="width:100%;">
-                      <thead>
-                        <tr class="tr-header">
-                          <td>No</td>
-                          <td>Kode Surat</td>
-                          <td>Keterangan</td>
-                          <td>Aksi</td>
-                        </tr>
-                      </thead>
-                    </table>
-                  </div>
-                </div>
-            </div>
-        </div>
+      <table id="table-kode-surat" class="table dt-responsive table-hover table-striped table-bordered nowrap " style="width:100%;">
+        <thead>
+          <tr class="tr-header">
+            <td>No</td>
+            <td>Kode Surat</td>
+            <td>Keterangan</td>
+            <td>Aksi</td>
+          </tr>
+        </thead>
+      </table>
     </div>
-
+  </div>
 @endsection
 
 @push('scripts')

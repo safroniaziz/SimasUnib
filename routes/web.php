@@ -41,11 +41,6 @@ Route::group(['prefix'	=>	'admin/dashboard'],function(){
 	Route::get('/','Admin\AdminController@index')->name('admin.dashboard');
 });
 
-Route::group(['prefix'	=>	'admin/surat_masuk'],function(){
-	Route::get('/','Admin\SuratMasukController@index')->name('admin.surat_masuk.index');
-	Route::get('/detail','Admin\SuratMasukController@show')->name('admin.surat_masuk.show');
-});
-
 Route::group(['prefix'	=>	'admin/kode_surat'],function(){
 	Route::get('/','Admin\KodeSuratController@index')->name('admin.kode_surat.index');
 	Route::get('/create','Admin\KodeSuratController@create')->name('admin.kode_surat.create');

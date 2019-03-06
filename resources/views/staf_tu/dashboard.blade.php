@@ -6,23 +6,8 @@
     @include('staf_tu/sidebar-menu')
 @endsection
 @section('content')
-<div class="row">
-          <div class="col-md-12">
-            <div class="box-header with-border" style="padding:7px 7px 3px 10px;">
-              <h3 class="box-title"><b><i class="fa fa-television"></i> DASHBOARD </b></h3>
-
-              <div class="box-tools pull-right">
-                <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip"
-                        title="Collapse">
-                  <i class="fa fa-minus"></i></button>
-                <button type="button" class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove">
-                  <i class="fa fa-times"></i></button>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="box-body">
-          @if (\Session::has('gagal-admin'))
+      @if (\Session::has('gagal-admin'))
+        <div class="card-body">
               <div class="alert alert-danger">
                       <i class="fa fa-close"></i> {!! \Session::get('gagal-admin') !!} !!
               </div>
@@ -30,16 +15,21 @@
                 <div class="alert alert-danger">
                         <i class="fa fa-close"></i> {!! \Session::get('gagal-pimpinan') !!} !!
                 </div>
+        </div>
           @endif
           <!-- row selamat datang -->
           <div class="row">
-            <div class="col-md-12">
-              <div class="callout callout-info">
-                <h4 style="margin-bottom:3px;">Selamat Datang !</h4>
-                <p>Anda berhasil login sebagai <b> STAF TATA USAHA</b>, silahkan gunakan menu yang telah disediakan, dan jangan lupa <b>Logout</b> setelah menggunakan aplikasi !</p>
-              </div>
+    <div class="col-md-12 grid-margin stretch-card">
+      <div class="card bg-primary">
+        <div class="card-body py-3">
+          <div class="d-flex flex-row  align-items">
+            <i class="mdi mdi-television text-white icon-lg"></i>
+            <div class="ml-3">
+              <h6 class="text-white font-weight-semibold mb-0">DASHBOARD</h6>
+              <p class="text-white card-text">Selamat Datang {{ Auth::user()->nm_admin }}, anda berhasil login sebagai <b class="text-white">ADMINISTRATOR</b>. Silahkan gunakan menu yang telah disediakan, dan angan lupa <b class="text-danger">LOGOUT</b> setelah menggunakan aplikasi !</p>
             </div>
           </div>
+        </div>
           <!-- end row selamat datang -->
           
           <!-- row widgets -->
