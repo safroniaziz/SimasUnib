@@ -350,7 +350,7 @@
   <script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
   <script src="https://cdn.datatables.net/responsive/2.2.3/js/responsive.bootstrap4.min.js"></script>
   <script src="{{ asset('js/app.js') }}"></script>
-
+  @include('layouts/partials/file_js')
   @stack('scripts')
 </body>
 

@@ -8,6 +8,7 @@ use Gate;
 use App\Model\SuratMasuk;
 use DB;
 use DataTables;
+use Auth;
 
 class SuratMasukController extends Controller
 {
@@ -15,7 +16,7 @@ class SuratMasukController extends Controller
         if(!Gate::allows('isStafTu')){
             return redirect()->back()->with('gagal-staf-tu', 'Anda tidak memiliki akses sebagai staf tu, silahkan logout dan login kembali sebagai admin'); 
         }
-        $model = new SuratMasuk();
+        
         $id_pejabat_disposisi = DB::table('tb_pejabat_disposisi')->select('id','nm_pejabat')->get();
         $id_jenis_surat = DB::table('tb_jenis_surat')->select('id','jenis_surat')->get();
         return view('staf_tu/surat_masuk.index',compact('model','id_pejabat_disposisi','id_jenis_surat'));

@@ -14,7 +14,7 @@
             <i class="mdi mdi-television text-white icon-lg"></i>
             <div class="ml-3">
               <h6 class="text-white font-weight-semibold mb-0">DASHBOARD</h6>
-              <p class="text-white card-text">Selamat Datang {{ Auth::user()->nm_admin }}, anda berhasil login sebagai <b class="text-white">ADMINISTRATOR</b>. Jangan lupa <b class="text-danger">LOGOUT</b> setelah menggunakan aplikasi !</p>
+              <p class="text-white card-text">Selamat Datang {{ Auth::user()->nm_admin }}, anda berhasil login sebagai <b class="text-white">ADMINISTRATOR</b>. Jangan lupa <b>LOGOUT</b> setelah menggunakan aplikasi !</p>
             </div>
           </div>
         </div>
