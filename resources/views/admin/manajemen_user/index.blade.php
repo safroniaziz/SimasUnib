@@ -11,7 +11,7 @@
 @section('manajemen-title','Manajemen User')
 @section('manajemen-button-tambah')
   <div class="wrapper ml-auto action-bar">
-      <a onclick="#" class="btn btn-primary pull-right" style="margin-top:-8px;color:white;"><i class="fa fa-plus"></i>&nbsp;Tambah User</a>
+      <a onclick="formTambahUser()" class="btn btn-primary pull-right" style="margin-top:-8px;color:white;"><i class="fa fa-plus"></i>&nbsp;Tambah User</a>
   </div>
 @endsection
 @section('manajemen-table')

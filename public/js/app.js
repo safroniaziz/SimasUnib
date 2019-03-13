@@ -93,6 +93,7 @@ $('body').on('click', '.btn-delete', function (event) {
                     $('#table-satuan-kerja').DataTable().ajax.reload();
                     $('#table-jabatan').DataTable().ajax.reload();
                     $('#table-pejabat-disposisi').DataTable().ajax.reload();
+                    $('#table-user').DataTable().ajax.reload();
                     swal({
                         type: 'success',
                         title: 'Berhasil!',

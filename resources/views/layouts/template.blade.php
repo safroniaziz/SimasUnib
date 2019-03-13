@@ -324,11 +324,14 @@
     <!-- page-body-wrapper ends -->
   </div>
   <!-- container-scroller -->
+
   <!-- plugins:js -->
   <script src="{{ asset('assets/template/js/jquery.min.js') }}"></script>
   <script src="{{ asset('assets/template/vendors/js/vendor.bundle.base.js') }}"></script>
   <script src="{{ asset('assets/template/vendors/js/vendor.bundle.addons.js') }}"></script>
   <!-- endinject -->
+  {{-- Validator --}}
+  <script src="{{ asset('assets/validator/validator.min.js') }}"></script>
   <!-- Plugin js for this page-->
   <!-- End plugin js for this page-->
   <!-- inject:js -->
@@ -349,6 +352,7 @@
   <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
   <script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
   <script src="https://cdn.datatables.net/responsive/2.2.3/js/responsive.bootstrap4.min.js"></script>
+
   <script src="{{ asset('js/app.js') }}"></script>
   @include('layouts/partials/file_js')
   @stack('scripts')
