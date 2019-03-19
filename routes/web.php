@@ -126,8 +126,7 @@ Route::group(['prefix'	=>	'admin/manajemen_user'],function(){
 	Route::post('/','Admin\ManajemenUserController@store')->name('admin.manajemen_user.store');
 	Route::get('/detail','Admin\ManajemenUserController@show')->name('admin.manajemen_user.show');
 	Route::get('/{id}/edit','Admin\ManajemenUserController@edit')->name('admin.manajemen_user.edit');
-	Route::patch('/{id}','Admin\ManajemenUserController@update')->name('admin.manajemen_user.update');
-	Route::delete('/{id}','Admin\ManajemenUserController@destroy')->name('admin.manajemen_user.destroy');
+	Route::patch('/{id}','Admin\ManajemenUserController@update');
 	Route::get('/api','Admin\ManajemenUserController@dataTable')->name('admin.manajemen_user.api');
 });
 

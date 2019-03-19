@@ -16,16 +16,8 @@
         ]
     });
 
-    function formTambahUser(){
-        save_method = "add";
-        $('#input[name=_method]').val('POST');
-        $('#modal-user').modal('show');
-        $('#modal-user form')[0].reset();
-        $('.modal-title').text('Tambah User');
-    }
-
     function formEditUser(id) {
-        save_method = 'edit';
+        save_method = "edit";
         $('input[name=_method]').val('PATCH');
         $('#modal-user form')[0].reset();
         $.ajax({
@@ -84,18 +76,17 @@
     }
 
     $(function(){
-        $('modal-user form').validator().on('submit', function (e) {
+        $('form-user form').validator().on('submit', function (e) {
             if (!e.isDefaultPrevented()){
                 var id = $('#id').val();
-                if (save_method == 'add') url = "{{ url('admin/manajemen_user') }}";
-                else url = "{{ url('admin/manajemen_user') . '/' }}" + id;
+                url = "{{ route('admin.manajemen_user.store') }}";
                 $.ajax({
                     url : url,
-                    type : "POST",
                     data : $('modal-user form').serialize(),
                     success : function($data) {
                         $('modal-user').modal('hide');
                         $('table-user').DataTable().ajax.reload();
+                        exit(); 
                     },
                     error : function(){
                         alert('Oops! Something Error!');

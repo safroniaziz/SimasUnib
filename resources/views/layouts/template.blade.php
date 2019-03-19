@@ -36,13 +36,13 @@
       height:0px !important;
       overflow: hidden;
     }
+    
     th{
       height:0px !important;
     }
 
     .tr-header{
       font-weight:bold;
-
     }
 
     .sidebar-dark .sidebar .nav .nav-item.active > .nav-link {
@@ -69,6 +69,22 @@
     .sidebar .nav .nav-item .nav-link i.menu-arrow:before{
       color:white;
     }
+
+    input, textarea, select, input[type="file"]  {
+	padding: 2px;
+  color: #333;
+  height:45px !important;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 15px;
+	line-height: 16px;
+	background: #fafafa;
+	border: 1px solid #ccc;
+	outline: 0;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        -ms-sizing: border-box;
+        box-sizing: border-box;
+}
 
   </style>
 </head>
@@ -342,6 +358,7 @@
   <script src="{{ asset('assets/template/js/shared/todolist.js') }}"></script>
   <script src="{{ asset('assets/template/js/shared/dropify.js') }}"></script>
   <script src="{{ asset('assets/template/js/shared/formpickers.js') }}"></script>
+  <script src="{{ asset('assets/template/js/shared/file-upload.js') }}"></script>
   <!-- endinject -->
    <!-- Sweetalert2 -->
    <script src="{{ asset('assets/sweetalert2/sweetalert2.all.min.js') }}"></script>
