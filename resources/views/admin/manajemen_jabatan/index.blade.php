@@ -11,7 +11,7 @@
 @section('manajemen-title','Manajemen Jabatan')
 @section('manajemen-button-tambah')
   <div class="wrapper ml-auto action-bar">
-    <a href="{{ route('admin.manajemen_user.create') }}" class="btn btn-primary btn-flat modal-show" title="Tambah User"><i class="fa fa-plus text-white"></i>Tambah User</a>
+    <a href="{{ route('admin.manajemen_jabatan.create') }}" class="btn btn-primary btn-flat modal-show" title="Tambah User"><i class="fa fa-plus text-white"></i>Tambah User</a>
   </div>
 @endsection
 @section('manajemen-table')

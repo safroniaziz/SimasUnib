@@ -18,7 +18,8 @@
   <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.bootstrap4.min.css">
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 
-  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2-bootstrap-theme/0.1.0-beta.10/select2-bootstrap.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2-bootstrap-theme/0.1.0-beta.10/select2-bootstrap.min.css">
   @stack('styles')
   <!-- endinject -->
   <!-- plugin css for this page -->
@@ -35,6 +36,7 @@
     td{
       height:0px !important;
       overflow: hidden;
+      font-size:11px !important;
     }
     
     th{
@@ -66,11 +68,20 @@
       padding:16px 15px;
     }
 
-    .sidebar .nav .nav-item .nav-link i.menu-arrow:before{
-      color:white;
+    .sidebar .nav .nav-item .nav-link .menu-title{
+      font-size: 12px;
     }
 
-    input, textarea, select, input[type="file"]  {
+    .sidebar .nav .nav-item .nav-link i.menu-arrow:before{
+      color:white;
+      font-size:5px !important;
+    }
+
+    .badge{
+      font-size: 11px !important;
+    }
+
+    input, textarea, select,  input[type="file"]  {
 	padding: 2px;
   color: #333;
   height:45px !important;
@@ -86,6 +97,12 @@
         box-sizing: border-box;
 }
 
+    table td img{
+      width: 50px !important;
+      height: 50px !important;
+      border-radius: unset !important;
+    }
+
   </style>
 </head>
 
@@ -93,9 +110,9 @@
   <div class="container-scroller">
     <!-- partial:partials/_navbar.html -->
     <nav class="navbar default-layout col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
-      <div class="text-center navbar-brand-wrapper bg-primary d-flex align-items-top justify-content-center">
+      <div class="text-center navbar-brand-wrapper d-flex align-items-top justify-content-center" style="background: #252C46; border-bottom:1px white solid;">
         <a class="navbar-brand brand-logo" href="{{ route('admin.dashboard') }}" style="color:white;line-height:55px;">
-          <i class="mdi mdi-home"></i>SIMAS UNIB
+          <img src="{{ asset('assets/img/logo-utama.png') }}" style="width:30px;" alt="">&nbsp; SIMAS UNIB
         <a class="navbar-brand brand-logo-mini" href="{{ route('admin.dashboard') }}">
           <i class="mdi mdi-home text-white"></i>  
         </a>
@@ -105,11 +122,6 @@
           <span class="mdi mdi-menu"></span>
         </button>
         <ul class="navbar-nav navbar-nav-right">
-          <li class="nav-item d-none d-lg-block color-setting">
-            <a class="nav-link" href="#">
-              <i class="mdi mdi-settings"></i>
-            </a>
-          </li>
           <li class="nav-item dropdown ml-4">
             <a class="nav-link count-indicator dropdown-toggle" id="notificationDropdown" href="#" data-toggle="dropdown">
               <i class="mdi mdi-bell-outline"></i>
@@ -153,7 +165,7 @@
           <li class="nav-item dropdown d-none d-xl-inline-block">
             <a class="nav-link dropdown-toggle" id="UserDropdown" href="#" data-toggle="dropdown" aria-expanded="false">
               <span class="profile-text" style="text-transform:uppercase;">{{ Auth::user()->nm_user }} !</span>
-              <img class="img-xs rounded-circle" src="{{ asset('assets/template/images/faces/face8.jpg') }}" alt="Profile image"> </a>
+            <img class="img-xs rounded-circle" src="{{ Auth::user()->foto  }}" alt="Profile image"> </a>
             <div class="dropdown-menu dropdown-menu-right navbar-dropdown p-0" aria-labelledby="UserDropdown">
               <a class="dropdown-item p-2 text-primary" href="{{ route('logout') }}"
                   onclick="event.preventDefault();
@@ -175,106 +187,16 @@
     <!-- partial -->
     <div class="container-fluid page-body-wrapper  sidebar-dark">
       <!-- partial:partials/_settings-panel.html -->
-      <div class="theme-setting-wrapper">
-        <div id="theme-settings" class="settings-panel" style="padding-top:20px;">
-          <i class="settings-close mdi mdi-close" style="top:20px;"></i>
-          <div class="d-flex align-items-center justify-content-between border-bottom">
-            <p class="settings-heading font-weight-bold border-top-0 mb-3 pl-3 pt-0 border-bottom-0 pb-0">Pengaturan User</p>
-          </div>
-          <div class="sidebar-bg-options selected" id="sidebar-light-theme">
-            <div class="img-ss rounded-circle bg-light border mr-3"></div>Light
-          </div>
-          <div class="sidebar-bg-options" id="sidebar-dark-theme">
-            <div class="img-ss rounded-circle bg-dark border mr-3"></div>Dark
-          </div>
-        </div>
-      </div>
-      <div id="right-sidebar" class="settings-panel">
-        <i class="settings-close mdi mdi-close"></i>
-        <div class="d-flex align-items-center justify-content-between border-bottom">
-          <p class="settings-heading font-weight-bold border-top-0 mb-3 pl-3 pt-0 border-bottom-0 pb-0">Friends</p>
-        </div>
-        <ul class="chat-list">
-          <li class="list active">
-            <div class="profile">
-              <img src="{{ asset('assets/template/images/faces/face1.jpg') }}" alt="image">
-              <span class="online"></span>
-            </div>
-            <div class="info">
-              <p>Thomas Douglas</p>
-              <p>Available</p>
-            </div>
-            <small class="text-muted my-auto">19 min</small>
-          </li>
-          <li class="list">
-            <div class="profile">
-              <img src="{{ asset('assets/template/images/faces/face2.jpg') }}" alt="image">
-              <span class="offline"></span>
-            </div>
-            <div class="info">
-              <div class="wrapper d-flex">
-                <p>Catherine</p>
-              </div>
-              <p>Away</p>
-            </div>
-            <div class="badge badge-success badge-pill my-auto mx-2">4</div>
-            <small class="text-muted my-auto">23 min</small>
-          </li>
-          <li class="list">
-            <div class="profile">
-              <img src="{{ asset('assets/template/images/faces/face3.jpg') }}" alt="image">
-              <span class="online"></span>
-            </div>
-            <div class="info">
-              <p>Daniel Russell</p>
-              <p>Available</p>
-            </div>
-            <small class="text-muted my-auto">14 min</small>
-          </li>
-          <li class="list">
-            <div class="profile">
-              <img src="{{ asset('assets/template/images/faces/face4.jpg') }}" alt="image">
-              <span class="offline"></span>
-            </div>
-            <div class="info">
-              <p>James Richardson</p>
-              <p>Away</p>
-            </div>
-            <small class="text-muted my-auto">2 min</small>
-          </li>
-          <li class="list">
-            <div class="profile">
-              <img src="{{ asset('assets/template/images/faces/face5.jpg') }}" alt="image">
-              <span class="online"></span>
-            </div>
-            <div class="info">
-              <p>Madeline Kennedy</p>
-              <p>Available</p>
-            </div>
-            <small class="text-muted my-auto">5 min</small>
-          </li>
-          <li class="list">
-            <div class="profile">
-              <img src="{{ asset('assets/template/images/faces/face6.jpg') }}" alt="image">
-              <span class="online"></span>
-            </div>
-            <div class="info">
-              <p>Sarah Graves</p>
-              <p>Available</p>
-            </div>
-            <small class="text-muted my-auto">47 min</small>
-          </li>
-        </ul>
-      </div>
+      
       <!-- partial -->
       <!-- partial:partials/_sidebar.html -->
       <nav class="sidebar sidebar-offcanvas" id="sidebar" style="background:">
         <ul class="nav">
           <li class="nav-item nav-profile">
-            <div class="nav-link">
+            <div class="nav-link"  style="flex-direction:unset !important;">
               <div class="user-wrapper">
                 <div class="profile-image">
-                  <img src="{{ asset('assets/template/images/faces/face8.jpg') }}" alt="profile image"> </div>
+                  <img src="{{ Auth::user()->foto }}" alt="profile image" style="max-width:100% !important; height:39px !important;"> </div>
                 <div class="text-wrapper">
                   <p class="profile-name" style="color:white;text-transform:uppercase;">{{ Auth::user()->nm_user }}</p>
                   <div >
@@ -294,9 +216,6 @@
                 </div>
               </div>
             </div>
-          </li>
-          <li class="text-center bg-primary" style="padding:5px 10px;width:95%; margin:0 auto; margin-top:2px; margin-bottom:2px; color:white;">
-            <span>MENU UTAMA</span>
           </li>
           @yield('sidebar-menu')
         </ul>

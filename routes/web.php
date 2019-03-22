@@ -122,11 +122,10 @@ Route::group(['prefix'	=>	'admin/satuan_kerja'],function(){
 
 Route::group(['prefix'	=>	'admin/manajemen_user'],function(){
 	Route::get('/','Admin\ManajemenUserController@index')->name('admin.manajemen_user.index');
-	Route::get('/create','Admin\ManajemenUserController@create')->name('admin.manajemen_user.create');
-	Route::post('/','Admin\ManajemenUserController@store')->name('admin.manajemen_user.store');
-	Route::get('/detail','Admin\ManajemenUserController@show')->name('admin.manajemen_user.show');
-	Route::get('/{id}/edit','Admin\ManajemenUserController@edit')->name('admin.manajemen_user.edit');
+	Route::post('/','Admin\ManajemenUserController@store');
 	Route::patch('/{id}','Admin\ManajemenUserController@update');
+	Route::delete('/{id}','Admin\ManajemenUserController@destroy');
+	Route::get('/{id}/edit','Admin\ManajemenUserController@edit');
 	Route::get('/api','Admin\ManajemenUserController@dataTable')->name('admin.manajemen_user.api');
 });
 

@@ -71,7 +71,7 @@ class PejabatDisposisiController extends Controller
         $model = DB::table('tb_pejabat_disposisi')
                 ->join('tb_satuan_kerja','tb_satuan_kerja.id','tb_pejabat_disposisi.id_satuan_kerja')
                 ->join('tb_jabatan','tb_jabatan.id','tb_pejabat_disposisi.id_jabatan')
-                ->select('tb_pejabat_disposisi.id','nm_satuan_kerja','nm_pejabat','nip_pejabat','nm_jabatan','no_telephone','email','level_disposisi')
+                ->select('tb_pejabat_disposisi.id','nm_satuan_kerja','nm_pejabat','nip_pejabat','nm_jabatan','no_telephone','email')
                 ->get();
         return DataTables::of($model)
                 ->addColumn('action', function($model){

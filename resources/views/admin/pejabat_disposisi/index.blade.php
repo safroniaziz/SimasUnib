@@ -27,7 +27,6 @@
                 <td>Jabatan</td>
                 <td>Telephone</td>
                 <td>Email</td>
-                <td>Level Disposisi</td>
                 <td>Aksi</td>
             </tr>
             </thead>
@@ -51,7 +50,6 @@
                 {data: 'nm_jabatan',name:'nm_jabatan'},
                 {data: 'no_telephone',name:'no_telephone'},
                 {data: 'email',name:'email'},
-                {data: 'level_disposisi',name:'level_disposisi'},
                 {data: 'action',name:'action'},
             ],
         })

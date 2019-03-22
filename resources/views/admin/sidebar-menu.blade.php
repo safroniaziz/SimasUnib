@@ -75,7 +75,7 @@
         <span class="menu-title">{{ __('Logout') }}</span>
     </a>
 
-    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+    <form id="logout-form2" action="{{ route('logout') }}" method="POST" style="display: none;">
         @csrf
     </form>
   </li>

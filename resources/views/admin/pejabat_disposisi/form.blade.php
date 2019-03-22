@@ -57,9 +57,4 @@
         {!! Form::email('email',null,['class' =>  'form-control','id' =>  'email']) !!}
     </div>
 
-    <div class="form-group">
-        <label for="" class="control-label">Level Disposisi :</label>
-        {!! Form::email('level_disposisi',null,['class' =>  'form-control','id' =>  'level_disposisi']) !!}
-    </div>
-
 {!! Form::close() !!}
