@@ -11,10 +11,12 @@ use DB;
 
 class PejabatDisposisiController extends Controller
 {
-    public function index(){
-        if(!Gate::allows('isAdmin')){
-            return redirect()->back()->with('gagal-admin', 'Anda tidak memiliki akses admin, silahkan logout dan login kembali sebagai admin'); 
-        }
+    public function __construct()
+    {
+        $this->middleware('auth:admin');
+    }
+
+    public function index(){    
         return view('admin/pejabat_disposisi.index',compact('id_satuan_kerja'));
     }
 

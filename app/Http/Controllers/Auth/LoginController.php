@@ -26,7 +26,7 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/admin/dashboard';
+    protected $redirectTo = '/staf_tu/dashboard';
 
     /**
      * Create a new controller instance.
@@ -35,7 +35,7 @@ class LoginController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('guest')->except('logout');
+        $this->middleware('guest')->except(['logout','logoutUser']);
     }
 
     protected function credentials(Request $request)
@@ -44,6 +44,12 @@ class LoginController extends Controller
             'username' => $request->username,
             'password' => $request->password,
         ];
+    }
+
+    public function logoutUser(Request $request)
+    {
+        $this->guard('web')->logout();
+        return redirect()->route('login');
     }
 
     public function username()

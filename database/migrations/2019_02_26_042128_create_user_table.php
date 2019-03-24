@@ -18,10 +18,13 @@ class CreateUserTable extends Migration
             $table->integer('id_satuan_kerja')->length(10)->unsigned();
             $table->integer('nm_lengkap')->length(10)->unsigned();
             $table->string('username')->unique();
+            $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->string('foto')->default('profile.png');
-            $table->enum('level',['administrator','pimpinan','staf_tu']);
+            $table->string('foto');
+            $table->integer('id_jabatan')->length(10)->unsigned();;
+            $table->string('telephone');
+            $table->enum('level',['pimpinan','staf_tu']);
             $table->rememberToken();
             $table->timestamps();
         });
@@ -30,6 +33,13 @@ class CreateUserTable extends Migration
             $table->foreign('id_satuan_kerja')
             ->references('id')
             ->on('tb_satuan_kerja')
+            ->onUpdate('CASCADE');
+        });
+
+        Schema::table('tb_user',function($table){
+            $table->foreign('id_jabatan')
+            ->references('id')
+            ->on('tb_jabatan')
             ->onUpdate('CASCADE');
         });
 

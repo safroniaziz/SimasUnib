@@ -67,6 +67,14 @@
       <span class="menu-title">Manajemen User</span>
     </a>
   </li>
+
+  <li class="nav-item {{ set_active('admin.manajemen_admin.index') }}">
+    <a class="nav-link" href="{{ route('admin.manajemen_admin.index') }}">
+      <i class="menu-icon fa fa-user"></i>
+      <span class="menu-title">Manajemen Admin</span>
+    </a>
+  </li>
+
   <li class="nav-item {{ set_active('admin.manajemen_user.index') }}">
     <a class="nav-link" href="{{ route('logout') }}"
         onclick="event.preventDefault();

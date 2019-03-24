@@ -1,19 +1,19 @@
 @extends('layouts/template')
 @section('page-title')
-    Admin - Manajemen User
+    Admin - Manajemen Admin
 @endsection
 @section('sidebar-menu')
     @include('admin/sidebar-menu')
 @endsection
 @section('manajemen-icon')
-    <i class="fa fa-users icon-md text-dark"></i>
+    <i class="fa fa-user icon-md text-dark"></i>
 @endsection
 @section('manajemen-title')
-<p id="manajemen-title">Manajemen User</p>
+<p id="manajemen-title">Manajemen Admin</p>
 @endsection
 @section('manajemen-button-tambah')
   <div class="wrapper ml-auto action-bar">
-	    <a onclick="tambahUser()" class="btn btn-primary pull-right btn-flat"  style="margin-top: -8px; margin-left: 10px; color:white;" ><i class="fa fa-plus"></i>&nbsp;Tambah User</a>
+	    <a onclick="tambahAdmin()" class="btn btn-primary pull-right btn-flat"  style="margin-top: -8px; margin-left: 10px; color:white;" ><i class="fa fa-plus"></i>&nbsp;Tambah User</a>
   </div>
 @endsection
 @push('styles')
@@ -24,21 +24,16 @@
   </style>
 @endpush
 @section('manajemen-table')
-  <div class="row" id="row-table-user">
+  <div class="row" id="row-table-admin">
     <div class="col-12 table-responsive">
-      <table id="table-user" class="table dt-responsive table-hover table-striped table-bordered nowrap " style="width:100%;">
+      <table id="table-admin" class="table dt-responsive table-hover table-striped table-bordered nowrap " style="width:100%;">
         <thead>
           <tr class="tr-header">
             <td>No</td>
-            <td>Nama User</td>
-            <td>Foto User</td>
+            <td>Nama Admin</td>
+            <td>Foto Admin</td>
             <td>Username</td>
-            <td>Email</td>
-            <td>Jabatan</td>
-            <td>Telephone</td>
-            <td>Username</td>
-            <td>Satuan Kerja</td>
-            <td>Level User</td>
+            <td>Password</td>
             <td>Terdaftar Sejak</td>
             <td>Aksi</td>
           </tr>
@@ -46,62 +41,53 @@
       </table>
     </div>
   </div>
-  @include('admin/manajemen_user.form')
+  @include('admin/manajemen_admin.form')
 @endsection
 
 @push('scripts')
   <script>
-    $('#table-user').DataTable({
+    $('#table-admin').DataTable({
         processing: true,
         serverSide: true,
         
-        ajax: "{{ route('admin.manajemen_user.api')  }}",
+        ajax: "{{ route('admin.manajemen_admin.api')  }}",
         columns: [
             {data: 'rownum', name: 'rownum'},
-            {data: 'nm_user', name:'nm_user'},
+            {data: 'nm_admin', name:'nm_admin'},
             {data: 'foto', name:'foto'},
             {data: 'username', name:'username'},
-            {data: 'email', name:'email'},
-            {data: 'id_jabatan', name:'id_jabatan'},
-            {data: 'telephone', name:'telephone'},
-            {data: 'nm_satuan_kerja', name:'nm_satuan_kerja'},
-            {data: 'level', name:'level'},
+            {data: 'password', name:'password'},
             {data: 'created_at', name:'created_at'},
             {data: 'action', name:'action', orderable: false, searchable: false,}
         ]
     });
 
-  function tambahUser(){
+  function tambahAdmin(){
     save_method = "add";
     $('input[name=_method]').val('POST');
-    $('#form-user').modal('show');
+    $('#form-admin').modal('show');
     $('.modal-dialog').css('width','750px');
-    $('#form-user form')[0].reset();
+    $('#form-admin form')[0].reset();
     $('.modal-title').text('TAMBAH USER BARU');
     $('#password-form').show();
 }
 
-function editUser(id){
+function editAdmin(id){
     save_method = 'edit';
     $('input[name=_method]').val('PATCH');
-    $('#form-user form')[0].reset();
+    $('#form-admin form')[0].reset();
     $.ajax({
-      url: "{{ url('admin/manajemen_user') }}"+'/'+ id + "/edit",
+      url: "{{ url('admin/manajemen_admin') }}"+'/'+ id + "/edit",
       type: "GET",
       dataType: "JSON",
       success: function(data){
-        $('#form-user').modal('show');
+        $('#form-admin').modal('show');
         $('.modal-title').text('EDIT USER '+'('+data.nm_user+')');
         $('.modal-dialog').css('width','750px');
         $('#modal-title').text('Edit User');
         $('#id').val(data.id);
-        $('#id_satuan_kerja').val(data.id_satuan_kerja).trigger('change');
-        $('#nm_user').val(data.nm_user);
+        $('#nm_admin').val(data.nm_admin);
         $('#username').val(data.username);
-        $('#email').val(data.email);
-        $('#telephone').val(data.telephone);
-        $('#id_jabatan').val(data.id_jabatan);
-        $('#level').val(data.level).trigger('change');
         $('#password-form').remove();
         $('#upload-value').val(data.foto);
         $('#foto-baru').val(data.foto);
@@ -130,7 +116,7 @@ function editUser(id){
 
   
 
-function hapusUser(id){
+function hapusAdmin(id){
   var csrf_token = $('meta[name="csrf-token"]').attr('content');
   swal({
         title: 'Apakah anda yakin ingin menghapus data  ?',
@@ -142,11 +128,11 @@ function hapusUser(id){
         confirmButtonText: 'Ya, hapus data!'
   }).then(function () {
       $.ajax({
-          url : "{{ url('admin/manajemen_user') }}" + '/' + id,
+          url : "{{ url('admin/manajemen_admin') }}" + '/' + id,
           type : "POST",
           data : {'_method' : 'DELETE', '_token' : csrf_token},
           success : function(data) {
-            $('#table-user').dataTable().api().ajax.reload();
+            $('#table-admin').dataTable().api().ajax.reload();
               swal({
                   title: 'Berhasil!',
                   text: 'Data sudah menjadi sampah!',
@@ -167,22 +153,22 @@ function hapusUser(id){
 }
 
 $(function(){
-    $('#form-user form').validator().on('submit', function(e){
+    $('#form-admin form').validator().on('submit', function(e){
       if (!e.isDefaultPrevented()) {
         var id = $('#id').val();
-        if (save_method == 'add') url = "{{ url('admin/manajemen_user') }}";
-        else url = "{{ url('admin/manajemen_user').'/' }}"+id;
+        if (save_method == 'add') url = "{{ url('admin/manajemen_admin') }}";
+        else url = "{{ url('admin/manajemen_admin').'/' }}"+id;
 
         $.ajax({
           url : url,
           type : "POST",
-          // data : $('#form-user form').serialize(),
-          data : new FormData($('#form-user form')[0]),
+          // data : $('#form-admin form').serialize(),
+          data : new FormData($('#form-admin form')[0]),
           contentType : false,
           processData : false,
           success : function($data){
-            $('#form-user').modal('hide');
-            $('#table-user').dataTable().api().ajax.reload();
+            $('#form-admin').modal('hide');
+            $('#table-admin').dataTable().api().ajax.reload();
             swal({
               title:'Berhasil!',
               text:'Data Sudah Diperbarui',
@@ -199,13 +185,13 @@ $(function(){
     $( "#id_satuan_kerja" ).select2({
         theme: "bootstrap",
         width: "100%",
-        dropdownParent: $('#form-user'),
+        dropdownParent: $('#form-admin'),
     });
 
     $( "#level" ).select2({
         theme: "bootstrap",
         width: "100%",
-        dropdownParent: $('#form-user'),
+        dropdownParent: $('#form-admin'),
     });
 
     

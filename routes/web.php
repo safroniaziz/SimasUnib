@@ -33,6 +33,9 @@ Route::get('/admin',function(){
 	return redirect()->route('admin.dashboard');
 });
 
+Route::get('/admin/login','AuthAdmin\LoginController@showAdminLoginForm')->name('admin.login');
+Route::post('/admin/login','AuthAdmin\LoginController@login')->name('admin.login.submit');
+
 Route::get('/staf_tu',function(){
 	return redirect()->route('staf_tu.dashboard');
 });
@@ -127,6 +130,15 @@ Route::group(['prefix'	=>	'admin/manajemen_user'],function(){
 	Route::delete('/{id}','Admin\ManajemenUserController@destroy');
 	Route::get('/{id}/edit','Admin\ManajemenUserController@edit');
 	Route::get('/api','Admin\ManajemenUserController@dataTable')->name('admin.manajemen_user.api');
+});
+
+Route::group(['prefix'	=>	'admin/manajemen_admin'],function(){
+	Route::get('/','Admin\ManajemenAdminController@index')->name('admin.manajemen_admin.index');
+	Route::post('/','Admin\ManajemenAdminController@store');
+	Route::patch('/{id}','Admin\ManajemenAdminController@update');
+	Route::delete('/{id}','Admin\ManajemenAdminController@destroy');
+	Route::get('/{id}/edit','Admin\ManajemenAdminController@edit');
+	Route::get('/api','Admin\ManajemenAdminController@dataTable')->name('admin.manajemen_admin.api');
 });
 
 //Route Untuk Staf TU

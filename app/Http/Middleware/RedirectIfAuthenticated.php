@@ -17,19 +17,24 @@ class RedirectIfAuthenticated
      */
     public function handle($request, Closure $next, $guard = null)
     {
-        if (Auth::guard($guard)->check()) {
-            if(Auth::user()->level == "administrator")
-            {
-                return redirect('/admin/dashboard');
-            }
-            elseif(Auth::user()->level == "staf_tu")
-            {
-                return redirect('/staf_tu/dashboard');
-            }
-            elseif(Auth::user()->level == "pimpinan")
-            {
-                return redirect('/pimpinan.dashboard');
-            }
+        switch ($guard){
+            case 'admin':
+                if (Auth::guard($guard)->check()) {
+                    return redirect()->route('admin.dashboard');
+                }
+                break;
+            default:
+                if (Auth::guard($guard)->check()) {
+                    if(Auth::user()->level == "staf_tu")
+                    {
+                        return redirect('/staf_tu/dashboard');
+                    }
+                    elseif(Auth::user()->level == "pimpinan")
+                    {
+                        return redirect('/pimpinan.dashboard');
+                    }
+                }
+                break;
         }
         
         return $next($request);

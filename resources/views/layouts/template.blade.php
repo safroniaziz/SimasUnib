@@ -161,11 +161,23 @@
               </a>
             </div>
           </li>
-          
           <li class="nav-item dropdown d-none d-xl-inline-block">
             <a class="nav-link dropdown-toggle" id="UserDropdown" href="#" data-toggle="dropdown" aria-expanded="false">
-              <span class="profile-text" style="text-transform:uppercase;">{{ Auth::user()->nm_user }} !</span>
-            <img class="img-xs rounded-circle" src="{{ Auth::user()->foto  }}" alt="Profile image"> </a>
+              <span class="profile-text" style="text-transform:uppercase;">
+                @if(Auth::guard('admin')->check())
+                  {{ Auth::guard('admin')->user()->nm_admin }}
+                    @else
+                      {{ Auth::user()->nm_user }}
+                @endif
+                !</span>
+            <img class="img-xs rounded-circle" src="
+            @if(Auth::guard('admin')->check())
+              {{ Auth::guard('admin')->user()->foto }}
+                @else
+                  {{ Auth::user()->foto }}
+                
+            @endif
+            " alt="Profile image"> </a>
             <div class="dropdown-menu dropdown-menu-right navbar-dropdown p-0" aria-labelledby="UserDropdown">
               <a class="dropdown-item p-2 text-primary" href="{{ route('logout') }}"
                   onclick="event.preventDefault();
@@ -196,20 +208,25 @@
             <div class="nav-link"  style="flex-direction:unset !important;">
               <div class="user-wrapper">
                 <div class="profile-image">
-                  <img src="{{ Auth::user()->foto }}" alt="profile image" style="max-width:100% !important; height:39px !important;"> </div>
+                  <img src="
+                    @if(Auth::guard('admin')->check())
+                      {{ Auth::guard('admin')->user()->foto }}
+                        @else
+                          {{ Auth::user()->foto }}
+                    @endif
+                  " alt="profile image" style="max-width:100% !important; height:39px !important;"> </div>
                 <div class="text-wrapper">
-                  <p class="profile-name" style="color:white;text-transform:uppercase;">{{ Auth::user()->nm_user }}</p>
+                  <p class="profile-name" style="color:white;text-transform:uppercase;">
+                    @if(Auth::guard('admin')->check())
+                      {{ Auth::guard('admin')->user()->nm_admin }}
+                        @else
+                          {{ Auth::user()->nm_user }}
+                    @endif
+                  </p>
                   <div >
                     <small class="designation text-white">
-                      @can('isAdmin')
-                        MASTER ADMIN
-                      @endcan
-                      @can('isStafTu')
-                        STAF TATA USAHA
-                      @endcan
-                      @can('isPimpinan')
-                        PIMPINAN SATUAN KERJA
-                      @endcan
+                      @component('component.who')
+                      @endcomponent
                     </small>
                     <span class="status-indicator online"></span>
                   </div>

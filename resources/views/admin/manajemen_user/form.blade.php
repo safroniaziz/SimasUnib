@@ -41,9 +41,35 @@
                             <label for="" class="control-label">Nama User :</label>
                             <input type="text" name="nm_user" class="form-control" id="nm_user">
                         </div>
+
                         <div class="form-group col-md-6">
                             <label for="" class="control-label">Username :</label>
                             {!! Form::text('username',null,['class' =>  'form-control','id' =>  'username']) !!}
+                        </div>
+
+                        <div class="form-group col-md-6">
+                            <label for="" class="control-label">Email :</label>
+                            {!! Form::email('email',null,['class' =>  'form-control','id' =>  'email']) !!}
+                        </div>
+
+                        <div class="form-group col-md-6">
+                            <label for="" class="control-label">Satuan Kerja :</label>
+                            <select name="id_satuan_kerja" id="id_satuan_kerja" class="form-control" >
+                                <option value="0"  >-- pilih satuan kerja --</option>    
+                                <?php
+                                    $id_jabatan = DB::table('tb_jabatan')->select('id','nm_jabatan')->get();
+                                    foreach($id_jabatan as $value){
+                                        ?>
+                                            <option value="{{  $value->id }}">{{ $value->nm_jabatan }}</option>
+                                        <?php
+                                    }
+                                ?>
+                            </select>
+                        </div>
+
+                        <div class="form-group col-md-6">
+                            <label for="" class="control-label">Telephone :</label>
+                            {!! Form::text('telephone',null,['class' =>  'form-control','id' =>  'telephone']) !!}
                         </div>
                 
                         <div class="form-group col-md-6" id="password-form">

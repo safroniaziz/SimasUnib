@@ -5,12 +5,12 @@ namespace App\Http\Controllers\Admin;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Gate;
-use App\Model\User;
+use App\Model\Admin;
 use DataTables;
 use DB;
 use Auth;
 
-class ManajemenUserController extends Controller
+class ManajemenAdminController extends Controller
 {
     public function __construct()
     {
@@ -18,35 +18,28 @@ class ManajemenUserController extends Controller
     }
 
     public function index(){
-        return view('admin/manajemen_user.index');
+        return view('admin/manajemen_admin.index');
     }
 
     public function store(Request $request){
         $this->validate($request,[
-            'id_satuan_kerja'    =>  'required|',
-            'nm_user'    =>  'required|string|',
-            'username'    =>  'required|string|',
-            'email'    =>  'required|email|string|unique:email',
-            'telephone'    =>  'string',
-            'id_jabaatan'    =>  'required|',
+            'nm_admin'    =>  'required|string|',
+            'username'    =>  'required|string|unique:tb_admin,username',
             'password'    =>  'required|string|',
             'foto'        =>    'image|max:500',
-            'level'      =>     'required',
         ]);
             
         $model = $request->all();
         $model['foto'] = null;
 
         if ($request->hasFile('foto')) {
-        	$model['foto'] = '/upload/foto_user/'.str_slug($model['nm_user'],'-').'.'.$request->foto->getClientOriginalExtension();
-        	$request->foto->move(public_path('/upload/foto_user'), $model['foto']);
+        	$model['foto'] = '/upload/foto_admin/'.str_slug($model['username'],'-').'.'.$request->foto->getClientOriginalExtension();
+        	$request->foto->move(public_path('/upload/foto_admin'), $model['foto']);
         }
 
-        User::create([
-            'id_satuan_kerja'   => $model['id_satuan_kerja'],
-            'nm_user'   => $model['nm_user'],
+        Admin::create([
+            'nm_admin'   => $model['nm_admin'],
             'username'   => $model['username'],
-            'level'   => $model['level'],
             'foto'   => $model['foto'],
             'password'   => bcrypt($model['password']),
         ]);
@@ -58,25 +51,20 @@ class ManajemenUserController extends Controller
 
     public function edit($id)
     {
-        $model = User::find($id);
+        $model = Admin::find($id);
         return $model;
     }
 
     public function update(Request $request, $id){
         $this->validate($request,[
-            'id_satuan_kerja'    =>  'required|',
-            'nm_user'    =>  'required|string|',
-            'username'    =>  'required|string|',
-            'email'    =>  'required|email|string|unique:email',
-            'telephone'    =>  'string',
-            'id_jabaatan'    =>  'required|',
+            'nm_admin'    =>  'required|string|',
+            'username'    =>  'required|string|unique:tb_admin,id',
             'password'    =>  'string|',
             'foto'        =>    'image|max:500',
-            'level'      =>     'required',
         ]);
 
         $input = $request->all();
-        $model = User::findOrFail($id);
+        $model = Admin::findOrFail($id);
 
         $input['foto'] = $model->foto;
 
@@ -84,8 +72,8 @@ class ManajemenUserController extends Controller
         	if ($model->foto != null) {
         		unlink(public_path($model->foto));
         	}
-        	$input['foto'] = '/upload/foto_user/'.str_slug($input['username'],'-').'.'.$request->foto->getClientOriginalExtension();
-        	$request->foto->move(public_path('/upload/foto_user'), $input['foto']);
+        	$input['foto'] = '/upload/foto_admin/'.str_slug($input['username'],'-').'.'.$request->foto->getClientOriginalExtension();
+        	$request->foto->move(public_path('/upload/foto_admin'), $input['foto']);
         }
 
         $model->update($input);
@@ -97,12 +85,12 @@ class ManajemenUserController extends Controller
 
     public function destroy($id)
     {
-        $model = User::findOrFail($id);
+        $model = Admin::findOrFail($id);
         if ($model->foto != null) {
     		unlink(public_path($model->foto));
     	}
 
-    	User::destroy($id);
+    	Admin::destroy($id);
     	return response()->json([
     		'success'	=>	true
     	]);
@@ -110,10 +98,8 @@ class ManajemenUserController extends Controller
 
     public function dataTable(){
         DB::statement(DB::raw('set @rownum=0'));
-        $model = DB::table('tb_user')
-                ->join('tb_satuan_kerja','tb_satuan_kerja.id','tb_user.id_satuan_kerja')
-                ->join('tb_jabatan','tb_jabatan.id','tb_user.id_jabatan')
-                ->select('tb_user.id','tb_satuan_kerja.id as id_satuan_kerja','tb_satuan_kerja.nm_satuan_kerja','nm_user','username','email','tb_jabatan.nm_jabatan','telephone','foto','level','tb_user.created_at',DB::raw('@rownum  := @rownum  + 1 AS rownum'))
+        $model = DB::table('tb_admin')
+                ->select('id','nm_admin','username','password','foto','created_at',DB::raw('@rownum  := @rownum  + 1 AS rownum'))
                 ->get();
         return DataTables::of($model)
                 ->addColumn('foto',function($model){
@@ -127,8 +113,8 @@ class ManajemenUserController extends Controller
                 })
                 ->addColumn('action', function($model){
                     return
-                    '<a onclick="editUser('.$model->id.')"  class="btn btn-primary btn-xs btn-flat"><i class="fa fa-edit"></i></a> '.
-                    '<a onclick="hapusUser('.$model->id.')" class="btn btn-danger btn-xs btn-flat"><i class="fa fa-remove"></i></a> ';
+                    '<a onclick="editAdmin('.$model->id.')"  class="btn btn-primary btn-xs btn-flat"><i class="fa fa-edit"></i></a> '.
+                    '<a onclick="hapusAdmin('.$model->id.')" class="btn btn-danger btn-xs btn-flat"><i class="fa fa-remove"></i></a> ';
                 })->rawColumns(['foto','action'])->make(true);
     }
 }

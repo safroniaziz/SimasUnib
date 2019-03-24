@@ -10,10 +10,12 @@ use App\Model\KodeSurat;
 
 class KodeSuratController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth:admin');
+    }
+    
     public function index(){
-        if(!Gate::allows('isAdmin')){
-            return redirect()->back()->with('gagal-admin', 'Anda tidak memiliki akses admin, silahkan logout dan login kembali sebagai admin'); 
-        }
         return view('admin/kode_surat.index');
     }
 
