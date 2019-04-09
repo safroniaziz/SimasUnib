@@ -18,20 +18,27 @@ class ManajemenUserController extends Controller
     }
 
     public function index(){
-        return view('admin/manajemen_user.index');
+        if(empty($id)){
+            $id_jabatan = DB::table('tb_jabatan')->select('id','nm_jabatan')->whereNotIn('id', function($q){
+                $q->select('tb_user.id_jabatan')->from('tb_user')->join('tb_jabatan','tb_jabatan.id','tb_user.id_jabatan');
+            })->get();
+        }else{
+            $id_jabatan = User::find($id);
+        }
+        return view('admin/manajemen_user.index',compact('id_jabatan','id_jabatan'));
     }
 
     public function store(Request $request){
         $this->validate($request,[
-            'id_satuan_kerja'    =>  'required|',
             'nm_user'    =>  'required|string|',
+            'nip'    =>  'required|string|',
             'username'    =>  'required|string|',
-            'email'    =>  'required|email|string|unique:email',
+            'email'    =>  'required|email|string|unique:tb_user',
             'telephone'    =>  'string',
-            'id_jabaatan'    =>  'required|',
+            'id_jabatan'    =>  'required|',
             'password'    =>  'required|string|',
             'foto'        =>    'image|max:500',
-            'level'      =>     'required',
+            'level_user'      =>     'required',
         ]);
             
         $model = $request->all();
@@ -43,10 +50,13 @@ class ManajemenUserController extends Controller
         }
 
         User::create([
-            'id_satuan_kerja'   => $model['id_satuan_kerja'],
             'nm_user'   => $model['nm_user'],
+            'nip'   => $model['nip'],
             'username'   => $model['username'],
-            'level'   => $model['level'],
+            'email'   => $model['email'],
+            'id_jabatan'   => $model['id_jabatan'],
+            'telephone'   => $model['telephone'],
+            'level_user'   => $model['level_user'],
             'foto'   => $model['foto'],
             'password'   => bcrypt($model['password']),
         ]);
@@ -58,22 +68,33 @@ class ManajemenUserController extends Controller
 
     public function edit($id)
     {
-        $model = User::find($id);
+        $model = DB::table('tb_user')
+                ->join('tb_jabatan','tb_jabatan.id','tb_user.id_jabatan')
+                ->join('tb_satuan_kerja','tb_satuan_kerja.id','tb_jabatan.id_satuan_kerja')
+                ->where('tb_user.id',$id)
+                ->select('tb_user.id','nm_user','nip','username','email','status','tb_jabatan.nm_jabatan','tb_satuan_kerja.nm_satuan_kerja','telephone','foto','level_user','tb_user.created_at',DB::raw('@rownum  := @rownum  + 1 AS rownum'))
+                ->get();
         return $model;
     }
 
     public function update(Request $request, $id){
         $this->validate($request,[
-            'id_satuan_kerja'    =>  'required|',
             'nm_user'    =>  'required|string|',
-            'username'    =>  'required|string|',
-            'email'    =>  'required|email|string|unique:email',
+            'nip'    =>  'required|string|unique:tb_user,id',
+            'username'    =>  'required|string|unique:tb_user,id',
+            'email'    =>  'required|email|string|unique:tb_user,id',
             'telephone'    =>  'string',
-            'id_jabaatan'    =>  'required|',
+            // 'id_jabatan'    =>  'required|',
             'password'    =>  'string|',
             'foto'        =>    'image|max:500',
-            'level'      =>     'required',
+            'level_user'      =>     'required',
         ]);
+
+        $id_jabatan = DB::table('tb_user')
+                    ->join('tb_jabatan','tb_jabatan.id','tb_user.id_jabatan')
+                    ->where('tb_user.id',$id)
+                    ->select('tb_jabatan.id as id_jabatan')
+                    ->get();
 
         $input = $request->all();
         $model = User::findOrFail($id);
@@ -88,11 +109,20 @@ class ManajemenUserController extends Controller
         	$request->foto->move(public_path('/upload/foto_user'), $input['foto']);
         }
 
-        $model->update($input);
+        $model->update([
+            'nm_user'   => $input['nm_user'],
+            'nip'   => $input['nip'],
+            'username'   => $input['username'],
+            'email'   => $input['email'],
+            'id_jabatan'   => $id_jabatan[0]->id_jabatan,
+            'telephone'   => $input['telephone'],
+            'level_user'   => $input['level_user'],
+            'foto'   => $input['foto'],
+            // 'password'   => bcrypt($input['password']),
+        ]);
         return response()->json([
         	'success'	=> true
         ]);
-        
     }
 
     public function destroy($id)
@@ -108,12 +138,24 @@ class ManajemenUserController extends Controller
     	]);
     }
 
+    public function setNonaktif()
+    {
+        $data = DB::table('tb_user')->update(['status'  => 0]);
+    }
+
+    public function setAktif($id)
+    {
+      $this->setNonaktif();
+      $data = DB::table('tb_user')->where('id',$id)->update(['status'  =>1]);
+        return true;
+    }
+
     public function dataTable(){
         DB::statement(DB::raw('set @rownum=0'));
         $model = DB::table('tb_user')
-                ->join('tb_satuan_kerja','tb_satuan_kerja.id','tb_user.id_satuan_kerja')
                 ->join('tb_jabatan','tb_jabatan.id','tb_user.id_jabatan')
-                ->select('tb_user.id','tb_satuan_kerja.id as id_satuan_kerja','tb_satuan_kerja.nm_satuan_kerja','nm_user','username','email','tb_jabatan.nm_jabatan','telephone','foto','level','tb_user.created_at',DB::raw('@rownum  := @rownum  + 1 AS rownum'))
+                ->join('tb_satuan_kerja','tb_satuan_kerja.id','tb_jabatan.id_satuan_kerja')
+                ->select('tb_user.id','nm_user','nip','username','email','status','tb_jabatan.nm_jabatan','tb_satuan_kerja.nm_satuan_kerja','telephone','foto','level_user','tb_user.created_at',DB::raw('@rownum  := @rownum  + 1 AS rownum'))
                 ->get();
         return DataTables::of($model)
                 ->addColumn('foto',function($model){
@@ -125,10 +167,24 @@ class ManajemenUserController extends Controller
                         return '<img class="" width="50" height="50" src="'. url($model->foto) .'" alt="">';
                     }
                 })
+
+                ->addColumn('ubah_status',function($model){
+                    if($model->status == 1)
+                    {
+                        return 
+                       '<a onclick="setNonaktif('.$model->id.')"  class="btn social-btn btn-danger " style="padding:5px;font-size:10px;"><i class="fa fa-thumbs-o-down"></i></a> ';
+                    }
+                    else
+                    {
+                        return 
+                        '<a onclick="setAktif('.$model->id.')"  class="btn social-btn btn-primary " style="padding:5px;font-size:10px;"><i class="fa fa-thumbs-o-up"></i></a> ';
+                    }                    
+                })
+
                 ->addColumn('action', function($model){
                     return
-                    '<a onclick="editUser('.$model->id.')"  class="btn btn-primary btn-xs btn-flat"><i class="fa fa-edit"></i></a> '.
-                    '<a onclick="hapusUser('.$model->id.')" class="btn btn-danger btn-xs btn-flat"><i class="fa fa-remove"></i></a> ';
-                })->rawColumns(['foto','action'])->make(true);
+                    '<a onclick="editUser('.$model->id.')"  class="btn social-btn btn-primary " style="padding:5px;font-size:10px;"><i class="fa fa-edit"></i></a> '.
+                    '<a onclick="hapusUser('.$model->id.')"  class="btn social-btn btn-danger " style="padding:5px;font-size:10px;"><i class="fa fa-remove"></i></a> ';
+                })->rawColumns(['foto','action','ubah_status'])->make(true);
     }
 }

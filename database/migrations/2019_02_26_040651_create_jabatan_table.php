@@ -15,9 +15,17 @@ class CreateJabatanTable extends Migration
     {
         Schema::create('tb_jabatan', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('id_satuan_kerja')->length(10)->unsigned();
             $table->string('nm_jabatan');
-            $table->string('keterangan');
+            $table->string('keterangan')->nullable();;
             $table->timestamps();
+        });
+
+        Schema::table('tb_jabatan',function($table){
+            $table->foreign('id_satuan_kerja')
+            ->references('id')
+            ->on('tb_satuan_kerja')
+            ->onUpdate('CASCADE');
         });
     }
 

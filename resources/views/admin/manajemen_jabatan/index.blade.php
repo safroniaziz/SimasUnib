@@ -21,6 +21,7 @@
         <thead>
           <tr class="tr-header">
             <td>No</td>
+            <td>Nama Satuan Kerja</td>
             <td>Nama Jabatan</td>
             <td>Keterangan</td>
             <td>Aksi</td>
@@ -34,14 +35,25 @@
 @push('scripts')
      <script>
         $('#table-jabatan').DataTable({
-            responsive: true,
             processing: true,
             serverside: true,
             ajax: "{{ route('admin.manajemen_jabatan.api') }}",
             columns: [
                 {data: 'DT_RowIndex',name:'id'},
+                {data: 'nm_satuan_kerja',name:'nm_satuan_kerja'},
                 {data: 'nm_jabatan',name:'nm_jabatan'},
-                {data: 'keterangan',name:'keterangan'},
+                {data: 'keterangan', 
+                        render:function(data, type, row){
+                            if(data == null)
+                            {
+                              return '<label class="badge badge-danger" style="font-size:11px;">'+"tidak ada keterangan"+'</label>';
+                            }
+                            else
+                            {
+                              return '<style="font-size:11px;">'+data;
+                            }
+                        }
+                },
                 {data: 'action',name:'action'},
             ],
             

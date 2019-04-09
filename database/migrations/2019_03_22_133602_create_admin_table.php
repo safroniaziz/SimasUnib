@@ -17,9 +17,11 @@ class CreateAdminTable extends Migration
             $table->increments('id');
             $table->string('nm_admin');
             $table->string('username')->unique();
+            $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->string('foto')->nullable();
+            $table->enum('status',['0','1'])->default(1);
             $table->rememberToken();
             $table->timestamps();
         });

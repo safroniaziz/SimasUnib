@@ -88,6 +88,7 @@ function editAdmin(id){
         $('#id').val(data.id);
         $('#nm_admin').val(data.nm_admin);
         $('#username').val(data.username);
+        $('#email').val(data.email);
         $('#password-form').remove();
         $('#upload-value').val(data.foto);
         $('#foto-baru').val(data.foto);

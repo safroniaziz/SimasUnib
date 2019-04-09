@@ -15,25 +15,21 @@ class CreateUserTable extends Migration
     {
         Schema::create('tb_user', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('id_satuan_kerja')->length(10)->unsigned();
-            $table->integer('nm_lengkap')->length(10)->unsigned();
-            $table->string('username')->unique();
-            $table->string('email')->unique();
+            $table->integer('id_jabatan')->length(10)->unsigned();;
+            $table->string('nip')->length(18)->unique();
+            $table->string('nm_user');
+            $table->string('username');
+            $table->string('email');
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->string('foto');
-            $table->integer('id_jabatan')->length(10)->unsigned();;
-            $table->string('telephone');
-            $table->enum('level',['pimpinan','staf_tu']);
+            $table->string('foto')->nullable();
+            $table->string('telephone')->nullable();;
+            $table->enum('level_user',['pimpinan','staf_tu']);
+            $table->enum('status',['0','1'])->default(1);
             $table->rememberToken();
             $table->timestamps();
-        });
-        
-        Schema::table('tb_user',function($table){
-            $table->foreign('id_satuan_kerja')
-            ->references('id')
-            ->on('tb_satuan_kerja')
-            ->onUpdate('CASCADE');
+
+            $table->unique(['username','email','nip']);
         });
 
         Schema::table('tb_user',function($table){

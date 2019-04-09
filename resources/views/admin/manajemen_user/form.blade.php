@@ -12,29 +12,37 @@
                 <div class="modal-body">
                     <input type="hidden" id="id" name="id">
                     <div class="row">
-                        <div class="form-group col-md-6">
-                            <label for="" class="control-label">Satuan Kerja :</label>
-                            <select name="id_satuan_kerja" id="id_satuan_kerja" class="form-control" >
-                                <option value="0"  >-- pilih satuan kerja --</option>    
+                        <div class="form-group col-md-6" id="id_jabatan_edit">
+                            <label for="" class="control-label">Jabatan :</label>
+                            <select name="id_jabatan" id="id_jabatan" class="form-control" >
+                                <option value="0"  >-- pilih jabatan --</option>    
                                 <?php
-                                    $id_satuan_kerja = DB::table('tb_satuan_kerja')->select('id','nm_satuan_kerja')->get();
-                                    foreach($id_satuan_kerja as $value){
+                                    foreach($id_jabatan as $value){
                                         ?>
-                                            <option value="{{  $value->id }}">{{ $value->nm_satuan_kerja }}</option>
+                                            <option value="{{  $value->id }}">{{ $value->nm_jabatan }}</option>
                                         <?php
                                     }
                                 ?>
                             </select>
                         </div>
 
+                        <div class="form-group col-md-6" id="jabatan_edit">
+                            <label for="" class="control-label">Jabatan :</label>
+                            <input type="text" class="form-control" id="jabatan">
+                        </div>
+
                         <div class="form-group col-md-6">
                             <label for="" class="control-label">Level User :</label>
-                            <select name="level" id="level" class="form-control">
+                            <select name="level_user" id="level_user" class="form-control">
                                 <option value="0" selected="true" disabled="true">-- pilih level user --</option>    
-                                <option value="administrator">Administrator</option>
                                 <option value="staf_tu">Staf Tata Usaha</option>
                                 <option value="pimpinan">Pimpinan</option>
                             </select>
+                        </div>
+
+                        <div class="form-group col-md-6">
+                            <label for="" class="control-label">Nomor Induk Pegawai :</label>
+                            <input type="text" name="nip" class="form-control" id="nip">
                         </div>
                 
                         <div class="form-group col-md-6">
@@ -44,28 +52,13 @@
 
                         <div class="form-group col-md-6">
                             <label for="" class="control-label">Username :</label>
-                            {!! Form::text('username',null,['class' =>  'form-control','id' =>  'username']) !!}
+                            <input type="text" name="username" class="form-control" id="username">
                         </div>
 
                         <div class="form-group col-md-6">
                             <label for="" class="control-label">Email :</label>
                             {!! Form::email('email',null,['class' =>  'form-control','id' =>  'email']) !!}
-                        </div>
-
-                        <div class="form-group col-md-6">
-                            <label for="" class="control-label">Satuan Kerja :</label>
-                            <select name="id_satuan_kerja" id="id_satuan_kerja" class="form-control" >
-                                <option value="0"  >-- pilih satuan kerja --</option>    
-                                <?php
-                                    $id_jabatan = DB::table('tb_jabatan')->select('id','nm_jabatan')->get();
-                                    foreach($id_jabatan as $value){
-                                        ?>
-                                            <option value="{{  $value->id }}">{{ $value->nm_jabatan }}</option>
-                                        <?php
-                                    }
-                                ?>
-                            </select>
-                        </div>
+                        </div>  
 
                         <div class="form-group col-md-6">
                             <label for="" class="control-label">Telephone :</label>

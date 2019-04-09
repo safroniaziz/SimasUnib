@@ -30,15 +30,17 @@
         <thead>
           <tr class="tr-header">
             <td>No</td>
+            <td>Nama Satuan Kerja</td>
+            <td>Jabatan</td>
             <td>Nama User</td>
+            <td>NIP</td>
             <td>Foto User</td>
             <td>Username</td>
             <td>Email</td>
-            <td>Jabatan</td>
             <td>Telephone</td>
-            <td>Username</td>
-            <td>Satuan Kerja</td>
             <td>Level User</td>
+            <td>Status</td>
+            <td>Ubah Status</td>
             <td>Terdaftar Sejak</td>
             <td>Aksi</td>
           </tr>
@@ -52,20 +54,36 @@
 @push('scripts')
   <script>
     $('#table-user').DataTable({
+        responsive: true,
         processing: true,
         serverSide: true,
         
         ajax: "{{ route('admin.manajemen_user.api')  }}",
         columns: [
             {data: 'rownum', name: 'rownum'},
+            {data: 'nm_satuan_kerja', name:'nm_satuan_kerja'},
+            {data: 'nm_jabatan', name:'nm_jabatan'},
             {data: 'nm_user', name:'nm_user'},
+            {data: 'nip', name:'nip'},
             {data: 'foto', name:'foto'},
             {data: 'username', name:'username'},
             {data: 'email', name:'email'},
-            {data: 'id_jabatan', name:'id_jabatan'},
             {data: 'telephone', name:'telephone'},
-            {data: 'nm_satuan_kerja', name:'nm_satuan_kerja'},
-            {data: 'level', name:'level'},
+            {data: 'level_user', name:'level_user'},
+            {data: 'status', 
+                        render:function(data, type, row){
+                            if(data == 1)
+                            {
+                              return '<label class="badge badge-primary" style="font-size:11px;">'+'<i class="fa fa-check"></i>'+'&nbsp;actived'+'</label>';
+                            }
+                            else
+                            {
+                              return '<label class="badge badge-danger" style="font-size:11px;">'+'<i class="fa fa-check"></i>'+'&nbsp;deactive'+'</label>';
+                            }
+                        }
+                },
+            {data: 'ubah_status', name:'ubah_status'},
+
             {data: 'created_at', name:'created_at'},
             {data: 'action', name:'action', orderable: false, searchable: false,}
         ]
@@ -79,6 +97,8 @@
     $('#form-user form')[0].reset();
     $('.modal-title').text('TAMBAH USER BARU');
     $('#password-form').show();
+    $('#jabatan_edit').hide();
+
 }
 
 function editUser(id){
@@ -94,17 +114,18 @@ function editUser(id){
         $('.modal-title').text('EDIT USER '+'('+data.nm_user+')');
         $('.modal-dialog').css('width','750px');
         $('#modal-title').text('Edit User');
-        $('#id').val(data.id);
-        $('#id_satuan_kerja').val(data.id_satuan_kerja).trigger('change');
-        $('#nm_user').val(data.nm_user);
-        $('#username').val(data.username);
-        $('#email').val(data.email);
-        $('#telephone').val(data.telephone);
-        $('#id_jabatan').val(data.id_jabatan);
-        $('#level').val(data.level).trigger('change');
+        $('#id').val(data[0].id);
+        $('#nm_user').val(data[0].nm_user);
+        $('#nip').val(data[0].nip);
+        $('#username').val(data[0].username);
+        $('#email').val(data[0].email);
+        $('#telephone').val(data[0].telephone);
+        $('#id_jabatan_edit').hide();
+        $('#jabatan').val(data[0].nm_jabatan).prop('disabled',true);
+        $('#level_user').val(data[0].level_user).trigger('change');
         $('#password-form').remove();
-        $('#upload-value').val(data.foto);
-        $('#foto-baru').val(data.foto);
+        $('#upload-value').val(data[0].foto);
+        $('#foto-baru').val(data[0].foto);
       },
       error:function(){
         alert("Nothing Data");
@@ -147,12 +168,14 @@ function hapusUser(id){
           data : {'_method' : 'DELETE', '_token' : csrf_token},
           success : function(data) {
             $('#table-user').dataTable().api().ajax.reload();
+            
               swal({
                   title: 'Berhasil!',
                   text: 'Data sudah menjadi sampah!',
                   type: 'success',
                   timer: '1500'
               })
+              location.reload(true);
           },
           error : function () {
               swal({
@@ -163,6 +186,19 @@ function hapusUser(id){
               })
           }
       });
+  });
+}
+
+function setAktif(id){
+  $.ajax({
+      url : "{{ url('admin/manajemen_user/set_aktif') }}" + '/' + id,
+      type : "POST",
+      success : function(data) {
+        $('#table-user').dataTable().api().ajax.reload();
+      },
+      error : function () {
+
+      }
   });
 }
 
@@ -183,12 +219,14 @@ $(function(){
           success : function($data){
             $('#form-user').modal('hide');
             $('#table-user').dataTable().api().ajax.reload();
+            
             swal({
               title:'Berhasil!',
               text:'Data Sudah Diperbarui',
               type:'success',
               timer:'1500'
             })
+            location.reload(true);
           }
         });
         return false;
@@ -196,17 +234,17 @@ $(function(){
     });
   });
 
-    $( "#id_satuan_kerja" ).select2({
-        theme: "bootstrap",
-        width: "100%",
-        dropdownParent: $('#form-user'),
-    });
+    // $( "#id_satuan_kerja" ).select2({
+    //     theme: "bootstrap",
+    //     width: "100%",
+    //     dropdownParent: $('#form-user'),
+    // });
 
-    $( "#level" ).select2({
-        theme: "bootstrap",
-        width: "100%",
-        dropdownParent: $('#form-user'),
-    });
+    // $( "#level_user" ).select2({
+    //     theme: "bootstrap",
+    //     width: "100%",
+    //     dropdownParent: $('#form-user'),
+    // });
 
     
   </script>

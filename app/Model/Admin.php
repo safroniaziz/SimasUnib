@@ -11,6 +11,6 @@ class Admin extends Authenticatable
     protected $guard = 'admin';
     protected $table = 'tb_admin';
     protected $fillable = [
-        'nm_admin','username', 'password','foto',
+        'nm_admin','username','email', 'password','foto',
     ];
 }

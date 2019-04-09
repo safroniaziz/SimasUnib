@@ -13,13 +13,13 @@
 
 Route::get('/', function () {
     if(Auth::check()){
-			if(Auth::user()->level == 'administrator'){
+			if(Auth::user()->level_user == 'administrator'){
 				return redirect()->route('admin.dashboard');
 			}
-			elseif(Auth::user()->level == 'staf_tu'){
+			elseif(Auth::user()->level_user == 'staf_tu'){
 				return redirect()->route('staf_tu.dashboard');
 			}
-			elseif(Auth::user()->level == 'pimpinan'){
+			elseif(Auth::user()->level_user == 'pimpinan'){
 				return redirect()->route('pimpinan.dashboard');
 			}
 			else{
@@ -38,6 +38,10 @@ Route::post('/admin/login','AuthAdmin\LoginController@login')->name('admin.login
 
 Route::get('/staf_tu',function(){
 	return redirect()->route('staf_tu.dashboard');
+});
+
+Route::get('/pimpinan',function(){
+	return redirect()->route('pimpinan.dashboard');
 });
 
 Auth::routes();
@@ -70,15 +74,14 @@ Route::group(['prefix'	=>	'admin/jenis_surat'],function(){
 	Route::get('/api','Admin\JenisSuratController@dataTable')->name('admin.jenis_surat.api');
 });
 
-Route::group(['prefix'	=>	'admin/surat_masuk'],function(){
-	Route::get('/','Admin\SuratMasukController@index')->name('admin.surat_masuk.index');
-	Route::get('/create','Admin\SuratMasukController@create')->name('admin.surat_masuk.create');
-	Route::post('/','Admin\SuratMasukController@store')->name('admin.surat_masuk.store');
-	Route::get('/detail','Admin\SuratMasukController@show')->name('admin.surat_masuk.show');
-	Route::get('/{id}/edit','Admin\SuratMasukController@edit')->name('admin.surat_masuk.edit');
-	Route::put('/{id}','Admin\SuratMasukController@update')->name('admin.surat_masuk.update');
-	Route::delete('/{id}','Admin\SuratMasukController@destroy')->name('admin.surat_masuk.destroy');
-	Route::get('/api','Admin\SuratMasukController@dataTable')->name('admin.surat_masuk.api');
+Route::group(['prefix'	=>	'admin/surat_masuk_internal'],function(){
+	Route::get('/','Admin\SuratMasukInternalController@index')->name('admin.surat_masuk_internal.index');
+	Route::get('/api','Admin\SuratMasukInternalController@dataTable')->name('admin.surat_masuk_internal.api');
+});
+
+Route::group(['prefix'	=>	'admin/surat_masuk_eksternal'],function(){
+	Route::get('/','Admin\SuratMasukEksternalController@index')->name('admin.surat_masuk_eksternal.index');
+	Route::get('/api','Admin\SuratMasukEksternalController@dataTable')->name('admin.surat_masuk_eksternal.api');
 });
 
 Route::group(['prefix'	=>	'admin/satuan_kerja'],function(){
@@ -129,6 +132,8 @@ Route::group(['prefix'	=>	'admin/manajemen_user'],function(){
 	Route::patch('/{id}','Admin\ManajemenUserController@update');
 	Route::delete('/{id}','Admin\ManajemenUserController@destroy');
 	Route::get('/{id}/edit','Admin\ManajemenUserController@edit');
+	Route::get('/set_nonaktif','Admin\ManajemenUserController@setNonaktif');
+	Route::get('/set_active/{id}','Admin\ManajemenUserController@setAktif')->name('admin.manajemen_user.set_aktif');
 	Route::get('/api','Admin\ManajemenUserController@dataTable')->name('admin.manajemen_user.api');
 });
 
@@ -146,15 +151,24 @@ Route::group(['prefix'	=>	'staf_tu/dashboard'],function(){
 	Route::get('/','TataUsaha\TataUsahaController@index')->name('staf_tu.dashboard');
 });
 
-Route::group(['prefix'	=>	'staf_tu/surat_masuk'],function(){
-	Route::get('/','TataUsaha\SuratMasukController@index')->name('staf_tu.surat_masuk.index');
-	Route::get('/create','TataUsaha\SuratMasukController@create')->name('staf_tu.surat_masuk.create');
-	Route::post('/','TataUsaha\SuratMasukController@store')->name('staf_tu.surat_masuk.store');
-	Route::get('/detail','TataUsaha\SuratMasukController@show')->name('staf_tu.surat_masuk.show');
-	Route::get('/{id}/edit','TataUsaha\SuratMasukController@edit')->name('staf_tu.surat_masuk.edit');
-	Route::put('/{id}','TataUsaha\SuratMasukController@update')->name('staf_tu.surat_masuk.update');
-	Route::delete('/{id}','TataUsaha\SuratMasukController@destroy')->name('staf_tu.surat_masuk.destroy');
-	Route::get('/api','TataUsaha\SuratMasukController@dataTable')->name('staf_tu.surat_masuk.api');
+Route::group(['prefix'	=>	'staf_tu/surat_masuk_internal'],function(){
+	Route::get('/','TataUsaha\SuratMasukInternalController@index')->name('staf_tu.surat_masuk_internal.index');
+	Route::post('/','TataUsaha\SuratMasukInternalController@store')->name('staf_tu.surat_masuk_internal.index');;
+	Route::patch('/{id}','TataUsaha\SuratMasukInternalController@update')->name('staf_tu.surat_masuk_internal.update');;
+	Route::get('/{id}/edit','TataUsaha\SuratMasukInternalController@edit');
+	Route::get('/{id}/teruskan','TataUsaha\SuratMasukInternalController@teruskan');
+	Route::post('/teruskan','TataUsaha\SuratMasukInternalController@teruskanStore')->name('staf_tu.surat_masuk_internal.teruskan_store');
+	Route::delete('/{id}','TataUsaha\SuratMasukInternalController@destroy');
+	Route::get('/api','TataUsaha\SuratMasukInternalController@dataTable')->name('staf_tu.surat_masuk_internal.api');
+});
+
+Route::group(['prefix'	=>	'staf_tu/surat_masuk_eksternal'],function(){
+	Route::get('/','TataUsaha\SuratMasukEksternalController@index')->name('staf_tu.surat_masuk_eksternal.index');
+	Route::post('/','TataUsaha\SuratMasukEksternalController@store')->name('staf_tu.surat_masuk_eksternal.index');;
+	Route::patch('/{id}','TataUsaha\SuratMasukEksternalController@update')->name('staf_tu.surat_masuk_eksternal.update');;
+	Route::get('/{id}/edit','TataUsaha\SuratMasukEksternalController@edit');
+	Route::delete('/{id}','TataUsaha\SuratMasukEksternalController@destroy');
+	Route::get('/api','TataUsaha\SuratMasukEksternalController@dataTable')->name('staf_tu.surat_masuk_eksternal.api');
 });
 
 Route::group(['prefix'	=>	'staf_tu/kode_surat'],function(){
@@ -166,7 +180,7 @@ Route::group(['prefix'	=>	'staf_tu/panduan'],function(){
 });
 
 //Route Untuk Pimpinan
-Route::group(['prefix'	=>	'pimpinan'],function(){
+Route::group(['prefix'	=>	'pimpinan/dashboard'],function(){
 	Route::get('/','Pimpinan\PimpinanController@index')->name('pimpinan.dashboard');
 });
 

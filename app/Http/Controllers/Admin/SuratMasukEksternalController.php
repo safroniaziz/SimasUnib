@@ -9,7 +9,7 @@ use App\Model\SuratMasuk;
 use DataTables;
 use DB;
 
-class SuratMasukController extends Controller
+class SuratMasukEksternalController extends Controller
 {
     public function __construct()
     {
@@ -17,7 +17,7 @@ class SuratMasukController extends Controller
     }
     
     public function index(){
-        return view('admin/surat_masuk.index');
+        return view('admin/surat_masuk.eksternal');
     }
 
     public function create(){
@@ -62,21 +62,13 @@ class SuratMasukController extends Controller
 
     public function dataTable(){
         $model = DB::table('tb_surat_masuk')
-                ->join('tb_satuan_kerja','tb_satuan_kerja.id','tb_surat_masuk.id_pengirim')
-                ->join('tb_pejabat_disposisi','tb_pejabat_disposisi.id','tb_surat_masuk.id_pejabat_disposisi')
-                ->join('tb_jabatan','tb_jabatan.id','tb_pejabat_disposisi.id_jabatan')
+                ->join('tb_user as id_pengirim_surat','id_pengirim_surat.id','tb_surat_masuk.id_pengirim_surat')
                 ->join('tb_jenis_surat','tb_jenis_surat.id','tb_surat_masuk.id_jenis_surat')
-                ->select('tb_surat_masuk.id','nm_pejabat','tb_pejabat_disposisi.nip_pejabat','nm_jabatan','jenis_surat','no_surat','nm_satuan_kerja as pengirim','perihal','tujuan','lampiran','catatan','sifat_surat','status')
+                ->where('tb_surat_masuk.tipe_surat','eksternal')
+                ->select('tb_surat_masuk.id','tipe_surat','id_pengirim_surat.nm_user as nm_pengirim_surat','tb_jenis_surat.jenis_surat','no_surat','perihal','tujuan','lampiran','catatan','sifat_surat','tanggal_surat','tb_surat_masuk.status',DB::raw('@rownum  := @rownum  + 1 AS rownum'))
                 ->get();
         return DataTables::of($model)
-                ->addColumn('action', function($model){
-                    return view('layouts/partials._action',[
-                        'model' =>  $model,
-                        'url_show'  => route('admin.surat_masuk.show', $model->id),
-                        'url_edit'  => route('admin.surat_masuk.edit', $model->id),
-                        'url_destroy'  => route('admin.surat_masuk.destroy', $model->id),
-                    ]);
-                })
+              
                 ->addIndexColumn()
                 ->rawColumns(['action'])
                 ->make(true);

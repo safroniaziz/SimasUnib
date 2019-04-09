@@ -1,5 +1,5 @@
  <div class="col-md-4 grid-margin stretch-card">
-    <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal fade" id="modal" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header" id="modal-header" style="padding:20px 26px;">

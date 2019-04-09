@@ -34,7 +34,6 @@
 @push('scripts')
      <script>
         $('#table-jenis-surat').DataTable({
-            responsive: true,
             processing: true,
             
             serverside: true,

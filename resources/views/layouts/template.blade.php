@@ -33,14 +33,23 @@
   <!-- End Layout styles -->
   <link rel="shortcut icon" href="{{ asset('assets/img/logo-utama.png') }}" />
   <style>
-    td{
-      height:0px !important;
-      overflow: hidden;
-      font-size:11px !important;
+  
+    label{
+      font-size: 12px !important;
+      margin-bottom: 0px !important;
+    }
+
+    dl, ol, ul{
+      font-size: 11px !important;
     }
     
-    th{
-      height:0px !important;
+    table tr{
+      height:1px !important;
+      padding: 0px !important; 
+    }
+
+    table th, tr{
+      height:1px !important;
     }
 
     .tr-header{
@@ -51,8 +60,24 @@
         color: white !important;
     }
 
+    .sidebar .nav.sub-menu{
+      padding: 0px 50px !important;
+    }
+
     .sidebar-dark .sidebar .nav .nav-item .nav-link[aria-expanded="true"] {
         background: #2e3657;
+
+    }
+
+    li.nav-item.menu.active{
+      color:red !important;
+      border-left:2px white solid;
+
+    }
+
+    .sidebar-dark .sidebar .nav.sub-menu .nav-item .nav-link.active {
+        background: #2e3657;
+        color: #F3EBE9 !important;
         border-left:2px white solid;
     }
 
@@ -74,34 +99,66 @@
 
     .sidebar .nav .nav-item .nav-link i.menu-arrow:before{
       color:white;
-      font-size:5px !important;
+      font-size:15px !important;
+    }
+
+    .modal .modal-dialog .modal-content .modal-body{
+        padding:5px 26px !important;
     }
 
     .badge{
       font-size: 11px !important;
+      font-weight: 500;
     }
 
     input, textarea, select,  input[type="file"]  {
-	padding: 2px;
-  color: #333;
-  height:45px !important;
-	font-family: Arial, Helvetica, sans-serif;
-	font-size: 15px;
-	line-height: 16px;
-	background: #fafafa;
-	border: 1px solid #ccc;
-	outline: 0;
+        padding: 2px;
+        color: #333;
+        height:40px !important;
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 15px;
+        line-height: 16px;
+        background: #fafafa;
+        border: 1px solid #ccc;
+        outline: 0;
         -webkit-box-sizing: border-box;
         -moz-box-sizing: border-box;
         -ms-sizing: border-box;
         box-sizing: border-box;
-}
+    }
+
+    .form-control{
+      padding: 0px 5px !important;
+    }
+
+    table.dataTable.dtr-inline.collapsed>tbody>tr[role="row"]>td:first-child:before, table.dataTable.dtr-inline.collapsed>tbody>tr[role="row"]>th:first-child:before{
+      top: 31% !important;
+      left: 10% !important;
+    }
+
+    .card .card-header.header-sm{
+      padding: 15px !important;
+    }
 
     table td img{
       width: 50px !important;
       height: 50px !important;
       border-radius: unset !important;
     }
+
+    div.dataTables_wrapper div.dataTables_filter input{
+      height:40px !important;
+    }
+
+    div.dataTables_wrapper div.dataTables_length select{
+      height: 40px !important;
+    }
+
+    .table td, .jsgrid .jsgrid-table td {
+      font-size: 11px !important;
+      padding: 8px;
+    }
+
 
   </style>
 </head>
@@ -171,12 +228,20 @@
                 @endif
                 !</span>
             <img class="img-xs rounded-circle" src="
-            @if(Auth::guard('admin')->check())
-              {{ Auth::guard('admin')->user()->foto }}
-                @else
-                  {{ Auth::user()->foto }}
-                
-            @endif
+                    @if(Auth::guard('admin')->check())
+                      @if(Auth::user()->foto == NULL)
+                        {{ asset('upload/default_profile.png') }}
+                        @else
+                          {{ Auth::guard('admin')->user()->foto }}
+                      @endif
+                    @elseif(Auth::guard('web')->check())
+                          @if(Auth::user()->foto == NULL)
+                            {{ asset('upload/default_profile.png') }}
+                            @else
+                              {{ Auth::user()->foto  }}
+                          @endif
+
+                    @endif
             " alt="Profile image"> </a>
             <div class="dropdown-menu dropdown-menu-right navbar-dropdown p-0" aria-labelledby="UserDropdown">
               <a class="dropdown-item p-2 text-primary" href="{{ route('logout') }}"
@@ -209,14 +274,23 @@
               <div class="user-wrapper">
                 <div class="profile-image">
                   <img src="
-                    @if(Auth::guard('admin')->check())
-                      {{ Auth::guard('admin')->user()->foto }}
-                        @else
-                          {{ Auth::user()->foto }}
+                  @if(Auth::guard('admin')->check())
+                    @if(Auth::user()->foto == NULL)
+                      {{ asset('upload/default_profile.png') }}
+                      @else
+                        {{ Auth::guard('admin')->user()->foto }}
                     @endif
+                  @elseif(Auth::guard('web')->check())
+                        @if(Auth::user()->foto == NULL)
+                          {{ asset('upload/default_profile.png') }}
+                          @else
+                            {{ Auth::user()->foto  }}
+                        @endif
+
+                  @endif
                   " alt="profile image" style="max-width:100% !important; height:39px !important;"> </div>
                 <div class="text-wrapper">
-                  <p class="profile-name" style="color:white;text-transform:uppercase;">
+                  <p class="profile-name" style="color:white;text-transform:uppercase;font-size:12px;">
                     @if(Auth::guard('admin')->check())
                       {{ Auth::guard('admin')->user()->nm_admin }}
                         @else
@@ -247,7 +321,7 @@
                 <div class="d-flex align-items-center">
                     <div class="wrapper d-flex align-items-center media-info text-facebook">
                     @yield('manajemen-icon')
-                    <h2 class="card-title ml-3">@yield('manajemen-title')</h5>
+                      <h2 class="card-title ml-3">@yield('manajemen-title')</h5>
                     </div>
                     @yield('manajemen-button-tambah')
                 </div>

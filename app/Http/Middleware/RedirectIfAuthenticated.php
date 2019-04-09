@@ -25,13 +25,13 @@ class RedirectIfAuthenticated
                 break;
             default:
                 if (Auth::guard($guard)->check()) {
-                    if(Auth::user()->level == "staf_tu")
+                    if(Auth::user()->level_user == "staf_tu")
                     {
                         return redirect('/staf_tu/dashboard');
                     }
-                    elseif(Auth::user()->level == "pimpinan")
+                    elseif(Auth::user()->level_user == "pimpinan")
                     {
-                        return redirect('/pimpinan.dashboard');
+                        return redirect('/pimpinan/dashboard');
                     }
                 }
                 break;

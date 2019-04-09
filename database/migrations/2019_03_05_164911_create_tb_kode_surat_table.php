@@ -16,7 +16,7 @@ class CreateTbKodeSuratTable extends Migration
         Schema::create('tb_kode_surat', function (Blueprint $table) {
             $table->increments('id');
             $table->string('kode_surat')->length(10)->unique();
-            $table->string('keterangan');
+            $table->string('keterangan')->nullable();
             $table->timestamps();
         });
     }

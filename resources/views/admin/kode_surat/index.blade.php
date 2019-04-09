@@ -37,7 +37,6 @@
 @push('scripts')
      <script>
         $('#table-kode-surat').DataTable({
-            responsive: true,
             processing: true,
             serverside: true,
             ajax: "{{ route('admin.kode_surat.api') }}",

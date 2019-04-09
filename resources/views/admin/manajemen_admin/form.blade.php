@@ -7,6 +7,7 @@
                 <span aria-hidden="true">&times;</span>
                 </button>
             </div>
+            
             <form method="POST" class="form-horizontal" data-toggle="validator">
                 {{Form::token()}} {{ method_field('POST') }}
                 <div class="modal-body">
@@ -16,9 +17,15 @@
                             <label for="" class="control-label">Nama Admin :</label>
                             <input type="text" name="nm_admin" class="form-control" id="nm_admin">
                         </div>
+
                         <div class="form-group col-md-6">
                             <label for="" class="control-label">Username :</label>
                             {!! Form::text('username',null,['class' =>  'form-control','id' =>  'username']) !!}
+                        </div>
+
+                        <div class="form-group col-md-6">
+                            <label for="" class="control-label">Email :</label>
+                            {!! Form::email('email',null,['class' =>  'form-control','id' =>  'email']) !!}
                         </div>
                 
                         <div class="form-group col-md-6" id="password-form">

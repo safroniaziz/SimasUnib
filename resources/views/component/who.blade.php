@@ -1,7 +1,7 @@
 @if (Auth::guard('web')->check())
-    @if(Auth::user()->level == "staf_tu")
+    @if(Auth::user()->level_user == "staf_tu")
             Login Sebagai TATA USAHA    
-            @elseif(Auth::user()->level == "pimpinan")
+            @elseif(Auth::user()->level_user == "pimpinan")
                     Login Sebagai Pimpinan
     @endif
 @endif

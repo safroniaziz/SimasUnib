@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Gate;
 use App\Model\Jabatan;
 use DataTables;
+use DB;
 
 class ManajemenJabatanController extends Controller
 {
@@ -21,13 +22,14 @@ class ManajemenJabatanController extends Controller
 
     public function create(){
         $model = new Jabatan();
-        return view('admin/manajemen_jabatan.form',compact('model'));
+        $id_satuan_kerja = DB::table('tb_satuan_kerja')->select('id','nm_satuan_kerja')->get();
+        return view('admin/manajemen_jabatan.form',compact('model','id_satuan_kerja'));
     }
 
     public function store(Request $request){
         $this->validate($request,[
+            'id_satuan_kerja'    =>  'required|',
             'nm_jabatan'    =>  'required|string|',
-            'keterangan'    =>  'required|string|',
         ]);
 
         $model = Jabatan::create($request->all());
@@ -41,8 +43,8 @@ class ManajemenJabatanController extends Controller
 
     public function update(Request $request, $id){
         $this->validate($request,[
+            'id_satuan_kerja'    =>  'required|',
             'nm_jabatan'    =>  'required|string|',
-            'keterangan'    =>  'required|string|',
         ]);
 
         $model = Jabatan::findOrFail($id);
@@ -57,7 +59,10 @@ class ManajemenJabatanController extends Controller
     }
 
     public function dataTable(){
-        $model = Jabatan::query();
+        $model = DB::table('tb_jabatan')
+                ->join('tb_satuan_kerja','tb_satuan_kerja.id','tb_jabatan.id_satuan_kerja')
+                ->select('tb_jabatan.id','nm_satuan_kerja','nm_jabatan','keterangan')
+                ->get();
         return DataTables::of($model)
                 ->addColumn('action', function($model){
                     return view('layouts/partials._action',[

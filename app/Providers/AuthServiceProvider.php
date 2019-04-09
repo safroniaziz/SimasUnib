@@ -30,11 +30,11 @@ class AuthServiceProvider extends ServiceProvider
         });
         
         $gate->define('isPimpinan',function($user){
-            return $user->level =='pimpinan';
+            return $user->level_user =='pimpinan';
         });
 
         $gate->define('isStafTu',function($user){
-            return $user->level =='staf_tu';
+            return $user->level_user =='staf_tu';
         });
     }
 }

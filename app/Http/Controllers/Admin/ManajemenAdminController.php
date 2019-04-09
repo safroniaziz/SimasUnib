@@ -25,6 +25,7 @@ class ManajemenAdminController extends Controller
         $this->validate($request,[
             'nm_admin'    =>  'required|string|',
             'username'    =>  'required|string|unique:tb_admin,username',
+            'email'    =>  'required|string|unique:tb_admin,username',
             'password'    =>  'required|string|',
             'foto'        =>    'image|max:500',
         ]);
@@ -40,6 +41,7 @@ class ManajemenAdminController extends Controller
         Admin::create([
             'nm_admin'   => $model['nm_admin'],
             'username'   => $model['username'],
+            'email'   => $model['email'],
             'foto'   => $model['foto'],
             'password'   => bcrypt($model['password']),
         ]);
@@ -59,6 +61,7 @@ class ManajemenAdminController extends Controller
         $this->validate($request,[
             'nm_admin'    =>  'required|string|',
             'username'    =>  'required|string|unique:tb_admin,id',
+            'email'    =>  'required|string|unique:tb_admin,id',
             'password'    =>  'string|',
             'foto'        =>    'image|max:500',
         ]);

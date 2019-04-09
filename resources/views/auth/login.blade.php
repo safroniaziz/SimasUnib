@@ -9,9 +9,12 @@
 		<div class="loginBox">
     <img src="{{ asset('assets/login/logo.png')  }}" height="100" class="user">
 			<h2>SILAHKAN LOGIN DISINI</h2>
+			@if($errors->any())
+  <h4>{{$errors->first()}}</h4>
+@endif
 			<form method="post">
         @csrf
-				<p>Username</p>
+			<p>Username</p>
 				<input type="text" name="username" placeholder="username">
 				<p>Password</p>
 				<input type="password" name="password" placeholder="••••••">
