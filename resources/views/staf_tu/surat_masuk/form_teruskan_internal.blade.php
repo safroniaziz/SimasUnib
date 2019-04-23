@@ -11,7 +11,6 @@
             <form method="POST" class="form-horizontal" data-toggle="validator">
                 {{Form::token()}} {{ method_field('POST') }}
                 <div class="modal-body"style="max-width:700px;overflow-x: auto;">
-                    <input type="hidden" id="id" name="id">
                     <span class="badge badge-success"><i class="fa fa-info"></i>&nbsp;Detail Inforamsi Surat</span>
                      <div class="row">
                          <div class="col-md-12">
@@ -71,18 +70,20 @@
                     <fieldset class="scheduler-border">
                         <legend class="scheduler-border" style="font-size:12px !important;">Form Teruskan Surat Internal</legend>
                         <div class="row">
-                                <input type="hidden" name="id_surat_masuk" class="form-control" id="id_surat_masuk">
-                                <input type="hidden" name="id_pengirim_disposisi" class="form-control" value="{{ Auth::user()->id  }}" id="id_pengirim_disposisi">
+                                <input type="hidden" id="id" name="id">
+
+                                {{-- <input type="hidden" name="id_surat_masuk" class="form-control" id="id_surat_masuk">
+                                <input type="hidden" name="id_pengirim_disposisi" class="form-control" value="{{ Auth::user()->id  }}" id="id_pengirim_disposisi"> --}}
                             <div class="form-group col-md-6">
                                 <label for="" class="control-label">Pengirim Surat :</label>
-                                <input type="text" name="nm_pengirim_surat" class="form-control" id="nm_pengirim_surat" value="{{ Auth::user()->nm_user }}" >
+                                <input type="text" name="nm_pengirim_surat" class="form-control" id="nm_pengirim_surat" value="{{ Auth::user()->nm_user }}" disabled>
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="" class="control-label">Teruskan Kepada :</label>
-                                <select name="id_penerima_disposisi" id="id_penerima_disposisi" class="form-control">
+                                <select name="id_pimpinan_penerima_disposisi" id="id_pimpinan_penerima_disposisi" class="form-control">
                                     <option value="0">-- pilih penerima disposisi --</option>
                                     @foreach ($id_penerima_disposisi as $value)
-                                        <option value="{{ $value->id }}">{{ $value->nm_user }}</option>                                        
+                                        <option value="{{ $value->id }}">{{ $value->nm_user }} ({{$value->jabatan_user}})</option>                                        
                                     @endforeach
                                 </select>
                             </div>

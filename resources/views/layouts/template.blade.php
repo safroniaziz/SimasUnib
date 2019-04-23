@@ -164,7 +164,10 @@
 </head>
 
 <body class="sidebar-fixed ">
-  <div class="container-scroller">
+  <div class="loader">
+    <img src="{{ asset('assets/loading/animasi.svg') }}" style="height: 150px; width: 150px; position: absolute; top: 50%; left: 50%; margin-left: -75px; margin-top: -75px;">
+  </div>
+  <div class="container-scroller wrapper" style="display:none;">
     <!-- partial:partials/_navbar.html -->
     <nav class="navbar default-layout col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
       <div class="text-center navbar-brand-wrapper d-flex align-items-top justify-content-center" style="background: #252C46; border-bottom:1px white solid;">
@@ -382,6 +385,14 @@
 
   <script src="{{ asset('js/app.js') }}"></script>
   @include('layouts/partials/file_js')
+  <script>
+      $(function(){
+        
+          $(".wrapper").fadeIn(700);
+          $(".loader").fadeOut(700);
+        
+      });
+    </script>
   @stack('scripts')
 </body>
 

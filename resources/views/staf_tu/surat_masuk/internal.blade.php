@@ -39,7 +39,6 @@
 @endpush
 @section('manajemen-table')
     @include('staf_tu/surat_masuk.form_internal')
-    @include('staf_tu/surat_masuk.form_teruskan_internal')
     @if (\Session::has('success'))
         <div class="alert alert-success" role="alert">
             <button type="button" class="close" data-dismiss="alert">×</button>
@@ -52,21 +51,21 @@
         <table id="table-surat-masuk-internal" class="table dt-responsive table-hover table-striped table-bordered nowrap " style="width:100%;">
             <thead>
                 <tr class="tr-header">
-                <td>No</td>
-                <td>Tipe Surat</td>
-                <td>Satker Pengirim Surat</td>
-                <td>Satker Penerima Surat</td>
-                <td>Pimpinan Penerima Surat</td>
-                <td>Jenis Surat</td>
-                <td>No Surat</td>
-                <td>Perihal</td>
-                <td>Tujuan</td>
-                <td>lampiran</td>
-                <td>Catatan</td>
-                <td>Sifat Surat</td>
-                <td>Tanggal Surat</td>
-                <td>Status</td>
-                <td>Aksi</td>
+                    <td>No</td>
+                    <td>Tipe Surat</td>
+                    <td>Satker Pengirim Surat</td>
+                    <td>Satker Penerima Surat</td>
+                    <td>Pimpinan Penerima Surat</td>
+                    <td>Jenis Surat</td>
+                    <td>No Surat</td>
+                    <td>Perihal</td>
+                    <td>Tujuan</td>
+                    <td>lampiran</td>
+                    <td>Catatan</td>
+                    <td>Sifat Surat</td>
+                    <td>Tanggal Surat</td>
+                    <td>Status</td>
+                    <td>Aksi</td>
                 </tr>
             </thead>
         </table>
@@ -179,6 +178,8 @@
             save_method = 'add';
             $('input[name=_method]').val('POST');
             $("#form-surat-masuk-staf-tu").show(300);
+            $("#form-teruskan").hide();
+            $("#detail-teruskan").hide();
             $('#id').val("");
             $('#tipe_surat').val("");
             $('#pengirim_surat').val("");
@@ -198,11 +199,16 @@
                 dataType: "JSON",
                 success: function(data){
                     $("#form-surat-masuk-staf-tu").show(300);
+                    $("#form-add-edit").show();
+                    $("#form-teruskan").hide();
+                    $("#detail-teruskan").hide();
                     $(window).scrollTop(0);
                     $('#id').val(data.id);
                     $('#tipe_surat').val(data.tipe_surat);
+                    // $('#form-teruskan').show();
                     $('#id_satker_pengirim_surat').val(data.id_satker_pengirim_surat);
                     $('#id_jenis_surat').val(data.id_jenis_surat);
+                    $('#id_pimpinan_penerima_surat').val(data.id_pimpinan_penerima_surat);
                     $('#sifat_surat').val(data.sifat_surat);
                     $('#no_surat').val(data.no_surat);
                     $('#perihal').val(data.perihal);
@@ -254,14 +260,19 @@
         }
 
         function teruskanSuratMasukInternal(id){
-            save_method = "teruskan";
-            $('input[name=_method]').val('POST');
+            save_method = 'teruskan';
+            $('input[name=_method]').val('PATCH');
             $.ajax({
                 url: "{{ url('staf_tu/surat_masuk_internal') }}"+'/'+ id + "/teruskan",
                 type: "GET",
                 dataType: "JSON",
                 success: function(data){
-                    $("#form-teruskan-internal").modal('show');
+                    $("#form-surat-masuk-staf-tu").show(300);
+                    $("#form-add-edit").hide();
+                    $("#form-teruskan").show();
+                    $("#detail-teruskan").show();
+                    $(window).scrollTop(0);
+                    $('#id').text(data[0].id);
                     $('#tipe_suratt').text(data[0].tipe_surat);
                     $('#satker_pengirim_suratt').text(data[0].nm_satker_pengirim_surat);
                     $('#jenis_suratt').text(data[0].jenis_surat);
@@ -271,6 +282,19 @@
                     $('#catatan_suratt').text(data[0].catatan);
                     $('#sifat_suratt').text(data[0].sifat_surat);
                     $('#id_surat_masuk').val(data[0].id);
+
+                    $('#id').val(data[0].id);
+                    $('#tipe_surat').val(data[0].tipe_surat);
+                    $('#id_satker_pengirim_surat').val(data[0].id_satker_pengirim_surat);
+                    $('#id_jenis_surat').val(data[0].id_jenis_surat);
+                    $('#sifat_surat').val(data[0].sifat_surat);
+                    $('#no_surat').val(data[0].no_surat);
+                    $('#perihal').val(data[0].perihal);
+                    $('#tujuan').val(data[0].tujuan);
+                    $('#catatan').val(data[0].catatan);
+                    $('#tanggal_surat').val(data[0].tanggal_surat);
+                    $('#lampiran').val(data[0].lampiran);
+
                 },
                 error:function(){
                     alert("Nothing Data");
@@ -279,11 +303,18 @@
         }
 
         $(function(){
+            
             $('#form-surat-masuk-staf-tu form').validator().on('submit', function(e){
+                $.ajaxSetup({
+      headers: {
+        'X-CSSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      }
+    });
                 if (!e.isDefaultPrevented()) {
                     var id = $('#id').val();
                     if (save_method == 'add') url = "{{ url('staf_tu/surat_masuk_internal') }}";
-                    else url = "{{ url('staf_tu/surat_masuk_internal').'/' }}"+id;
+                    else if(save_method == 'edit')url = "{{ url('staf_tu/surat_masuk_internal').'/' }}"+id;
+                    else if(save_method == 'teruskan') url = "{{ url('staf_tu/surat_masuk_internal/teruskan').'/' }}"+id;
 
                     $.ajax({
                     url : url,
@@ -295,12 +326,19 @@
                     success : function($data){
                         $('#form-surat-masuk-staf-tu').hide();
                         $('#table-surat-masuk-internal').dataTable().api().ajax.reload();
-                        swal({
-                        title:'Berhasil!',
-                        text:'Data Sudah Diperbarui',
-                        type:'success',
-                        timer:'1500'
+                        if(save_method == 'teruskan') swal({
+                            title:'Berhasil!',
+                            text:'Surat Sudah Diteruskan',
+                            type:'success',
+                            timer:'1500'
                         })
+                        else
+                            swal({
+                                title:'Berhasil!',
+                                text:'Data Surat Sudah Diperbarui',
+                                type:'success',
+                                timer:'1500'
+                            })
                     }
                     });
                     return false;
@@ -308,34 +346,37 @@
             });
         });
 
-        $(function(){
-            $('#form-teruskan-internal form').validator().on('submit', function(e){
-                if (!e.isDefaultPrevented()) {
-                    url = "{{ route('staf_tu.surat_masuk_internal.teruskan_store') }}";
-                    $.ajax({
-                    url : url,
-                    type : "POST",
-                    // data : $('#form-teruskan-internal form').serialize(),
-                    data : new FormData($('#form-teruskan-internal form')[0]),
-                    contentType : false,
-                    processData : false,
-                    success : function($data){
-                        $('#form-teruskan-internal').hide();
-                        $('body').removeClass('modal-open');
-                        $('.modal-backdrop').remove();
-                        $('#table-surat-masuk-internal').dataTable().api().ajax.reload();
-                        swal({
-                        title:'Berhasil!',
-                        text:'Surat Masuk Sudah Dikirim ke Pimpinan',
-                        type:'success',
-                        timer:'1500'
-                        })
-                    }
-                    });
-                    return false;
-                }
-            });
-        });
+        // $(function(){
+
+        //     $('#form-teruskan-internal form').validator().on('submit', function(e){
+                
+        //         if (!e.isDefaultPrevented()) {
+        //             var id = $('#id').val();
+        //             if (save_method == 'teruskan') url = "{{ url('staf_tu/surat_masuk_internal').'/' }}"+id;
+        //             $.ajax({
+        //             url : url,
+        //             type : "POST",
+        //             // data : $('#form-teruskan-internal form').serialize(),
+        //             data : new FormData($('#form-teruskan-internal form')[0]),
+        //             contentType : false,
+        //             processData : false,
+        //             success : function($data){
+        //                 $('#form-teruskan-internal').hide();
+        //                 $('body').removeClass('modal-open');
+        //                 $('.modal-backdrop').remove();
+        //                 $('#table-surat-masuk-internal').dataTable().api().ajax.reload();
+        //                 swal({
+        //                 title:'Berhasil!',
+        //                 text:'Surat Masuk Sudah Dikirim ke Pimpinan',
+        //                 type:'success',
+        //                 timer:'1500'
+        //                 })
+        //             }
+        //             });
+        //             return false;
+        //         }
+        //     });
+        // });
 
         
     </script>

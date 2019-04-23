@@ -21,7 +21,24 @@ class SuratMasukEksternalController extends Controller
     public function index(){
         $waktu = Carbon\Carbon::now();
         $waktu2 = $waktu->toDateString();
-        return view('staf_tu/surat_masuk.eksternal',compact('waktu2'));
+        $id_user = DB::table('tb_user')
+                    ->join('tb_jabatan','tb_jabatan.id','tb_user.id_jabatan')
+                    ->join('tb_satuan_kerja','tb_satuan_kerja.id','tb_jabatan.id_satuan_kerja')
+                    ->where('tb_user.id',Auth::user()->id)
+                    ->select('tb_satuan_kerja.id')->pluck('tb_satuan_kerja.id');
+        $id_penerima = DB::table('tb_satuan_kerja')
+                    ->where('tb_satuan_kerja.id',$id_user[0])
+                    ->select('tb_satuan_kerja.id as id_satuan_kerja')
+                    ->pluck('tb_satuan_kerja.id_satuan_kerja');
+        $id_penerima_disposisi = DB::table('tb_user')
+                    ->join('tb_jabatan','tb_jabatan.id','tb_user.id_jabatan')
+                    ->join('tb_satuan_kerja','tb_satuan_kerja.id','tb_jabatan.id_satuan_kerja')
+                    ->where('tb_satuan_kerja.id',$id_user[0])
+                    ->where('tb_user.id','!=',Auth::user()->id)
+                    ->where('tb_user.level_user','!=','staf_tu')
+                    ->select('tb_user.id','tb_user.nm_user','tb_jabatan.nm_jabatan as jabatan_user')
+                    ->get();
+        return view('staf_tu/surat_masuk.eksternal',compact('waktu2','id_penerima','id_penerima_disposisi'));
     }
 
     public function store(Request $request){
@@ -43,6 +60,7 @@ class SuratMasukEksternalController extends Controller
                 'id_pengirim_surat'   => null,
                 'pengirim_surat'   => $model['pengirim_surat'],
                 'id_jenis_surat'   => $model['id_jenis_surat'],
+                'id_satker_penerima_surat'   => $model['id_satker_penerima_surat'],
                 'no_surat'   => $model['no_surat'],
                 'perihal'   => $model['perihal'],
                 'tujuan'   => $model['tujuan'],
@@ -55,7 +73,8 @@ class SuratMasukEksternalController extends Controller
         else{
             SuratMasuk::create([
                 'tipe_surat'   => "internal",
-                'id_pengirim_surat'   => $model['id_pengirim_surat'],
+                'id_satker_pengirim_surat'   => $model['id_satker_pengirim_surat'],
+                'id_satker_penerima_surat'   => $model['id_satker_penerima_surat'],
                 'pengirim_surat'   => $pengirim_surat[0],
                 'id_jenis_surat'   => $model['id_jenis_surat'],
                 'no_surat'   => $model['no_surat'],
@@ -70,6 +89,26 @@ class SuratMasukEksternalController extends Controller
         
         return redirect()->back()->with('success', 'Surat baru sudah ditambahkan, namun belum di disposisi !!'); 
         
+    }
+
+    public function teruskan($id)
+    {
+        $model = DB::table('tb_surat_masuk')
+                ->join('tb_jenis_surat','tb_jenis_surat.id','tb_surat_masuk.id_jenis_surat')
+                ->where('tb_surat_masuk.id',$id)
+                ->select('tb_surat_masuk.id','tipe_surat','tb_surat_masuk.pengirim_surat as institusi_pengirim_surat','tb_jenis_surat.id as id_jenis_surat','tb_jenis_surat.jenis_surat','no_surat','perihal','tujuan','lampiran','catatan','sifat_surat','tanggal_surat','tb_surat_masuk.status',DB::raw('@rownum  := @rownum  + 1 AS rownum'))
+                ->get();
+                // dd($model);
+        return $model;
+    }
+
+    public function teruskanUpdate(Request $request, $id){
+        $model = SuratMasuk::findOrFail($id);
+        $a = $request->all();
+        $model->update($a);
+        if($model){
+            return 'a';
+        }
     }
 
     public function edit($id)
@@ -127,15 +166,23 @@ class SuratMasukEksternalController extends Controller
 
     public function dataTable(){
         DB::statement(DB::raw('set @rownum=0'));
+        $id_satuan_kerja = DB::table('tb_user')
+                    ->join('tb_jabatan','tb_jabatan.id','tb_user.id_jabatan')
+                    ->join('tb_satuan_kerja','tb_satuan_kerja.id','tb_jabatan.id_satuan_kerja')
+                    ->where('tb_user.id',Auth::user()->id)
+                    ->select('tb_satuan_kerja.id as id_satuan_kerja')->pluck('tb_satuan_kerja.id_satuan_kerja');
         $model = DB::table('tb_surat_masuk')
                 ->join('tb_jenis_surat','tb_jenis_surat.id','tb_surat_masuk.id_jenis_surat')
+                ->join('tb_satuan_kerja as id_satker_penerima_surat','id_satker_penerima_surat.id','tb_surat_masuk.id_satker_penerima_surat')
+                ->leftJoin('tb_user as id_pimpinan_penerima_surat','id_pimpinan_penerima_surat.id','tb_surat_masuk.id_pimpinan_penerima_surat')
                 ->where('tb_surat_masuk.tipe_surat','eksternal')
-                ->select('tb_surat_masuk.id','tipe_surat','tb_surat_masuk.pengirim_surat','tb_jenis_surat.jenis_surat','no_surat','perihal','tujuan','lampiran','catatan','sifat_surat','tanggal_surat','tb_surat_masuk.status',DB::raw('@rownum  := @rownum  + 1 AS rownum'))
+                ->where('id_satker_penerima_surat.id',$id_satuan_kerja[0])
+                ->select('tb_surat_masuk.id','tipe_surat','tb_surat_masuk.pengirim_surat','id_satker_penerima_surat.nm_satuan_kerja as satuan_kerja_penerima_surat','tb_jenis_surat.jenis_surat','id_pimpinan_penerima_surat.nm_user as nm_pimpinan_penerima_surat','no_surat','perihal','tujuan','lampiran','catatan','sifat_surat','tanggal_surat','tb_surat_masuk.status',DB::raw('@rownum  := @rownum  + 1 AS rownum'))
                 ->get();
         return DataTables::of($model)
                 ->addColumn('action', function($model){
                     return
-                    '<a onclick="teruskanSuratMasukInternal('.$model->id.')"  class="btn social-btn btn-success " style="padding:5px;font-size:10px;"><i class="fa fa-edit"></i></a> '.
+                    '<a onclick="teruskanSuratMasukEksternal('.$model->id.')"  class="btn social-btn btn-success " style="padding:5px;font-size:10px;"><i class="fa fa-send"></i></a> '.
                     '<a onclick="editSuratMasukEksternal('.$model->id.')"  class="btn social-btn btn-primary " style="padding:5px;font-size:10px;"><i class="fa fa-edit"></i></a> '.
                     '<a onclick="hapusSuratMasukEksternal('.$model->id.')"  class="btn social-btn btn-danger " style="padding:5px;font-size:10px;"><i class="fa fa-remove"></i></a> ';
                 })->make(true);

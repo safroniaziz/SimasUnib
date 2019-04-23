@@ -16,8 +16,8 @@ class CreateTbDisposisiSuratMasukTable extends Migration
         Schema::create('tb_disposisi_surat_masuk', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('id_surat_masuk')->length(10)->unsigned();
-            $table->integer('id_pengirim_disposisi')->length(10)->unsigned();
-            $table->integer('id_penerima_disposisi')->length(10)->unsigned();
+            $table->integer('id_pengirim_disposisi')->length(10)->unsigned()->nullable();
+            $table->integer('id_penerima_disposisi')->length(10)->unsigned()->nullable();
             $table->timestamps();
         });
 

@@ -157,8 +157,8 @@ Route::group(['prefix'	=>	'staf_tu/surat_masuk_internal'],function(){
 	Route::patch('/{id}','TataUsaha\SuratMasukInternalController@update')->name('staf_tu.surat_masuk_internal.update');;
 	Route::get('/{id}/edit','TataUsaha\SuratMasukInternalController@edit');
 	Route::get('/{id}/teruskan','TataUsaha\SuratMasukInternalController@teruskan');
-	Route::post('/teruskan','TataUsaha\SuratMasukInternalController@teruskanStore')->name('staf_tu.surat_masuk_internal.teruskan_store');
 	Route::delete('/{id}','TataUsaha\SuratMasukInternalController@destroy');
+	Route::patch('/teruskan/{id}','TataUsaha\SuratMasukInternalController@teruskanUpdate')->name('staf_tu.surat_masuk_internal.teruskan_update');;
 	Route::get('/api','TataUsaha\SuratMasukInternalController@dataTable')->name('staf_tu.surat_masuk_internal.api');
 });
 
@@ -167,7 +167,9 @@ Route::group(['prefix'	=>	'staf_tu/surat_masuk_eksternal'],function(){
 	Route::post('/','TataUsaha\SuratMasukEksternalController@store')->name('staf_tu.surat_masuk_eksternal.index');;
 	Route::patch('/{id}','TataUsaha\SuratMasukEksternalController@update')->name('staf_tu.surat_masuk_eksternal.update');;
 	Route::get('/{id}/edit','TataUsaha\SuratMasukEksternalController@edit');
+	Route::get('/{id}/teruskan','TataUsaha\SuratMasukEksternalController@teruskan');
 	Route::delete('/{id}','TataUsaha\SuratMasukEksternalController@destroy');
+	Route::patch('/teruskan/{id}','TataUsaha\SuratMasukEksternalController@teruskanUpdate')->name('staf_tu.surat_masuk_eksternal.teruskan_update');;
 	Route::get('/api','TataUsaha\SuratMasukEksternalController@dataTable')->name('staf_tu.surat_masuk_eksternal.api');
 });
 
@@ -184,6 +186,20 @@ Route::group(['prefix'	=>	'pimpinan/dashboard'],function(){
 	Route::get('/','Pimpinan\PimpinanController@index')->name('pimpinan.dashboard');
 });
 
-Route::group(['prefix'	=>	'pimpinan/surat_masuk'],function(){
-	Route::get('/','Pimpinan\SuratMasukController@index')->name('pimpinan.surat_masuk.index');
+Route::group(['prefix'	=>	'pimpinan/surat_masuk_internal'],function(){
+	Route::get('/','Pimpinan\SuratMasukInternalController@index')->name('pimpinan.surat_masuk_internal.index');
+	Route::get('/{id}/teruskan','Pimpinan\SuratMasukInternalController@teruskan');
+	Route::patch('/teruskan/{id}','Pimpinan\SuratMasukInternalController@teruskanUpdate')->name('pimpinan.surat_masuk_internal.teruskan_update');;
+	Route::get('/api','Pimpinan\SuratMasukInternalController@dataTable')->name('pimpinan.surat_masuk_internal.api');
+});
+
+Route::group(['prefix'	=>	'pimpinan/surat_masuk_eksternal'],function(){
+	Route::get('/','Pimpinan\SuratMasukEksternalController@index')->name('pimpinan.surat_masuk_eksternal.index');
+	Route::post('/','Pimpinan\SuratMasukEksternalController@store')->name('pimpinan.surat_masuk_eksternal.index');;
+	Route::patch('/{id}','Pimpinan\SuratMasukEksternalController@update')->name('pimpinan.surat_masuk_eksternal.update');;
+	Route::get('/{id}/edit','Pimpinan\SuratMasukEksternalController@edit');
+	Route::get('/{id}/teruskan','Pimpinan\SuratMasukEksternalController@teruskan');
+	Route::delete('/{id}','Pimpinan\SuratMasukEksternalController@destroy');
+	Route::patch('/teruskan/{id}','Pimpinan\SuratMasukEksternalController@teruskanUpdate')->name('pimpinan.surat_masuk_internal.teruskan_update');;
+	// Route::get('/api','Pimpinan\SuratMasukEksternalController@dataTable')->name('pimpinan.surat_masuk_internal.api');
 });
