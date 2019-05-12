@@ -8,7 +8,7 @@
 @section('manajemen-icon')
   <i class="mdi mdi-email icon-md text-dark"></i>
 @endsection
-@section('manajemen-title','Manajemen Surat Masuk')
+@section('manajemen-title','Data Surat Masuk Eksternal')
 @section('manajemen-button-tambah')
   <div class="wrapper ml-auto action-bar">
   </div>

@@ -5,7 +5,7 @@
 
     <div class="form-group">
         <label for="" class="control-label">Nama Pejabat :</label>
-        <select name="id_pejabat" id="id_pejabat" class="form-control" >
+        <select name="id_pejabat" id="id_pejabat" class="form-control">
             <option value="0"  >-- pilih pejabat --</option>    
             <?php
                 foreach($id_pejabat as $value){

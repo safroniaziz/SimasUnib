@@ -8,7 +8,7 @@
                     <table class="table table-bordered">
                         <tr>
                             <td rowspan="4">
-                               <img src="{{ asset('assets/img/logo-utama.png')  }}" alt="">
+                               <img class="detail_lampiran_teruskan" src="{{ asset('assets/img/logo-utama.png')  }}" alt="" style="height:150px !important; width:100px !important;">
                             </td>
                             <td style="font-weight:bold;">Tipe Surat</td>
                             <td> : </td>
@@ -61,7 +61,7 @@
                 <fieldset class="scheduler-border">
                     <legend class="scheduler-border" style="font-size:12px !important;">Form Teruskan Surat Internal</legend>
                     <div class="row">
-                            <input type="hidden" name="id" id="id">
+                            <input type="hidden" name="id_disposisi_surat_masuk" id="id_disposisi_surat_masuk" class="form-control">
                             <input type="hidden" name="id_surat_masuk" class="form-control" id="id_surat_masuk">
                             <input type="hidden" name="id_pengirim_disposisi" class="form-control" value="{{ Auth::user()->id  }}" id="id_pengirim_disposisi">
                         <div class="form-group col-md-6">

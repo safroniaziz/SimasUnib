@@ -76,5 +76,36 @@
             ],
             
         });
+
+        $(document).ready(function(){
+          $(document).on('change','#id_pejabat',function(){
+            // alert('berhasil');
+            var id_pejabat = $(this).val();
+            var div = $(this).parent().parent();
+            var op=" ";
+            // alert(id_pejabat);
+            $.ajax({
+              type :'get',
+              url: "{{ url('admin/pejabat_disposisi/cari_pejabat_disposisi') }}",
+              data:{'id_pejabat':id_pejabat},
+              success:function(data){
+                // console.log('berhasil');
+                // console.log(data);
+                // console.log(data.length);
+                op+='<option value="0" selected disabled>-- pilih pejabat disposisi --</option>';
+                for(var i=0; i<data.length;i++){
+                  op+='<option value="'+data[i].id_pejabat_disposisi+'">'+data[i].nm_pejabat_disposisi+'</option>';
+                }
+
+                div.find('#id_disposisi_pejabat').html(" ");
+                div.find('#id_disposisi_pejabat').append(op);
+
+              },
+              error:function(){
+
+              }
+            });
+          })
+        });
     </script>
 @endpush

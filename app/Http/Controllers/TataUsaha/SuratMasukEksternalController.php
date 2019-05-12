@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Gate;
 use App\Model\SuratMasuk;
+use App\Model\DisposisiSuratMasuk;
 use DataTables;
 use DB;
 use Auth;
@@ -20,7 +21,7 @@ class SuratMasukEksternalController extends Controller
 
     public function index(){
         $waktu = Carbon\Carbon::now();
-        $waktu2 = $waktu->toDateString();
+        // $waktu2 = $waktu->toDateString();
         $id_user = DB::table('tb_user')
                     ->join('tb_jabatan','tb_jabatan.id','tb_user.id_jabatan')
                     ->join('tb_satuan_kerja','tb_satuan_kerja.id','tb_jabatan.id_satuan_kerja')
@@ -48,6 +49,12 @@ class SuratMasukEksternalController extends Controller
             
         $model = $request->all();
         // $model['foto'] = null;
+        $model['lampiran'] = null;
+
+        if ($request->hasFile('lampiran')) {
+        	$model['lampiran'] = '/upload/foto_surat_masuk_eksternal/'.str_slug($model['no_surat'],'-').'.'.$request->lampiran->getClientOriginalExtension();
+        	$request->lampiran->move(public_path('/upload/foto_surat_masuk_eksternal'), $model['lampiran']);
+        }
 
         $pengirim_surat = DB::table('tb_user')
         ->where('id',$request->id_pengirim_surat)
@@ -64,7 +71,7 @@ class SuratMasukEksternalController extends Controller
                 'no_surat'   => $model['no_surat'],
                 'perihal'   => $model['perihal'],
                 'tujuan'   => $model['tujuan'],
-                'lampiran'   => $request->lampiran,
+                'lampiran'   => $model['lampiran'],
                 'catatan'   => $model['catatan'],
                 'sifat_surat'   => $model['sifat_surat'],
                 'tanggal_surat'   => $model['tanggal_surat'],
@@ -80,7 +87,7 @@ class SuratMasukEksternalController extends Controller
                 'no_surat'   => $model['no_surat'],
                 'perihal'   => $model['perihal'],
                 'tujuan'   => $model['tujuan'],
-                'lampiran'   => $request->lampiran,
+                'lampiran'   => $model['lampiran'],
                 'catatan'   => $model['catatan'],
                 'sifat_surat'   => $model['sifat_surat'],
                 'tanggal_surat'   => $model['tanggal_surat'],
@@ -102,13 +109,18 @@ class SuratMasukEksternalController extends Controller
         return $model;
     }
 
-    public function teruskanUpdate(Request $request, $id){
-        $model = SuratMasuk::findOrFail($id);
-        $a = $request->all();
-        $model->update($a);
-        if($model){
-            return 'a';
-        }
+    public function teruskanSurat(Request $request){
+        $a = SuratMasuk::findOrFail($request->id_surat_masuk);
+        $a->update(['status_teruskan'   =>1,]);
+        $model = DisposisiSuratMasuk::create([
+            'id_surat_masuk' =>  $request->id_surat_masuk,
+            'id_pengirim_disposisi' =>  $request->id_pengirim_disposisi,
+            'id_penerima_disposisi' =>  $request->id_pimpinan_penerima_surat,
+        ]);
+        return response()->json([
+        	'success'	=> true
+        ]);
+
     }
 
     public function edit($id)
@@ -118,47 +130,66 @@ class SuratMasukEksternalController extends Controller
     }
 
     public function update(Request $request, $id){
-        // $this->validate($request,[
-        //     'id_satuan_kerja'    =>  'required|',
-        //     'nm_user'    =>  'required|string|',
-        //     'nip'    =>  'required|string|unique:tb_user,id',
-        //     'username'    =>  'required|string|unique:tb_user,id',
-        //     'email'    =>  'required|email|string|unique:tb_user,id',
-        //     'telephone'    =>  'string',
-        //     'id_jabatan'    =>  'required|',
-        //     'password'    =>  'string|',
-        //     'foto'        =>    'image|max:500',
-        //     'level'      =>     'required',
-        // ]);
-
         $input = $request->all();
         $model = SuratMasuk::findOrFail($id);
 
-        // $input['foto'] = $model->foto;
+        $input['lampiran'] = $model->lampiran;
 
-        // if ($request->hasFile('foto')) {
-        // 	if ($model->foto != null) {
-        // 		unlink(public_path($model->foto));
-        // 	}
-        // 	$input['foto'] = '/upload/foto_user/'.str_slug($input['username'],'-').'.'.$request->foto->getClientOriginalExtension();
-        // 	$request->foto->move(public_path('/upload/foto_user'), $input['foto']);
-        // }
+        if ($request->hasFile('lampiran')) {
+        	if ($model->lampiran != null) {
+        		unlink(public_path($model->lampiran));
+        	}
+        	$input['lampiran'] = '/upload/foto_surat_masuk_eksternal/'.str_slug($input['no_surat'],'-').'.'.$request->lampiran->getClientOriginalExtension();
+        	$request->lampiran->move(public_path('/upload/foto_surat_masuk_eksternal'), $input['lampiran']);
+        }
 
-        $model->update($input);
-        return response()->json([
-        	'success'	=> true
-        ]);
+        $pengirim_surat = DB::table('tb_satuan_kerja')
+        ->where('id',$request->id_satker_pengirim_surat)
+        ->select('nm_satuan_kerja')->pluck('nm_satuan_kerja');
         
+        // dd($pengirim_surat); 
+        if(empty($request->id_satker_pengirim_surat)){
+            $model->update([
+                'tipe_surat'   => "eksternal",
+                'id_pengirim_surat'   => null,
+                'pengirim_surat'   => $input['pengirim_surat'],
+                'id_jenis_surat'   => $input['id_jenis_surat'],
+                'id_satker_penerima_surat'   => $input['id_satker_penerima_surat'],
+                'no_surat'   => $input['no_surat'],
+                'perihal'   => $input['perihal'],
+                'tujuan'   => $input['tujuan'],
+                'lampiran'   => $input['lampiran'],
+                'catatan'   => $input['catatan'],
+                'sifat_surat'   => $input['sifat_surat'],
+                'tanggal_surat'   => $input['tanggal_surat'],
+            ]);
+        }
+        else{
+            $model->update([
+                'tipe_surat'   => "internal",
+                'id_satker_pengirim_surat'   => $input['id_satker_pengirim_surat'],
+                'id_satker_penerima_surat'   => $input['id_satker_penerima_surat'],
+                'pengirim_surat'   => $pengirim_surat[0],
+                'id_jenis_surat'   => $input['id_jenis_surat'],
+                'no_surat'   => $input['no_surat'],
+                'perihal'   => $input['perihal'],
+                'tujuan'   => $input['tujuan'],
+                'lampiran'   => $input['lampiran'],
+                'catatan'   => $input['catatan'],
+                'sifat_surat'   => $input['sifat_surat'],
+                'tanggal_surat'   => $input['tanggal_surat'],
+            ]);
+        }
     }
 
     public function destroy($id)
     {
-        $model = SuratMasuk::findOrFail($id);
+        $model = SuratKeluar::findOrFail($id);
         if ($model->foto != null) {
     		unlink(public_path($model->foto));
     	}
 
-    	SuratMasuk::destroy($id);
+    	SuratKeluar::destroy($id);
     	return response()->json([
     		'success'	=>	true
     	]);
@@ -174,17 +205,32 @@ class SuratMasukEksternalController extends Controller
         $model = DB::table('tb_surat_masuk')
                 ->join('tb_jenis_surat','tb_jenis_surat.id','tb_surat_masuk.id_jenis_surat')
                 ->join('tb_satuan_kerja as id_satker_penerima_surat','id_satker_penerima_surat.id','tb_surat_masuk.id_satker_penerima_surat')
-                ->leftJoin('tb_user as id_pimpinan_penerima_surat','id_pimpinan_penerima_surat.id','tb_surat_masuk.id_pimpinan_penerima_surat')
                 ->where('tb_surat_masuk.tipe_surat','eksternal')
                 ->where('id_satker_penerima_surat.id',$id_satuan_kerja[0])
-                ->select('tb_surat_masuk.id','tipe_surat','tb_surat_masuk.pengirim_surat','id_satker_penerima_surat.nm_satuan_kerja as satuan_kerja_penerima_surat','tb_jenis_surat.jenis_surat','id_pimpinan_penerima_surat.nm_user as nm_pimpinan_penerima_surat','no_surat','perihal','tujuan','lampiran','catatan','sifat_surat','tanggal_surat','tb_surat_masuk.status',DB::raw('@rownum  := @rownum  + 1 AS rownum'))
+                ->select('tb_surat_masuk.id','tipe_surat','tb_surat_masuk.pengirim_surat','id_satker_penerima_surat.nm_satuan_kerja_singkat as satuan_kerja_penerima_surat','tb_jenis_surat.jenis_surat','no_surat','perihal','tujuan','lampiran','catatan','sifat_surat','tanggal_surat','tb_surat_masuk.status','status_teruskan',DB::raw('@rownum  := @rownum  + 1 AS rownum'))
                 ->get();
         return DataTables::of($model)
+                ->addColumn('lampiran',function($model){
+                    if($model->lampiran == NULL){
+                        return '<label class="badge badge-danger"><i class="fa fa-close"></i> Tidak Ada Foto</label>';
+                    }
+                    else
+                    {
+                        return '<img class="" width="50" height="50" src="'. url($model->lampiran) .'" alt="">';
+                    }
+                })
                 ->addColumn('action', function($model){
-                    return
-                    '<a onclick="teruskanSuratMasukEksternal('.$model->id.')"  class="btn social-btn btn-success " style="padding:5px;font-size:10px;"><i class="fa fa-send"></i></a> '.
-                    '<a onclick="editSuratMasukEksternal('.$model->id.')"  class="btn social-btn btn-primary " style="padding:5px;font-size:10px;"><i class="fa fa-edit"></i></a> '.
-                    '<a onclick="hapusSuratMasukEksternal('.$model->id.')"  class="btn social-btn btn-danger " style="padding:5px;font-size:10px;"><i class="fa fa-remove"></i></a> ';
-                })->make(true);
+                    if($model->status_teruskan == 1){
+                        return
+                        '<a onclick="teruskanSuratMasukEksternal('.$model->id.')"  class="btn social-btn btn-secondary " style="padding:5px;font-size:10px; pointer-events: none;"><i class="fa fa-send-o"></i></a> '.
+                        '<a onclick="editSuratMasukEksternal('.$model->id.')"  class="btn social-btn btn-primary " style="padding:5px;font-size:10px;"><i class="fa fa-edit"></i></a> '.
+                        '<a onclick="hapusSuratMasukEksternal('.$model->id.')"  class="btn social-btn btn-danger " style="padding:5px;font-size:10px;"><i class="fa fa-remove"></i></a> ';    
+                    } else{
+                        return
+                        '<a onclick="teruskanSuratMasukEksternal('.$model->id.')"  class="btn social-btn btn-success " style="padding:5px;font-size:10px;"><i class="fa fa-send-o"></i></a> '.
+                        '<a onclick="editSuratMasukEksternal('.$model->id.')"  class="btn social-btn btn-primary " style="padding:5px;font-size:10px;"><i class="fa fa-edit"></i></a> '.
+                        '<a onclick="hapusSuratMasukEksternal('.$model->id.')"  class="btn social-btn btn-danger " style="padding:5px;font-size:10px;"><i class="fa fa-remove"></i></a> ';
+                    }
+                })->rawColumns(['lampiran','action'])->make(true);
     }
 }

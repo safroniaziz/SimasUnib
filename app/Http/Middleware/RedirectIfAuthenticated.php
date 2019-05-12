@@ -24,18 +24,30 @@ class RedirectIfAuthenticated
                 }
                 break;
             default:
-                if (Auth::guard($guard)->check()) {
-                    if(Auth::user()->level_user == "staf_tu")
-                    {
-                        return redirect('/staf_tu/dashboard');
-                    }
-                    elseif(Auth::user()->level_user == "pimpinan")
-                    {
-                        return redirect('/pimpinan/dashboard');
-                    }
-                }
-                break;
-        }
+            if(Auth::check() && Auth::user()->status == '1' && Auth::user()->level_user =="staf_tu"){
+                // Auth::logout();
+                return "berhasil";
+                // return redirect('/staf_tu/dashboard');
+            
+            }
+            elseif(Auth::check() && Auth::user()->status == '1' && Auth::user()->level_user =="pimpinan"){
+                // Auth::logout();
+                return redirect('/pimpinan/dashboard');
+            }
+            elseif(Auth::check() && Auth::user()->status == '0' && Auth::user()->level_user =="staf_tu"){
+                // Auth::logout();
+                return "gagal";
+                // return redirect('/staf_tu/dashboard');
+            }
+            elseif(Auth::check() && Auth::user()->status == '0' && Auth::user()->level_user =="pimpinan"){
+                Auth::logout();
+                // return redirect('/pimpinan/dashboard');
+            }
+            else{
+                Auth::logout();
+            }
+                    break;
+            }
         
         return $next($request);
     }

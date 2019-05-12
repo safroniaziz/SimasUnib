@@ -30,17 +30,17 @@
         <thead>
           <tr class="tr-header">
             <td>No</td>
-            <td>Nama Satuan Kerja</td>
+            <td>Satuan Kerja</td>
             <td>Jabatan</td>
             <td>Nama User</td>
+            <td>Status</td>
+            <td>Ubah Status</td>
             <td>NIP</td>
             <td>Foto User</td>
             <td>Username</td>
             <td>Email</td>
             <td>Telephone</td>
             <td>Level User</td>
-            <td>Status</td>
-            <td>Ubah Status</td>
             <td>Terdaftar Sejak</td>
             <td>Aksi</td>
           </tr>
@@ -61,29 +61,28 @@
         ajax: "{{ route('admin.manajemen_user.api')  }}",
         columns: [
             {data: 'rownum', name: 'rownum'},
-            {data: 'nm_satuan_kerja', name:'nm_satuan_kerja'},
+            {data: 'nm_satuan_kerja_singkat', name:'nm_satuan_kerja_singkat'},
             {data: 'nm_jabatan', name:'nm_jabatan'},
             {data: 'nm_user', name:'nm_user'},
+            {data: 'status', 
+                    render:function(data, type, row){
+                        if(data == 1)
+                        {
+                          return '<label class="badge badge-primary" style="font-size:11px;">'+'<i class="fa fa-check"></i>'+'&nbsp;actived'+'</label>';
+                        }
+                        else
+                        {
+                          return '<label class="badge badge-danger" style="font-size:11px;">'+'<i class="fa fa-check"></i>'+'&nbsp;deactive'+'</label>';
+                        }
+                    }
+            },
+            {data: 'ubah_status', name:'ubah_status'},
             {data: 'nip', name:'nip'},
             {data: 'foto', name:'foto'},
             {data: 'username', name:'username'},
             {data: 'email', name:'email'},
             {data: 'telephone', name:'telephone'},
             {data: 'level_user', name:'level_user'},
-            {data: 'status', 
-                        render:function(data, type, row){
-                            if(data == 1)
-                            {
-                              return '<label class="badge badge-primary" style="font-size:11px;">'+'<i class="fa fa-check"></i>'+'&nbsp;actived'+'</label>';
-                            }
-                            else
-                            {
-                              return '<label class="badge badge-danger" style="font-size:11px;">'+'<i class="fa fa-check"></i>'+'&nbsp;deactive'+'</label>';
-                            }
-                        }
-                },
-            {data: 'ubah_status', name:'ubah_status'},
-
             {data: 'created_at', name:'created_at'},
             {data: 'action', name:'action', orderable: false, searchable: false,}
         ]
@@ -99,7 +98,7 @@
     $('#password-form').show();
     $('#jabatan_edit').hide();
 
-}
+  }
 
 function editUser(id){
     save_method = 'edit';
@@ -189,17 +188,68 @@ function hapusUser(id){
   });
 }
 
-function setAktif(id){
-  $.ajax({
-      url : "{{ url('admin/manajemen_user/set_aktif') }}" + '/' + id,
-      type : "POST",
-      success : function(data) {
-        $('#table-user').dataTable().api().ajax.reload();
-      },
-      error : function () {
-
+function setAktifStatus(id){
+  $.ajaxSetup({
+      headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
       }
-  });
+    });
+    url = "{{ url('admin/manajemen_user/set_aktif_status').'/' }}"+id;
+    $.ajax({
+      url : url,
+      type : 'PATCH',
+
+      success : function($data){
+        $('#table-user').dataTable().api().ajax.reload();
+        swal({
+          title:'Berhasil!',
+          text:'User Sudah Diaktifkan',
+          type:'success',
+          timer:'1500'
+        })
+      },
+      error:function(){
+        swal({
+          title:'Oops...',
+          text:'Terjadi Kesalahan!',
+          type:'error',
+          timer:'1500'
+        })
+      }
+    });
+    return false;
+}
+
+function setNonaktifStatus(id){
+  $.ajaxSetup({
+      headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      }
+    });
+    url = "{{ url('admin/manajemen_user/set_nonaktif_status').'/' }}"+id;
+    $.ajax({
+      url : url,
+      type : 'PATCH',
+
+      success : function($data){
+        $('#table-user').dataTable().api().ajax.reload();
+        swal({
+          title:'Berhasil!',
+          text:'User Sudah Dinonaktifkan',
+          type:'success',
+          timer:'1500'
+        })
+      },
+      error:function(){
+        swal({
+          title:'Oops...',
+          text:'Terjadi Kesalahan!',
+          type:'error',
+          timer:'1500'
+        })
+      }
+    });
+    return false;
 }
 
 $(function(){
@@ -233,6 +283,115 @@ $(function(){
       }
     });
   });
+
+  $(document).ready(function(){
+    $.ajaxSetup({
+      headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      }
+    });
+    $("#nip").keyup(function(){
+      var nip = $("#nip").val();
+      // alert(nip);
+      url = "{{ url('admin/manajemen_user/cari_nip') }}";
+      $.ajax({
+        url :url,
+        data : {nip:nip},
+        method :"POST",
+        success:function(data){
+          if(data ==0){
+            $('#mencari_nip').show();
+            $('#nip_tersedia').hide();
+          }
+          else if(data == 1){
+            $('#mencari_nip').hide();
+            $('#nip_tersedia').show();
+          }
+        }
+      })
+
+    })
+  })
+
+  $(document).ready(function(){
+    $.ajaxSetup({
+      headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      }
+    });
+    $("#username").keyup(function(){
+      var username = $("#username").val();
+      // alert(username);
+      url = "{{ url('admin/manajemen_user/cari_uname') }}";
+      $.ajax({
+        url :url,
+        data : {username:username},
+        method :"POST",
+        success:function(data){
+          if(data ==0){
+            $('#mencari_username').show();
+            $('#username_tersedia').hide();
+          }
+          else if(data == 1){
+            $('#mencari_username').hide();
+            $('#username_tersedia').show();
+          }
+        }
+      })
+
+    })
+  })
+
+  $(document).ready(function(){
+    $.ajaxSetup({
+      headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      }
+    });
+    $("#email").keyup(function(){
+      var email = $("#email").val();
+      // alert(email);
+      url = "{{ url('admin/manajemen_user/cari_email') }}";
+      $.ajax({
+        url :url,
+        data : {email:email},
+        method :"POST",
+        success:function(data){
+          if(data ==0){
+            $('#mencari_email').show();
+            $('#email_tersedia').hide();
+          }
+          else if(data == 1){
+            $('#mencari_email').hide();
+            $('#email_tersedia').show();
+          }
+        }
+      })
+
+    })
+  })
+
+  $(document).ready(function(){
+    $.ajaxSetup({
+      headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      }
+    });
+    $("#foto").keyup(function(){
+      var foto = $("#foto").val();
+      // alert(foto);
+      url = "{{ url('admin/manajemen_user/cari_foto') }}";
+      $.ajax({
+        url :url,
+        data : {foto:foto},
+        method :"POST",
+        success:function(data){
+          alert(data);
+        }
+      })
+
+    })
+  })
 
     // $( "#id_satuan_kerja" ).select2({
     //     theme: "bootstrap",

@@ -5,19 +5,22 @@
 @section('sidebar-menu')
     @include('admin/sidebar-menu')
 @endsection
+@push('styles')
+  <style>
+    .grid-margin{
+      margin-bottom: 15px !important;
+    }
+
+    .alert{
+      margin-bottom: 15px !important;
+    }
+  </style>
+@endpush
 @section('content')
   <div class="row">
-    <div class="col-md-12 grid-margin stretch-card">
-      <div class="card bg-primary">
-        <div class="card-body py-3">
-          <div class="d-flex flex-row  align-items">
-            <i class="mdi mdi-television text-white icon-lg"></i>
-            <div class="ml-3">
-              <h6 class="text-white font-weight-semibold mb-0">DASHBOARD</h6>
-              <p class="text-white card-text">Selamat Datang {{ Auth::user()->nm_admin }}, anda berhasil login sebagai <b class="text-white">ADMINISTRATOR</b>. Jangan lupa <b>LOGOUT</b> setelah menggunakan aplikasi !</p>
-            </div>
-          </div>
-        </div>
+    <div class="col-md-12">
+      <div class="alert alert-fill-primary col-" role="alert">
+        <i class="mdi mdi-alert-circle"></i> Selamat Datang <a style="text-transform:uppercase;">{{Auth::user()->nm_admin}}</a>, Jangan Lupa Logout Setelah Menggunakan Aplikasi
       </div>
     </div>
   </div>
@@ -27,7 +30,7 @@
         <div class="card-body">
           <div class="clearfix">
             <div class="float-left">
-              <i class="mdi mdi-cube text-danger icon-lg"></i>
+              <i class="fa fa-sign-in text-danger icon-lg"></i>
             </div>
             <div class="float-right">
               <p class="mb-0 text-right" style="text-transform:uppercase;">Surat Masuk</p>
@@ -37,7 +40,7 @@
             </div>
           </div>
           <p class="text-muted mt-3 mb-0">
-            <i class="mdi mdi-alert-octagon mr-1" aria-hidden="true"></i> {{ $jumlah_surat_masuk_belum_dibaca }} Surat Belum Dibaca </p>
+            <i class="fa fa-sign-in text-primary mr-1" aria-hidden="true"></i> {{ $jumlah_surat_masuk_internal }} Surat Internal </p>
         </div>
       </div>
     </div>
@@ -46,17 +49,17 @@
         <div class="card-body">
           <div class="clearfix">
             <div class="float-left">
-              <i class="mdi mdi-receipt text-warning icon-lg"></i>
+              <i class="fa fa-sign-out text-warning icon-lg"></i>
             </div>
             <div class="float-right">
               <p class="mb-0 text-right" style="text-transform:uppercase;">Surat Keluar</p>
               <div class="fluid-container">
-                <h3 class="font-weight-medium text-right mb-0">3455</h3>
+              <h3 class="font-weight-medium text-right mb-0">{{ $jumlah_surat_keluar }}</h3>
               </div>
             </div>
           </div>
           <p class="text-muted mt-3 mb-0">
-            <i class="mdi mdi-bookmark-outline mr-1" aria-hidden="true"></i> Product-wise sales </p>
+            <i class="fa fa-sign-out text-primary mr-1" aria-hidden="true"></i>{{ $jumlah_surat_keluar_internal }} Surat Internal</p>
         </div>
       </div>
     </div>
@@ -65,7 +68,7 @@
         <div class="card-body">
           <div class="clearfix">
             <div class="float-left">
-              <i class="mdi mdi-poll-box text-success icon-lg"></i>
+              <i class="fa fa-users text-success icon-lg"></i>
             </div>
             <div class="float-right">
               <p class="mb-0 text-right" style="text-transform:uppercase;">User</p>
@@ -75,7 +78,7 @@
             </div>
           </div>
           <p class="text-muted mt-3 mb-0">
-            <i class="mdi mdi-calendar mr-1" aria-hidden="true"></i> Weekly Sales </p>
+            <i class="fa fa-users text-primary mr-1" aria-hidden="true"></i>{{ $jumlah_user_aktif }} User Aktif </p>
         </div>
       </div>
     </div>
@@ -84,7 +87,7 @@
         <div class="card-body">
           <div class="clearfix">
             <div class="float-left">
-              <i class="mdi mdi-account-box-multiple text-info icon-lg"></i>
+              <i class="fa fa-university text-info icon-lg"></i>
             </div>
             <div class="float-right">
               <p class="mb-0 text-right" style="text-transform:uppercase;">Satuan Kerja</p>
@@ -94,9 +97,19 @@
             </div>
           </div>
           <p class="text-muted mt-3 mb-0">
-            <i class="mdi mdi-reload mr-1" aria-hidden="true"></i> Product-wise sales </p>
+            <i class="fa fa-university text-primary mr-1" aria-hidden="true"></i> Satuan Kerja UNIB </p>
         </div>
       </div>
     </div>
   </div>
+@endsection
+
+@section('manajemen-icon')
+<i class="fa fa-bar-chart icon-md text-dark"></i>
+@endsection
+
+@section('manajemen-title','Statistik Surat Masuk dan Surat Keluar')
+
+@section('manajemen-table')
+
 @endsection

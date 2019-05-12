@@ -62,6 +62,24 @@ class PejabatDisposisiController extends Controller
         $model->delete();
     }
 
+    public function cariPejabatDisposisi(Request $request){
+        // $a = $request->id_pejabat;
+        $data = DB::table('tb_user')
+                ->join('tb_jabatan','tb_jabatan.id','tb_user.id_jabatan')
+                ->join('tb_satuan_kerja','tb_satuan_kerja.id','tb_jabatan.id_satuan_kerja')
+                ->where('tb_user.id',$request->id_pejabat)
+                ->select('tb_satuan_kerja.id')
+                ->pluck('tb_user.id');
+        $data_pejabat_disposisi = DB::table('tb_user')
+                                ->join('tb_jabatan','tb_jabatan.id','tb_user.id_jabatan')
+                                ->join('tb_satuan_kerja','tb_satuan_kerja.id','tb_jabatan.id_satuan_kerja')
+                                ->where('tb_user.id','!=',$request->id_pejabat)
+                                ->where('tb_satuan_kerja.id',$data[0])
+                                ->select('tb_user.id as id_pejabat_disposisi','tb_user.nm_user as nm_pejabat_disposisi')
+                                ->get();
+        return response()->json($data_pejabat_disposisi);
+    }
+
     public function dataTable(){
         $model = DB::table('tb_pejabat_disposisi')
                 ->join('tb_user as tb_pejabat','tb_pejabat.id','tb_pejabat_disposisi.id_pejabat')

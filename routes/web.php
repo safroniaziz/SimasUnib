@@ -12,21 +12,29 @@
 */
 
 Route::get('/', function () {
-    if(Auth::check()){
-			if(Auth::user()->level_user == 'administrator'){
-				return redirect()->route('admin.dashboard');
-			}
-			elseif(Auth::user()->level_user == 'staf_tu'){
-				return redirect()->route('staf_tu.dashboard');
-			}
-			elseif(Auth::user()->level_user == 'pimpinan'){
-				return redirect()->route('pimpinan.dashboard');
-			}
-			else{
-				return redirect()->route('login');
-			}
+    if(Auth::check() && Auth::user()->status == '1' && Auth::user()->level_user =="staf_tu"){
+		// return "berhasil";
+		return redirect('/staf_tu/dashboard');
+	
 	}
-	return redirect()->route('login');
+	elseif(Auth::check() && Auth::user()->status == '1' && Auth::user()->level_user =="pimpinan"){
+		// Auth::logout();
+		return redirect('/pimpinan/dashboard');
+	}
+	elseif(Auth::check() && Auth::user()->status == '0' && Auth::user()->level_user =="staf_tu"){
+		Auth::logout();
+		Session::flush();
+		return Redirect::to('/login')->with(['error' => 'Peringatan:','pesan'	=>	'akun sudah dinonaktifkan !']);
+	}
+	elseif(Auth::check() && Auth::user()->status == '0' && Auth::user()->level_user =="pimpinan"){
+		Auth::logout();
+		Session::flush();
+		return Redirect::to('/login')->with(['error' => 'Peringatan:','pesan'	=>	'akun sudah dinonaktifkan !']);
+	}
+	else{
+		return Redirect::to('/login');
+	}
+		
 });
 
 Route::get('/admin',function(){
@@ -84,6 +92,16 @@ Route::group(['prefix'	=>	'admin/surat_masuk_eksternal'],function(){
 	Route::get('/api','Admin\SuratMasukEksternalController@dataTable')->name('admin.surat_masuk_eksternal.api');
 });
 
+Route::group(['prefix'	=>	'admin/surat_keluar_internal'],function(){
+	Route::get('/','Admin\SuratKeluarInternalController@index')->name('admin.surat_keluar_internal.index');
+	Route::get('/api','Admin\SuratKeluarInternalController@dataTable')->name('admin.surat_keluar_internal.api');
+});
+
+Route::group(['prefix'	=>	'admin/surat_keluar_eksternal'],function(){
+	Route::get('/','Admin\SuratKeluarEksternalController@index')->name('admin.surat_keluar_eksternal.index');
+	Route::get('/api','Admin\SuratKeluarEksternalController@dataTable')->name('admin.surat_keluar_eksternal.api');
+});
+
 Route::group(['prefix'	=>	'admin/satuan_kerja'],function(){
 	Route::get('/','Admin\SatuanKerjaController@index')->name('admin.satuan_kerja.index');
 	Route::get('/create','Admin\SatuanKerjaController@create')->name('admin.satuan_kerja.create');
@@ -92,6 +110,8 @@ Route::group(['prefix'	=>	'admin/satuan_kerja'],function(){
 	Route::get('/{id}/edit','Admin\SatuanKerjaController@edit')->name('admin.satuan_kerja.edit');
 	Route::put('/{id}','Admin\SatuanKerjaController@update')->name('admin.satuan_kerja.update');
 	Route::delete('/{id}','Admin\SatuanKerjaController@destroy')->name('admin.satuan_kerja.destroy');
+	Route::post('/cari_nm_satuan_kerja','Admin\SatuanKerjaController@cariNamaSatuanKerja')->name('admin.satuan_kerja.cari_nm_satuan_kerja');
+	Route::post('/cari_nm_satuan_kerja_singkat','Admin\SatuanKerjaController@cariNamaJabatan')->name('admin.satuan_kerja.cari_nm_satuan_kerja_singkat');
 	Route::get('/api','Admin\SatuanKerjaController@dataTable')->name('admin.satuan_kerja.api');
 });
 
@@ -101,15 +121,12 @@ Route::group(['prefix'	=>	'admin/manajemen_jabatan'],function(){
 	Route::post('/','Admin\ManajemenJabatanController@store')->name('admin.manajemen_jabatan.store');
 	Route::get('/detail','Admin\ManajemenJabatanController@show')->name('admin.manajemen_jabatan.show');
 	Route::get('/{id}/edit','Admin\ManajemenJabatanController@edit')->name('admin.manajemen_jabatan.edit');
-	Route::put('/{id}','Admin\ManajemenJabatanController@update')->name('admin.manajemen_jabatan.update');
+	Route::patch('/{id}','Admin\ManajemenJabatanController@update')->name('admin.manajemen_jabatan.update');
 	Route::delete('/{id}','Admin\ManajemenJabatanController@destroy')->name('admin.manajemen_jabatan.destroy');
+	Route::post('/cari_nama_jabatan','Admin\ManajemenJabatanController@cariNamaJabatan')->name('admin.manajemen_jabatan.cari_nama_jabatan');
 	Route::get('/api','Admin\ManajemenJabatanController@dataTable')->name('admin.manajemen_jabatan.api');
 });
 
-Route::group(['prefix'	=>	'admin/surat_keluar'],function(){
-	Route::get('/internal','Admin\SuratKeluarController@internal')->name('admin.surat_keluar.internal');
-	Route::get('/eksternal','Admin\SuratKeluarController@eksternal')->name('admin.surat_keluar.eksternal');
-});
 
 Route::group(['prefix'	=>	'admin/pejabat_disposisi'],function(){
 	Route::get('/','Admin\PejabatDisposisiController@index')->name('admin.pejabat_disposisi.index');
@@ -119,11 +136,8 @@ Route::group(['prefix'	=>	'admin/pejabat_disposisi'],function(){
 	Route::get('/{id}/edit','Admin\PejabatDisposisiController@edit')->name('admin.pejabat_disposisi.edit');
 	Route::put('/{id}','Admin\PejabatDisposisiController@update')->name('admin.pejabat_disposisi.update');
 	Route::delete('/{id}','Admin\PejabatDisposisiController@destroy')->name('admin.pejabat_disposisi.destroy');
+	Route::get('/cari_pejabat_disposisi','Admin\PejabatDisposisiController@cariPejabatDisposisi')->name('admin.pejabat_disposisi.cari_pejabat_disposisi');
 	Route::get('/api','Admin\PejabatDisposisiController@dataTable')->name('admin.pejabat_disposisi.api');
-});
-
-Route::group(['prefix'	=>	'admin/satuan_kerja'],function(){
-	Route::get('/','Admin\SatuanKerjaController@index')->name('admin.satuan_kerja.index');
 });
 
 Route::group(['prefix'	=>	'admin/manajemen_user'],function(){
@@ -132,8 +146,11 @@ Route::group(['prefix'	=>	'admin/manajemen_user'],function(){
 	Route::patch('/{id}','Admin\ManajemenUserController@update');
 	Route::delete('/{id}','Admin\ManajemenUserController@destroy');
 	Route::get('/{id}/edit','Admin\ManajemenUserController@edit');
-	Route::get('/set_nonaktif','Admin\ManajemenUserController@setNonaktif');
-	Route::get('/set_active/{id}','Admin\ManajemenUserController@setAktif')->name('admin.manajemen_user.set_aktif');
+	Route::patch('/set_nonaktif_status/{id}','Admin\ManajemenUserController@setNonaktifStatus');
+	Route::patch('/set_aktif_status/{id}','Admin\ManajemenUserController@setAktifStatus')->name('admin.manajemen_user.set_aktif');
+	Route::post('/cari_nip','Admin\ManajemenUserController@cariNip')->name('admin.manajemen_user.cari_nip');
+	Route::post('/cari_uname','Admin\ManajemenUserController@cariUname')->name('admin.manajemen_user.cari_uname');
+	Route::post('/cari_email','Admin\ManajemenUserController@cariEmail')->name('admin.manajemen_user.cari_email');
 	Route::get('/api','Admin\ManajemenUserController@dataTable')->name('admin.manajemen_user.api');
 });
 
@@ -153,12 +170,14 @@ Route::group(['prefix'	=>	'staf_tu/dashboard'],function(){
 
 Route::group(['prefix'	=>	'staf_tu/surat_masuk_internal'],function(){
 	Route::get('/','TataUsaha\SuratMasukInternalController@index')->name('staf_tu.surat_masuk_internal.index');
-	Route::post('/','TataUsaha\SuratMasukInternalController@store')->name('staf_tu.surat_masuk_internal.index');;
-	Route::patch('/{id}','TataUsaha\SuratMasukInternalController@update')->name('staf_tu.surat_masuk_internal.update');;
+	Route::post('/','TataUsaha\SuratMasukInternalController@store')->name('staf_tu.surat_masuk_internal.index');
+	Route::patch('/{id}','TataUsaha\SuratMasukInternalController@update')->name('staf_tu.surat_masuk_internal.update');
 	Route::get('/{id}/edit','TataUsaha\SuratMasukInternalController@edit');
 	Route::get('/{id}/teruskan','TataUsaha\SuratMasukInternalController@teruskan');
 	Route::delete('/{id}','TataUsaha\SuratMasukInternalController@destroy');
-	Route::patch('/teruskan/{id}','TataUsaha\SuratMasukInternalController@teruskanUpdate')->name('staf_tu.surat_masuk_internal.teruskan_update');;
+	Route::post('/teruskan_surat','TataUsaha\SuratMasukInternalController@teruskanSurat')->name('staf_tu.surat_masuk_internal.teruskan_surat');
+	Route::post('/cari_no_surat','TataUsaha\SuratMasukInternalController@cariNoSurat')->name('staf_tu.surat_masuk_internal.cari_no_surat');
+	Route::post('/cek_lampiran','TataUsaha\SuratMasukInternalController@cekLampiran')->name('staf_tu.surat_masuk_internal.cek_lampiran');
 	Route::get('/api','TataUsaha\SuratMasukInternalController@dataTable')->name('staf_tu.surat_masuk_internal.api');
 });
 
@@ -169,8 +188,28 @@ Route::group(['prefix'	=>	'staf_tu/surat_masuk_eksternal'],function(){
 	Route::get('/{id}/edit','TataUsaha\SuratMasukEksternalController@edit');
 	Route::get('/{id}/teruskan','TataUsaha\SuratMasukEksternalController@teruskan');
 	Route::delete('/{id}','TataUsaha\SuratMasukEksternalController@destroy');
-	Route::patch('/teruskan/{id}','TataUsaha\SuratMasukEksternalController@teruskanUpdate')->name('staf_tu.surat_masuk_eksternal.teruskan_update');;
+	Route::post('/teruskan_surat','TataUsaha\SuratMasukEksternalController@teruskanSurat')->name('staf_tu.surat_masuk_internal.teruskan_surat');
 	Route::get('/api','TataUsaha\SuratMasukEksternalController@dataTable')->name('staf_tu.surat_masuk_eksternal.api');
+});
+
+Route::group(['prefix'	=>	'staf_tu/surat_keluar_internal'],function(){
+	Route::get('/','TataUsaha\SuratKeluarInternalController@index')->name('staf_tu.surat_keluar_internal.index');
+	Route::post('/','TataUsaha\SuratKeluarInternalController@store')->name('staf_tu.surat_keluar_internal.index');
+	Route::patch('/{id}','TataUsaha\SuratKeluarInternalController@update')->name('staf_tu.surat_keluar_internal.update');
+	Route::get('/{id}/edit','TataUsaha\SuratKeluarInternalController@edit');
+	Route::delete('/{id}','TataUsaha\SuratKeluarInternalController@destroy');
+	Route::post('/cari_no_surat','TataUsaha\SuratKeluarInternalController@cariNoSurat')->name('staf_tu.surat_keluar_internal.cari_no_surat');
+	Route::post('/cek_lampiran','TataUsaha\SuratKeluarInternalController@cekLampiran')->name('staf_tu.surat_keluar_internal.cek_lampiran');
+	Route::get('/api','TataUsaha\SuratKeluarInternalController@dataTable')->name('staf_tu.surat_keluar_internal.api');
+});
+
+Route::group(['prefix'	=>	'staf_tu/surat_keluar_eksternal'],function(){
+	Route::get('/','TataUsaha\SuratKeluarEksternalController@index')->name('staf_tu.surat_keluar_eksternal.index');
+	Route::post('/','TataUsaha\SuratKeluarEksternalController@store')->name('staf_tu.surat_keluar_eksternal.index');;
+	Route::patch('/{id}','TataUsaha\SuratKeluarEksternalController@update')->name('staf_tu.surat_keluar_eksternal.update');;
+	Route::get('/{id}/edit','TataUsaha\SuratKeluarEksternalController@edit');
+	Route::delete('/{id}','TataUsaha\SuratKeluarEksternalController@destroy');
+	Route::get('/api','TataUsaha\SuratKeluarEksternalController@dataTable')->name('staf_tu.surat_keluar_eksternal.api');
 });
 
 Route::group(['prefix'	=>	'staf_tu/kode_surat'],function(){
@@ -189,17 +228,17 @@ Route::group(['prefix'	=>	'pimpinan/dashboard'],function(){
 Route::group(['prefix'	=>	'pimpinan/surat_masuk_internal'],function(){
 	Route::get('/','Pimpinan\SuratMasukInternalController@index')->name('pimpinan.surat_masuk_internal.index');
 	Route::get('/{id}/teruskan','Pimpinan\SuratMasukInternalController@teruskan');
-	Route::patch('/teruskan/{id}','Pimpinan\SuratMasukInternalController@teruskanUpdate')->name('pimpinan.surat_masuk_internal.teruskan_update');;
+	Route::post('/teruskan_surat','Pimpinan\SuratMasukInternalController@teruskanSurat')->name('pimpinan.surat_masuk_internal.teruskan_surat');
 	Route::get('/api','Pimpinan\SuratMasukInternalController@dataTable')->name('pimpinan.surat_masuk_internal.api');
 });
 
 Route::group(['prefix'	=>	'pimpinan/surat_masuk_eksternal'],function(){
 	Route::get('/','Pimpinan\SuratMasukEksternalController@index')->name('pimpinan.surat_masuk_eksternal.index');
-	Route::post('/','Pimpinan\SuratMasukEksternalController@store')->name('pimpinan.surat_masuk_eksternal.index');;
-	Route::patch('/{id}','Pimpinan\SuratMasukEksternalController@update')->name('pimpinan.surat_masuk_eksternal.update');;
-	Route::get('/{id}/edit','Pimpinan\SuratMasukEksternalController@edit');
+	// Route::post('/','Pimpinan\SuratMasukEksternalController@store')->name('pimpinan.surat_masuk_eksternal.index');;
+	// Route::patch('/{id}','Pimpinan\SuratMasukEksternalController@update')->name('pimpinan.surat_masuk_eksternal.update');;
+	// Route::get('/{id}/edit','Pimpinan\SuratMasukEksternalController@edit');
 	Route::get('/{id}/teruskan','Pimpinan\SuratMasukEksternalController@teruskan');
-	Route::delete('/{id}','Pimpinan\SuratMasukEksternalController@destroy');
-	Route::patch('/teruskan/{id}','Pimpinan\SuratMasukEksternalController@teruskanUpdate')->name('pimpinan.surat_masuk_internal.teruskan_update');;
-	// Route::get('/api','Pimpinan\SuratMasukEksternalController@dataTable')->name('pimpinan.surat_masuk_internal.api');
+	// Route::delete('/{id}','Pimpinan\SuratMasukEksternalController@destroy');
+	Route::post('/teruskan_surat','Pimpinan\SuratMasukEksternalController@teruskanSurat')->name('pimpinan.surat_masuk_eksternal.teruskan_surat');
+	Route::get('/api','Pimpinan\SuratMasukEksternalController@dataTable')->name('pimpinan.surat_masuk_eksternal.api');
 });

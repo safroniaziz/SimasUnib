@@ -138,16 +138,44 @@ class ManajemenUserController extends Controller
     	]);
     }
 
-    public function setNonaktif()
+    public function setAktifStatus($id)
     {
-        $data = DB::table('tb_user')->update(['status'  => 0]);
+        $user = User::find($id);
+        $user->update([
+            'status'    => '1',
+        ]);
     }
 
-    public function setAktif($id)
+    public function setNonaktifStatus($id)
     {
-      $this->setNonaktif();
-      $data = DB::table('tb_user')->where('id',$id)->update(['status'  =>1]);
-        return true;
+        $user = User::find($id);
+        $user->update([
+            'status'    => '0',
+        ]);
+    }
+
+    public function cariNip(Request $request){
+        $data = DB::table('tb_user')->select('nip')->where('nip',$request->nip)->get();
+        
+        $datas = count($data);
+        
+        return response()->json($datas);
+    }
+
+    public function cariUname(Request $request){
+        $data = DB::table('tb_user')->select('username')->where('username',$request->username)->get();
+        
+        $datas = count($data);
+        
+        return response()->json($datas);
+    }
+
+    public function cariEmail(Request $request){
+        $data = DB::table('tb_user')->select('email')->where('email',$request->email)->get();
+        
+        $datas = count($data);
+        
+        return response()->json($datas);
     }
 
     public function dataTable(){
@@ -155,7 +183,7 @@ class ManajemenUserController extends Controller
         $model = DB::table('tb_user')
                 ->join('tb_jabatan','tb_jabatan.id','tb_user.id_jabatan')
                 ->join('tb_satuan_kerja','tb_satuan_kerja.id','tb_jabatan.id_satuan_kerja')
-                ->select('tb_user.id','nm_user','nip','username','email','status','tb_jabatan.nm_jabatan','tb_satuan_kerja.nm_satuan_kerja','telephone','foto','level_user','tb_user.created_at',DB::raw('@rownum  := @rownum  + 1 AS rownum'))
+                ->select('tb_user.id','nm_user','nip','username','email','status','tb_jabatan.nm_jabatan','tb_satuan_kerja.nm_satuan_kerja_singkat','telephone','foto','level_user','tb_user.created_at',DB::raw('@rownum  := @rownum  + 1 AS rownum'))
                 ->get();
         return DataTables::of($model)
                 ->addColumn('foto',function($model){
@@ -172,12 +200,12 @@ class ManajemenUserController extends Controller
                     if($model->status == 1)
                     {
                         return 
-                       '<a onclick="setNonaktif('.$model->id.')"  class="btn social-btn btn-danger " style="padding:5px;font-size:10px;"><i class="fa fa-thumbs-o-down"></i></a> ';
+                       '<a onclick="setNonaktifStatus('.$model->id.')"  class="btn social-btn btn-danger " style="padding:5px;font-size:10px;"><i class="fa fa-thumbs-o-down"></i></a> ';
                     }
                     else
                     {
                         return 
-                        '<a onclick="setAktif('.$model->id.')"  class="btn social-btn btn-primary " style="padding:5px;font-size:10px;"><i class="fa fa-thumbs-o-up"></i></a> ';
+                        '<a onclick="setAktifStatus('.$model->id.')"  class="btn social-btn btn-primary " style="padding:5px;font-size:10px;"><i class="fa fa-thumbs-o-up"></i></a> ';
                     }                    
                 })
 

@@ -35,14 +35,29 @@
                             <label for="" class="control-label">Level User :</label>
                             <select name="level_user" id="level_user" class="form-control">
                                 <option value="0" selected="true" disabled="true">-- pilih level user --</option>    
-                                <option value="staf_tu">Staf Tata Usaha</option>
                                 <option value="pimpinan">Pimpinan</option>
+                                <option value="staf_tu">Staf Tata Usaha</option>
                             </select>
                         </div>
 
                         <div class="form-group col-md-6">
-                            <label for="" class="control-label">Nomor Induk Pegawai :</label>
-                            <input type="text" name="nip" class="form-control" id="nip">
+                                <label for="" class="control-label">Nomor Induk Pegawai :</label>
+
+                            <div class="input-group">
+                                <input type="number" name="nip" class="form-control" id="nip">    
+                                <div class="input-group-append bg-success border-success" id="mencari_nip">
+                                        <span class="input-group-text bg-transparent">
+                                            <i class="fa fa-check"></i>
+                                        </span>
+                                    </div>
+
+                                <div class="input-group-append bg-danger border-danger" id="nip_tersedia" style="display:none;">
+                                    <span class="input-group-text bg-transparent" style="color:white; font-size:11px;">
+                                        <i class="fa fa-close"></i>&nbsp;sudah digunakan
+                                    </span>
+                                </div>
+
+                            </div> 
                         </div>
                 
                         <div class="form-group col-md-6">
@@ -52,13 +67,43 @@
 
                         <div class="form-group col-md-6">
                             <label for="" class="control-label">Username :</label>
-                            <input type="text" name="username" class="form-control" id="username">
+
+                            <div class="input-group">
+                                <input type="text" name="username" class="form-control" id="username">    
+                                <div class="input-group-append bg-success border-success" id="mencari_username">
+                                        <span class="input-group-text bg-transparent">
+                                            <i class="fa fa-check"></i>
+                                        </span>
+                                    </div>
+
+                                <div class="input-group-append bg-danger border-danger" id="username_tersedia" style="display:none;">
+                                    <span class="input-group-text bg-transparent" style="color:white; font-size:11px;">
+                                        <i class="fa fa-close"></i>&nbsp;sudah digunakan
+                                    </span>
+                                </div>
+
+                            </div> 
                         </div>
 
                         <div class="form-group col-md-6">
                             <label for="" class="control-label">Email :</label>
-                            {!! Form::email('email',null,['class' =>  'form-control','id' =>  'email']) !!}
-                        </div>  
+
+                            <div class="input-group">
+                                <input type="email" name="email" class="form-control" id="email">    
+                                <div class="input-group-append bg-success border-success" id="mencari_email">
+                                        <span class="input-group-text bg-transparent">
+                                            <i class="fa fa-check"></i>
+                                        </span>
+                                    </div>
+
+                                <div class="input-group-append bg-danger border-danger" id="email_tersedia" style="display:none;">
+                                    <span class="input-group-text bg-transparent" style="color:white; font-size:11px;">
+                                        <i class="fa fa-close"></i>&nbsp;sudah digunakan
+                                    </span>
+                                </div>
+
+                            </div> 
+                        </div>
 
                         <div class="form-group col-md-6">
                             <label for="" class="control-label">Telephone :</label>
@@ -72,9 +117,9 @@
             
                         <div class="form-group col-md-6">
                             <label>Foto User</label>
-                            <input type="file" name="foto" onchange="previewFoto()" class="file-upload-default">
+                            <input type="file" name="foto" id="foto" onchange="previewFoto()" class="file-upload-default">
                             <div class="input-group col-xs-12">
-                                <input type="text" class="form-control file-upload-info" id="upload-value" disabled placeholder="Upload Image">
+                                <input type="text" class="form-control file-upload-info upload_value" id="upload-value" disabled placeholder="Upload Image">
                                 <span class="input-group-append">
                                 <button class="file-upload-browse btn btn-info" type="button">Upload</button>
                                 </span>

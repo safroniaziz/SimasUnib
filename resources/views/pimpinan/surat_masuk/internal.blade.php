@@ -11,6 +11,10 @@
 @section('manajemen-title','Daftar Surat Masuk')
 @push('styles')
     <style>
+        td.highlight {
+        font-weight: bold;
+        color: blue;
+    }
         fieldset.scheduler-border {
             border: 1px groove #eee !important;
             padding: 0 1.4em 1.4em 1.4em !important;
@@ -47,11 +51,8 @@
             <thead>
                 <tr class="tr-header">
                     <td>No</td>
-                    <td>Tipe Surat</td>
                     <td>Satker Pengirim Surat</td>
-                    <td>Satker Penerima Surat</td>
-                    <td>Pimpinan Penerima Surat</td>
-                    <td>Penerima Disposisi Surat</td>
+                    <td>Pengirim Disposisi Surat</td>
                     <td>Jenis Surat</td>
                     <td>No Surat</td>
                     <td>Perihal</td>
@@ -61,6 +62,7 @@
                     <td>Sifat Surat</td>
                     <td>Tanggal Surat</td>
                     <td>Status</td>
+                    <td>Status Teruskan</td>
                     <td>Aksi</td>
                 </tr>
             </thead>
@@ -72,91 +74,25 @@
 @push('scripts')
      <script>
         $('#data-surat-masuk-internal-pimpinan').DataTable({
+            
             responsive: true,
             processing: true,
             serverside: true,
+            
             ajax: "{{ route('pimpinan.surat_masuk_internal.api') }}",
+            
             columns: [
                 {data: 'rownum',name:'rownum'},
-                {data: 'tipe_surat',name:'tipe_surat'},
-                {data: 'nm_pengirim_surat',name:'nm_pengirim_surat'},
-                {data: 'nm_penerima_surat',name:'nm_penerima_surat'},
-                {data: 'nm_pimpinan_penerima_surat', 
-                        render:function(data, type, row){
-                            if(data == null)
-                            {
-                                return '<label class="badge badge-warning" style="font-size:11px;">'+'<i class="fa fa-spinner"></i>'+'&nbsp;data belum diisi'+'</label>';
-                            }
-                            else
-                            {
-                                return '<style="font-size:11px;">'+data;
-                            }
-                        }
-                },
-                {data: 'nm_penerima_disposisi', 
-                        render:function(data, type, row){
-                            if(data == null)
-                            {
-                                return '<label class="badge badge-warning" style="font-size:11px;">'+'<i class="fa fa-spinner"></i>'+'&nbsp;data belum diisi'+'</label>';
-                            }
-                            else
-                            {
-                                return '<style="font-size:11px;">'+data;
-                            }
-                        }
-                },
+                {data: 'pengirim_surat',name:'pengirim_surat'},
+                {data: 'nm_pengirim_disposisi',name:'nm_pengirim_disposisi'},
                 {data: 'jenis_surat',name:'jenis_surat'},
                 {data: 'no_surat',name:'no_surat'},
-                {data: 'perihal', 
-                        render:function(data, type, row){
-                            if(data != null)
-                            {
-                              return '<style="font-size:11px;">'+data+'</style>';
-                            }
-                            else
-                            {
-                                return '<label class="badge badge-danger" style="font-size:11px;">'+'<i class="fa fa-close"></i>'+'&nbsp;data belum diisi'+'</label>';
-                            }
-                        }
-                },
-                {data: 'tujuan', 
-                        render:function(data, type, row){
-                            if(data != null)
-                            {
-                                return '<style="font-size:11px;">'+data+'</style>';
-                            }
-                            else
-                            {
-                                return '<label class="badge badge-danger" style="font-size:11px;">'+'<i class="fa fa-close"></i>'+'&nbsp;data belum diisi'+'</label>';
-                            }
-                        }
-                },
-                {data: 'lampiran', 
-                        render:function(data, type, row){
-                            if(data != null)
-                            {
-                                return '<style="font-size:11px;">'+data+'</style>';
-                            }
-                            else
-                            {
-                                return '<label class="badge badge-danger" style="font-size:11px;">'+'<i class="fa fa-close"></i>'+'&nbsp;data belum diisi'+'</label>';
-                            }
-                        }
-                },
-                {data: 'catatan', 
-                        render:function(data, type, row){
-                            if(data != null)
-                            {
-                                return '<style="font-size:11px;">'+data+'</style>';
-                            }
-                            else
-                            {
-                              return '<label class="badge badge-danger" style="font-size:11px;">'+'<i class="fa fa-close"></i>'+'&nbsp;data belum diisi'+'</label>';
-                            }
-                        }
-                },
-                {data: 'sifat_surat',name:'sifat_surat'},
+                {data: 'perihal',name:'perihal'},
+                {data: 'tujuan',name:'tujuan'},
+                {data: 'lampiran',name:'lampiran'},
                 {data: 'tanggal_surat',name:'tanggal_surat'},
+                {data: 'catatan',name:'catatan'},
+                {data: 'sifat_surat',name:'sifat_surat'},
                 {data: 'status', 
                         render:function(data, type, row){
                             if(data == 1)
@@ -169,9 +105,27 @@
                             }
                         }
                 },
+                {data: 'status_teruskan', 
+                        render:function(data, type, row){
+                            if(data == 1)
+                            {
+                              return '<label class="badge badge-success" style="font-size:11px;">'+'<i class="fa fa-check"></i>'+'&nbsp;Sudah Diteruskan'+'</label>';
+                            }
+                            else
+                            {
+                              return '<label class="badge badge-warning" style="font-size:11px;">'+'<i class="fa fa-spinner"></i>'+'&nbsp;Menunggu Diteruskan'+'</label>';
+                            }
+                        }
+                },
                 {data: 'action',name:'action'},
                 
             ],
+            "createdRow": function ( row, data, index ) {
+                if(data['status_teruskan'] == 0 ) {
+                    $('td', row).css('background-color', '#f2dede' );
+                }
+            },
+            
             
         })
 
@@ -183,9 +137,9 @@
         // });
 
       
-        function teruskanSuratMasukInternal(id){
+        function teruskanSuratMasukInternalPimpinan(id){
             save_method = 'teruskan';
-            $('input[name=_method]').val('PATCH');
+            $('input[name=_method]').val('POST');
             $.ajax({
                 url: "{{ url('pimpinan/surat_masuk_internal') }}"+'/'+ id + "/teruskan",
                 type: "GET",
@@ -196,10 +150,10 @@
                     $("#form-teruskan").show();
                     $("#detail-teruskan").show();
                     $(window).scrollTop(0);
-                    $('#id').text(data[0].id);
-                    $('#id_surat_masuk').text(data[0].id);
+                    $('#id_disposisi_surat_masuk').val(data[0].id_disposisi_surat_masuk);
+                    $('#id_surat_masuk').text(data[0].id_surat_masuk);
                     $('#tipe_suratt').text(data[0].tipe_surat);
-                    $('#satker_pengirim_suratt').text(data[0].nm_satker_pengirim_surat);
+                    $('#satker_pengirim_suratt').text(data[0].pengirim_surat);
                     $('#jenis_suratt').text(data[0].jenis_surat);
                     $('#nomor_suratt').text(data[0].no_surat);
                     $('#perihal_suratt').text(data[0].perihal);
@@ -207,19 +161,7 @@
                     $('#catatan_suratt').text(data[0].catatan);
                     $('#sifat_suratt').text(data[0].sifat_surat);
                     $('#id_surat_masuk').val(data[0].id);
-
-                    $('#id').val(data[0].id);
-                    $('#tipe_surat').val(data[0].tipe_surat);
-                    $('#id_satker_pengirim_surat').val(data[0].id_satker_pengirim_surat);
-                    $('#id_jenis_surat').val(data[0].id_jenis_surat);
-                    $('#sifat_surat').val(data[0].sifat_surat);
-                    $('#no_surat').val(data[0].no_surat);
-                    $('#perihal').val(data[0].perihal);
-                    $('#tujuan').val(data[0].tujuan);
-                    $('#catatan').val(data[0].catatan);
-                    $('#tanggal_surat').val(data[0].tanggal_surat);
-                    $('#lampiran').val(data[0].lampiran);
-
+                    $('.detail_lampiran_teruskan').attr("src",data[0].lampiran);
                 },
                 error:function(){
                     alert("Nothing Data");
@@ -237,8 +179,7 @@
     });
                 if (!e.isDefaultPrevented()) {
                     var id = $('#id').val();
-                    if (save_method == 'teruskan') url = "{{ url('pimpinan/surat_masuk_internal/teruskan').'/' }}"+id;
-                    
+                    if(save_method == 'teruskan') url = "{{ url('pimpinan/surat_masuk_internal/teruskan_surat') }}";
                     $.ajax({
                     url : url,
                     type : "POST",
@@ -246,9 +187,10 @@
                     data : new FormData($('#form-surat-masuk-pimpinan form')[0]),
                     contentType : false,
                     processData : false,
-                    success : function($data){
+                    success : function(data){
+                        // alert(data);
                         $('#form-surat-masuk-pimpinan').hide();
-                        $('#table-surat-masuk-internal').dataTable().api().ajax.reload();
+                        $('#data-surat-masuk-internal-pimpinan').dataTable().api().ajax.reload();
                         if(save_method == 'teruskan') swal({
                             title:'Berhasil!',
                             text:'Surat Sudah Diteruskan',
@@ -287,7 +229,7 @@
         //                 $('#form-teruskan-internal').hide();
         //                 $('body').removeClass('modal-open');
         //                 $('.modal-backdrop').remove();
-        //                 $('#table-surat-masuk-internal').dataTable().api().ajax.reload();
+        //                 $('#data-surat-masuk-internal-pimpinan').dataTable().api().ajax.reload();
         //                 swal({
         //                 title:'Berhasil!',
         //                 text:'Surat Masuk Sudah Dikirim ke Pimpinan',
@@ -301,6 +243,5 @@
         //     });
         // });
 
-        
     </script>
 @endpush

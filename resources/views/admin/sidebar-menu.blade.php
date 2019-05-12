@@ -6,7 +6,7 @@
     </a>
   </li>
 
-  <li class="nav-item">
+  <li class="nav-item menu">
     <a class="nav-link" data-toggle="collapse" href="#komponen-user" aria-expanded="false" aria-controls="komponen-user">
       <i class="menu-icon mdi mdi-email-open"></i>
       <span class="menu-title">Komponen Surat</span>
@@ -18,7 +18,7 @@
           <a class="nav-link" href="{{ route('admin.kode_surat.index') }}"><i class="menu-icon mdi mdi-code-array"></i>&nbsp;Kode Surat</a>
         </li>
         <li class="nav-item menu">
-          <a class="nav-link" href="{{ route('admin.jenis_surat.index') }}"><i class="menu-icon mdi-information-outline"></i>&nbsp;Jenis Surat</a>
+          <a class="nav-link" href="{{ route('admin.jenis_surat.index') }}"><i class="menu-icon mdi mdi-information-outline"></i>&nbsp;Jenis Surat</a>
         </li>
       </ul>
     </div>
@@ -26,42 +26,42 @@
 
   <li class="nav-item menu">
     <a class="nav-link" data-toggle="collapse" href="#surat-masuk" aria-expanded="false" aria-controls="surat-masuk">
-      <i class="menu-icon mdi mdi-email-open"></i>
+      <i class="menu-icon fa fa-sign-in"></i>
       <span class="menu-title">Manajemen Surat Masuk</span>
       <i class="menu-arrow"></i>
     </a>
     <div class="collapse" id="surat-masuk">
       <ul class="nav flex-column sub-menu">
         <li class="nav-item">
-          <a class="nav-link" href="{{ route('admin.surat_masuk_internal.index') }}"><i class="menu-icon mdi mdi-message-processing"></i>&nbsp;Surat Masuk Internal</a>
+          <a class="nav-link" href="{{ route('admin.surat_masuk_internal.index') }}"><i class="menu-icon mdi mdi-message-processing"></i>&nbsp;Surat Internal</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="{{ route('admin.surat_masuk_eksternal.index') }}"><i class="menu-icon mdi mdi-message-reply"></i>&nbsp;Surat Masuk Eksternal</a>
+          <a class="nav-link" href="{{ route('admin.surat_masuk_eksternal.index') }}"><i class="menu-icon mdi mdi-message-reply"></i>&nbsp;Surat Eksternal</a>
         </li>
       </ul>
     </div>
   </li>
-  <li class="nav-item">
+  <li class="nav-item menu">
     <a class="nav-link" data-toggle="collapse" href="#surat-keluar" aria-expanded="false" aria-controls="surat-keluar">
-      <i class="menu-icon mdi mdi-email-open"></i>
+      <i class="menu-icon fa fa-sign-out"></i>
       <span class="menu-title">Manajemen Surat Keluar</span>
       <i class="menu-arrow"></i>
     </a>
     <div class="collapse" id="surat-keluar">
       <ul class="nav flex-column sub-menu">
         <li class="nav-item menu">
-          <a class="nav-link" href="{{ route('admin.surat_keluar.internal') }}"><i class="menu-icon mdi mdi-message-processing"></i>&nbsp;Surat Ke Internal</a>
+          <a class="nav-link" href="{{ route('admin.surat_keluar_internal.index') }}"><i class="menu-icon mdi mdi-message-processing"></i>&nbsp;Surat Internal</a>
         </li>
         <li class="nav-item menu">
-          <a class="nav-link" href="{{ route('admin.surat_keluar.eksternal') }}"><i class="menu-icon mdi mdi-message-reply"></i>&nbsp;Surat Ke Eksternal</a>
+          <a class="nav-link" href="{{ route('admin.surat_keluar_eksternal.index') }}"><i class="menu-icon mdi mdi-message-reply"></i>&nbsp;Surat Eksternal</a>
         </li>
       </ul>
     </div>
   </li>
 
-  <li class="nav-item">
+  <li class="nav-item menu">
     <a class="nav-link" data-toggle="collapse" href="#komponen-surat" aria-expanded="false" aria-controls="komponen-surat">
-      <i class="menu-icon mdi mdi-email-open"></i>
+      <i class="menu-icon fa fa-users"></i>
       <span class="menu-title">Komponen User</span>
       <i class="menu-arrow"></i>
     </a>

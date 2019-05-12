@@ -16,17 +16,9 @@
     </div>
   @endif
   <div class="row">
-    <div class="col-md-12 grid-margin stretch-card">
-      <div class="card bg-primary">
-        <div class="card-body py-3">
-          <div class="d-flex flex-row  align-items">
-            <i class="mdi mdi-television text-white icon-lg"></i>
-            <div class="ml-3">
-              <h6 class="text-white font-weight-semibold mb-0">DASHBOARD</h6>
-              <p class="text-white card-text">Selamat Datang {{ Auth::user()->nm_admin }}, anda berhasil login sebagai <b class="text-white">ADMINISTRATOR</b>. Silahkan gunakan menu yang telah disediakan, dan angan lupa <b>LOGOUT</b> setelah menggunakan aplikasi !</p>
-            </div>
-          </div>
-        </div>
+    <div class="col-md-12">
+      <div class="alert alert-fill-primary col-" role="alert">
+        <i class="mdi mdi-alert-circle"></i> Selamat Datang <a style="text-transform:uppercase;">{{Auth::user()->nm_user}}</a>, Jangan Lupa Logout Setelah Menggunakan Aplikasi
       </div>
     </div>
   </div>

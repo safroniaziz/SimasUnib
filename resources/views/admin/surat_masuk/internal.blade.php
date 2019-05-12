@@ -8,7 +8,7 @@
 @section('manajemen-icon')
   <i class="mdi mdi-email icon-md text-dark"></i>
 @endsection
-@section('manajemen-title','Manajemen Surat Masuk')
+@section('manajemen-title','Data Surat Masuk Internal')
 @section('manajemen-button-tambah')
   <div class="wrapper ml-auto action-bar">
   </div>
@@ -22,11 +22,12 @@
           <td>No</td>
           <td>Tipe Surat</td>
           <td>Satker Pengirim Surat</td>
+          <td>Satker Penerima Surat</td>
+          <td>lampiran</td>
           <td>Jenis Surat</td>
           <td>No Surat</td>
           <td>Perihal</td>
           <td>Tujuan</td>
-          <td>lampiran</td>
           <td>Catatan</td>
           <td>Sifat Surat</td>
           <td>Tanggal Surat</td>
@@ -50,6 +51,19 @@
                 {data: 'rownum',name:'rownum'},
                 {data: 'tipe_surat',name:'tipe_surat'},
                 {data: 'nm_pengirim_surat',name:'nm_pengirim_surat'},
+                {data: 'nm_penerima_surat',name:'nm_penerima_surat'},
+                {data: 'lampiran', 
+                        render:function(data, type, row){
+                            if(data != null)
+                            {
+                                return '<style="font-size:11px;">'+data+'</style>';
+                            }
+                            else
+                            {
+                                return '<label class="badge badge-danger" style="font-size:11px;">'+'<i class="fa fa-close"></i>'+'&nbsp;data belum diisi'+'</label>';
+                            }
+                        }
+                },
                 {data: 'jenis_surat',name:'jenis_surat'},
                 {data: 'no_surat',name:'no_surat'},
                 {data: 'perihal', 
@@ -65,18 +79,6 @@
                         }
                 },
                 {data: 'tujuan', 
-                        render:function(data, type, row){
-                            if(data != null)
-                            {
-                                return '<style="font-size:11px;">'+data+'</style>';
-                            }
-                            else
-                            {
-                                return '<label class="badge badge-danger" style="font-size:11px;">'+'<i class="fa fa-close"></i>'+'&nbsp;data belum diisi'+'</label>';
-                            }
-                        }
-                },
-                {data: 'lampiran', 
                         render:function(data, type, row){
                             if(data != null)
                             {
