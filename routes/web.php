@@ -229,6 +229,7 @@ Route::group(['prefix'	=>	'pimpinan/surat_masuk_internal'],function(){
 	Route::get('/','Pimpinan\SuratMasukInternalController@index')->name('pimpinan.surat_masuk_internal.index');
 	Route::get('/{id}/teruskan','Pimpinan\SuratMasukInternalController@teruskan');
 	Route::post('/teruskan_surat','Pimpinan\SuratMasukInternalController@teruskanSurat')->name('pimpinan.surat_masuk_internal.teruskan_surat');
+	Route::get('/{id}/baca_surat','Pimpinan\SuratMasukInternalController@bacaSurat')->name('pimpinan.surat_masuk_internal.baca_surat');
 	Route::get('/api','Pimpinan\SuratMasukInternalController@dataTable')->name('pimpinan.surat_masuk_internal.api');
 });
 
@@ -239,6 +240,7 @@ Route::group(['prefix'	=>	'pimpinan/surat_masuk_eksternal'],function(){
 	// Route::get('/{id}/edit','Pimpinan\SuratMasukEksternalController@edit');
 	Route::get('/{id}/teruskan','Pimpinan\SuratMasukEksternalController@teruskan');
 	// Route::delete('/{id}','Pimpinan\SuratMasukEksternalController@destroy');
+	Route::get('/{id}/baca_surat','Pimpinan\SuratMasukEksternalController@bacaSurat')->name('pimpinan.surat_masuk_eksternal.baca_surat');
 	Route::post('/teruskan_surat','Pimpinan\SuratMasukEksternalController@teruskanSurat')->name('pimpinan.surat_masuk_eksternal.teruskan_surat');
 	Route::get('/api','Pimpinan\SuratMasukEksternalController@dataTable')->name('pimpinan.surat_masuk_eksternal.api');
 });

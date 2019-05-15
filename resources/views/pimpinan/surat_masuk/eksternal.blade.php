@@ -93,7 +93,7 @@
                 {data: 'tanggal_surat',name:'tanggal_surat'},
                 {data: 'catatan',name:'catatan'},
                 {data: 'sifat_surat',name:'sifat_surat'},
-                {data: 'status', 
+                {data: 'status_baca', 
                         render:function(data, type, row){
                             if(data == 1)
                             {

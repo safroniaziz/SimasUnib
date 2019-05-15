@@ -111,7 +111,7 @@ class SuratMasukInternalController extends Controller
                 ->join('tb_satuan_kerja as id_satker_pengirim_surat','id_satker_pengirim_surat.id','tb_surat_masuk.id_satker_pengirim_surat')
                 ->join('tb_jenis_surat','tb_jenis_surat.id','tb_surat_masuk.id_jenis_surat')
                 ->where('tb_surat_masuk.id',$id)
-                ->select('tb_surat_masuk.id','tipe_surat','id_satker_pengirim_surat.id as id_satker_pengirim_surat','id_satker_pengirim_surat.nm_satuan_kerja as nm_satker_pengirim_surat','tb_jenis_surat.id as id_jenis_surat','tb_jenis_surat.jenis_surat','no_surat','perihal','tujuan','lampiran','catatan','sifat_surat','tanggal_surat','tb_surat_masuk.status',DB::raw('@rownum  := @rownum  + 1 AS rownum'))
+                ->select('tb_surat_masuk.id','tipe_surat','id_satker_pengirim_surat.id as id_satker_pengirim_surat','id_satker_pengirim_surat.nm_satuan_kerja as nm_satker_pengirim_surat','tb_jenis_surat.id as id_jenis_surat','tb_jenis_surat.jenis_surat','no_surat','perihal','tujuan','lampiran','catatan','sifat_surat','tanggal_surat',DB::raw('@rownum  := @rownum  + 1 AS rownum'))
                 ->get();
         return $model;
     }
@@ -231,12 +231,16 @@ class SuratMasukInternalController extends Controller
                     ->where('tb_user.id',Auth::user()->id)
                     ->select('tb_satuan_kerja.id as id_satuan_kerja')->pluck('tb_satuan_kerja.id_satuan_kerja');
         $model = DB::table('tb_surat_masuk')
+                ->leftJoin('tb_disposisi_surat_masuk','tb_disposisi_surat_masuk.id_surat_masuk','tb_surat_masuk.id')
                 ->join('tb_satuan_kerja as id_satker_penerima_surat','id_satker_penerima_surat.id','tb_surat_masuk.id_satker_penerima_surat')
                 ->join('tb_satuan_kerja as id_satker_pengirim_surat','id_satker_pengirim_surat.id','tb_surat_masuk.id_satker_pengirim_surat')
                 ->join('tb_jenis_surat','tb_jenis_surat.id','tb_surat_masuk.id_jenis_surat')
                 ->where('tb_surat_masuk.tipe_surat','internal')
                 ->where('id_satker_penerima_surat.id',$id_satuan_kerja[0])
-                ->select('tb_surat_masuk.id','tipe_surat','id_satker_penerima_surat.nm_satuan_kerja_singkat as nm_penerima_surat','id_satker_pengirim_surat.nm_satuan_kerja_singkat as nm_pengirim_surat','tb_jenis_surat.jenis_surat','no_surat','perihal','tujuan','lampiran','catatan','sifat_surat','tanggal_surat','tb_surat_masuk.status','status_teruskan','status_pengiriman',DB::raw('@rownum  := @rownum  + 1 AS rownum'))
+                ->select('tb_surat_masuk.id','tipe_surat','id_satker_penerima_surat.nm_satuan_kerja_singkat as nm_penerima_surat',
+                        'id_satker_pengirim_surat.nm_satuan_kerja_singkat as nm_pengirim_surat','tb_jenis_surat.jenis_surat','no_surat',
+                        'perihal','tujuan','lampiran','catatan','sifat_surat','tanggal_surat','tb_surat_masuk.status_teruskan','status_pengiriman',
+                        'tb_disposisi_surat_masuk.status_baca',DB::raw('@rownum  := @rownum  + 1 AS rownum'))
                 ->get();
         
         return DataTables::of($model)

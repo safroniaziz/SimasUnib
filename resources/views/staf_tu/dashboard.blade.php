@@ -20,7 +20,7 @@
       <div class="row">
         <div class="col-md-12">
           <div class="alert alert-fill-primary col-" role="alert">
-            <i class="mdi mdi-alert-circle"></i> Selamat Datang <a style="text-transform:uppercase;">{{Auth::user()->nm_lptik}}</a>, Jangan Lupa Logout Setelah Menggunakan Aplikasi
+            <i class="mdi mdi-alert-circle"></i> Selamat Datang <a style="text-transform:uppercase;">{{Auth::user()->nm_user}}</a>, Jangan Lupa Logout Setelah Menggunakan Aplikasi
           </div>
         </div>
       </div>

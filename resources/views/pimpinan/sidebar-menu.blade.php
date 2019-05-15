@@ -1,5 +1,5 @@
 @can('isPimpinan')
-  <li class="nav-item {{ set_active('pimpinan.dashboard') }}">
+  <li class="nav-item menu">
     <a class="nav-link" href="{{ route('pimpinan.dashboard') }}">
       <i class="menu-icon mdi mdi-television"></i>
       <span class="menu-title">Dashboard</span>

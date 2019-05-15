@@ -68,7 +68,7 @@ class SuratMasukInternalController extends Controller
                 ->where('tb_surat_masuk.tipe_surat','internal')
                 ->select('tb_surat_masuk.id','tipe_surat','pengirim_surat.nm_satuan_kerja_singkat as nm_pengirim_surat','penerima_surat.nm_satuan_kerja_singkat as nm_penerima_surat',
                         'tb_jenis_surat.jenis_surat','no_surat','perihal','tujuan','lampiran','catatan','sifat_surat',
-                        'tanggal_surat','tb_surat_masuk.status',DB::raw('@rownum  := @rownum  + 1 AS rownum'))
+                        'tanggal_surat',DB::raw('@rownum  := @rownum  + 1 AS rownum'))
                 ->get();
         return DataTables::of($model)
                 ->addColumn('lampiran',function($model){

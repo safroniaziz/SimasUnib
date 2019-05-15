@@ -10,6 +10,7 @@ use DB;
 // use App\Model\SuratMasuk;
 use App\Model\DisposisiSuratMasuk;
 use Auth;
+use PDF;
 
 class SuratMasukInternalController extends Controller
 {
@@ -57,6 +58,24 @@ class SuratMasukInternalController extends Controller
         ]);
     }
 
+    public function bacaSurat($id){
+        DB::table('tb_disposisi_surat_masuk')->where('id',$id)->update(['status_baca'    =>  '1',]);
+
+        $model = DB::table('tb_disposisi_surat_masuk')
+                ->rightJoin('tb_surat_masuk','tb_surat_masuk.id','tb_disposisi_surat_masuk.id_surat_masuk')
+                ->rightJoin('tb_user as id_pengirim_disposisi','id_pengirim_disposisi.id','tb_disposisi_surat_masuk.id_pengirim_disposisi')
+                ->join('tb_jenis_surat','tb_jenis_surat.id','tb_surat_masuk.id_jenis_surat')
+                ->where('tb_disposisi_surat_masuk.id_penerima_disposisi',Auth::user()->id)
+                ->where('tb_disposisi_surat_masuk.id',$id)
+                ->where('tb_surat_masuk.tipe_surat','internal')
+                ->select('lampiran')
+                ->get();
+        $pdf = PDF::loadView('pimpinan/surat_masuk.detail_surat',compact('model'));
+        $pdf->setPaper('a4','portrait');
+        return $pdf->stream();
+                // return view('pimpinan/surat_masuk.detail_surat',compact('model'));
+    }
+
 
     public function datatable(){
         // dd(Auth::user()->id);
@@ -67,7 +86,8 @@ class SuratMasukInternalController extends Controller
                 ->join('tb_jenis_surat','tb_jenis_surat.id','tb_surat_masuk.id_jenis_surat')
                 ->where('tb_disposisi_surat_masuk.id_penerima_disposisi',Auth::user()->id)
                 ->where('tb_surat_masuk.tipe_surat','internal')
-                ->select('tb_disposisi_surat_masuk.id','tb_disposisi_surat_masuk.status_teruskan','tb_surat_masuk.id as id_surat_masuk','id_pengirim_disposisi.nm_user as nm_pengirim_disposisi','tb_surat_masuk.pengirim_surat',
+                // ->where('tb_disposisi_surat_masuk.id_penerima_disposisi','tb_disposisi_surat_masuk.id_pengirim_surat')
+                ->select('tb_disposisi_surat_masuk.id','tb_disposisi_surat_masuk.status_teruskan','tb_disposisi_surat_masuk.status_baca','tb_surat_masuk.id as id_surat_masuk','id_pengirim_disposisi.nm_user as nm_pengirim_disposisi','tb_surat_masuk.pengirim_surat',
                             'tb_surat_masuk.no_surat','tb_jenis_surat.jenis_surat',
                             'tb_surat_masuk.perihal','tb_surat_masuk.tujuan','tb_surat_masuk.lampiran','tb_surat_masuk.catatan',
                             'tb_surat_masuk.tanggal_surat','tb_surat_masuk.sifat_surat',DB::raw('@rownum  := @rownum  + 1 AS rownum'))
@@ -84,13 +104,20 @@ class SuratMasukInternalController extends Controller
                     }
                 })
                 ->addColumn('action', function($model){
-                   if($model->status_teruskan == 1){
+                   if($model->status_teruskan == 0  && $model->status_baca == 0){
                         return
+                        '<a href="' . route('pimpinan.surat_masuk_internal.baca_surat', $model->id) .'" class="btn social-btn btn-success" style="padding:5px;font-size:10px;"><i class="fa fa-envelope"></i></a>'.
+                        '<a onclick="teruskanSuratMasukInternalPimpinan('.$model->id.')"  class="btn social-btn btn-primary " style="padding:5px;font-size:10px; pointer-events: none;"><i class="fa fa-send-o"></i></a> ';
+                    } else if($model->status_baca == 1 && $model->status_teruskan ==0){
+                        return
+                        '<a href="' . route('pimpinan.surat_masuk_internal.baca_surat', $model->id) .'"  class="btn social-btn btn-success " style="padding:5px;font-size:10px;"><i class="fa fa-envelope"></i></a> '.
+                        '<a onclick="teruskanSuratMasukInternalPimpinan('.$model->id.')"  class="btn social-btn btn-primary " style="padding:5px;font-size:10px;"><i class="fa fa-send-o"></i></a> ';
+                    } else if($model->status_baca == 1 && $model->status_teruskan ==1){
+                        return
+                        '<a href="' . route('pimpinan.surat_masuk_internal.baca_surat', $model->id) .'"  class="btn social-btn btn-success " style="padding:5px;font-size:10px;"><i class="fa fa-envelope"></i></a> '.
                         '<a onclick="teruskanSuratMasukInternalPimpinan('.$model->id.')"  class="btn social-btn btn-secondary " style="padding:5px;font-size:10px; pointer-events: none;"><i class="fa fa-send-o"></i></a> ';
-                    } else{
-                        return
-                        '<a onclick="teruskanSuratMasukInternalPimpinan('.$model->id.')"  class="btn social-btn btn-success " style="padding:5px;font-size:10px;"><i class="fa fa-send-o"></i></a> ';
                     }
+                    
                 })->rawColumns(['lampiran','action'])->make(true);
     }
 }
