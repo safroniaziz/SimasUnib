@@ -81,7 +81,7 @@
                             <div class="form-group col-md-6">
                                 <label for="" class="control-label">Teruskan Kepada :</label>
                                 <select name="id_pimpinan_penerima_disposisi" id="id_pimpinan_penerima_disposisi" class="form-control">
-                                    <option value="0">-- pilih penerima disposisi --</option>
+                                    <option value="0" selected>-- pilih penerima disposisi --</option>
                                     @foreach ($id_penerima_disposisi as $value)
                                         <option value="{{ $value->id }}">{{ $value->nm_user }} ({{$value->jabatan_user}})</option>                                        
                                     @endforeach

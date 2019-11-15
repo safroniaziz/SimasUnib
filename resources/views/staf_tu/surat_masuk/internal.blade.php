@@ -73,7 +73,6 @@
                     <td>Sifat Surat</td>
                     <td>Tanggal Surat</td>
                     <td>Status Teruskan</td>
-                    <td>Status Baca</td>
                     <td>Aksi</td>
                 </tr>
             </thead>
@@ -145,18 +144,6 @@
                             else
                             {
                               return '<label class="badge badge-warning" style="font-size:11px;">'+'<i class="fa fa-spinner"></i>'+'&nbsp;Menunggu'+'</label>';
-                            }
-                        }
-                },
-                {data: 'status_baca', 
-                        render:function(data, type, row){
-                            if(data == 1)
-                            {
-                              return '<label class="badge badge-success" style="font-size:11px;">'+'<i class="fa fa-check"></i>'+'&nbsp;Sudah dibaca'+'</label>';
-                            }
-                            else
-                            {
-                              return '<label class="badge badge-warning" style="font-size:11px;">'+'<i class="fa fa-spinner"></i>'+'&nbsp;Belum dibaca'+'</label>';
                             }
                         }
                 },

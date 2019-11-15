@@ -8,7 +8,7 @@
                     <table class="table table-bordered">
                         <tr>
                             <td rowspan="4">
-                               <img class="detail_lampiran_teruskan" src="{{ asset('assets/img/logo-utama.png')  }}" alt="" style="height:150px !important; width:100px !important;">
+                               <img class="detail_lampiran_teruskan" src="" alt="" style="height:150px !important; width:100px !important;">
                             </td>
                             <td style="font-weight:bold;">Tipe Surat</td>
                             <td> : </td>

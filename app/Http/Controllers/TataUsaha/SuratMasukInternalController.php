@@ -45,6 +45,7 @@ class SuratMasukInternalController extends Controller
                                 ->select('tb_user.id','tb_user.nm_user','tb_jabatan.nm_jabatan as jabatan_user')
                                 ->get();
 
+
                     // dd($id_penerima);
         return view('staf_tu/surat_masuk.internal',compact('waktu2','id_pengirim','id_penerima','id_penerima_disposisi'));
     }

@@ -163,6 +163,11 @@ Route::group(['prefix'	=>	'admin/manajemen_admin'],function(){
 	Route::get('/api','Admin\ManajemenAdminController@dataTable')->name('admin.manajemen_admin.api');
 });
 
+Route::group(['prefix'	=> 'admin/laporan_rekapitulasi'],function(){
+	Route::get('/','Admin\ManajemenLaporanController@laporan')->name('admin.manajemen_laporan');
+	Route::get('/get_laporan','Admin\ManajemenLaporanController@laporanIndex')->name('admin.laporan');
+});
+
 //Route Untuk Staf TU
 Route::group(['prefix'	=>	'staf_tu/dashboard'],function(){
 	Route::get('/','TataUsaha\TataUsahaController@index')->name('staf_tu.dashboard');

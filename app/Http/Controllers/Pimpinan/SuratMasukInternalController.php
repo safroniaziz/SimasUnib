@@ -36,6 +36,7 @@ class SuratMasukInternalController extends Controller
                 ->rightJoin('tb_user as id_pengirim_disposisi','id_pengirim_disposisi.id','tb_disposisi_surat_masuk.id_pengirim_disposisi')
                 ->join('tb_jenis_surat','tb_jenis_surat.id','tb_surat_masuk.id_jenis_surat')
                 ->where('tb_disposisi_surat_masuk.id_penerima_disposisi',Auth::user()->id)
+                ->where('tb_surat_masuk.id',$id)
                 ->select('tb_disposisi_surat_masuk.id as id_disposisi_surat_masuk','tb_surat_masuk.id','id_pengirim_disposisi.nm_user as nm_pengirim_disposisi','tb_surat_masuk.pengirim_surat',
                             'tb_surat_masuk.no_surat','tb_jenis_surat.jenis_surat',
                             'tb_surat_masuk.perihal','tb_surat_masuk.tujuan','tb_surat_masuk.lampiran','tb_surat_masuk.catatan',
@@ -59,17 +60,18 @@ class SuratMasukInternalController extends Controller
     }
 
     public function bacaSurat($id){
-        DB::table('tb_disposisi_surat_masuk')->where('id',$id)->update(['status_baca'    =>  '1',]);
+        DB::table('tb_disposisi_surat_masuk')->where('id_surat_masuk',$id)->update(['status_baca'    =>  '1']);
 
         $model = DB::table('tb_disposisi_surat_masuk')
                 ->rightJoin('tb_surat_masuk','tb_surat_masuk.id','tb_disposisi_surat_masuk.id_surat_masuk')
                 ->rightJoin('tb_user as id_pengirim_disposisi','id_pengirim_disposisi.id','tb_disposisi_surat_masuk.id_pengirim_disposisi')
                 ->join('tb_jenis_surat','tb_jenis_surat.id','tb_surat_masuk.id_jenis_surat')
                 ->where('tb_disposisi_surat_masuk.id_penerima_disposisi',Auth::user()->id)
-                ->where('tb_disposisi_surat_masuk.id',$id)
+                ->where('tb_surat_masuk.id',$id)
                 ->where('tb_surat_masuk.tipe_surat','internal')
-                ->select('lampiran')
+                ->select('tb_surat_masuk.lampiran')
                 ->get();
+                // dd($model);
         $pdf = PDF::loadView('pimpinan/surat_masuk.detail_surat',compact('model'));
         $pdf->setPaper('a4','portrait');
         return $pdf->stream();
@@ -88,7 +90,7 @@ class SuratMasukInternalController extends Controller
                 ->where('tb_surat_masuk.tipe_surat','internal')
                 // ->where('tb_disposisi_surat_masuk.id_penerima_disposisi','tb_disposisi_surat_masuk.id_pengirim_surat')
                 ->select('tb_disposisi_surat_masuk.id','tb_disposisi_surat_masuk.status_teruskan','tb_disposisi_surat_masuk.status_baca','tb_surat_masuk.id as id_surat_masuk','id_pengirim_disposisi.nm_user as nm_pengirim_disposisi','tb_surat_masuk.pengirim_surat',
-                            'tb_surat_masuk.no_surat','tb_jenis_surat.jenis_surat',
+                            'tb_surat_masuk.no_surat','tb_jenis_surat.jenis_surat','tb_surat_masuk.id as id',
                             'tb_surat_masuk.perihal','tb_surat_masuk.tujuan','tb_surat_masuk.lampiran','tb_surat_masuk.catatan',
                             'tb_surat_masuk.tanggal_surat','tb_surat_masuk.sifat_surat',DB::raw('@rownum  := @rownum  + 1 AS rownum'))
                 ->get();

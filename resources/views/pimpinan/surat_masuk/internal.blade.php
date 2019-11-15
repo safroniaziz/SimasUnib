@@ -132,6 +132,8 @@
                 type: "GET",
                 dataType: "JSON",
                 success: function(data){
+                    // alert(data);
+                    // alert(data[0].id_disposisi_surat_masuk);
                     $("#form-surat-masuk-pimpinan").show(300);
                     $("#form-add-edit").hide();
                     $("#form-teruskan").show();

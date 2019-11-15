@@ -37,17 +37,11 @@ class ManajemenUserController extends Controller
             'telephone'    =>  'string',
             'id_jabatan'    =>  'required|',
             'password'    =>  'required|string|',
-            'foto'        =>    'image|max:500',
             'level_user'      =>     'required',
         ]);
             
         $model = $request->all();
-        $model['foto'] = null;
-
-        if ($request->hasFile('foto')) {
-        	$model['foto'] = '/upload/foto_user/'.str_slug($model['nm_user'],'-').'.'.$request->foto->getClientOriginalExtension();
-        	$request->foto->move(public_path('/upload/foto_user'), $model['foto']);
-        }
+     
 
         User::create([
             'nm_user'   => $model['nm_user'],
@@ -57,7 +51,6 @@ class ManajemenUserController extends Controller
             'id_jabatan'   => $model['id_jabatan'],
             'telephone'   => $model['telephone'],
             'level_user'   => $model['level_user'],
-            'foto'   => $model['foto'],
             'password'   => bcrypt($model['password']),
         ]);
         return response()->json([
